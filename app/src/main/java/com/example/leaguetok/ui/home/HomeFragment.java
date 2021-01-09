@@ -36,7 +36,7 @@ public class HomeFragment extends Fragment {
 
         // For POC this code is for uploading video from galley.
         // After POC need to be transferred to upload video fragment
-        Button uploudButton = root.findViewById(R.id.home_upload_video_btn);
+        Button uploadButton = root.findViewById(R.id.home_upload_video_btn);
         uploadProgress = root.findViewById(R.id.home_upload_progress);
         uploadProgress.setVisibility(View.INVISIBLE);
         progressText = root.findViewById(R.id.home_progress_text);
@@ -44,7 +44,7 @@ public class HomeFragment extends Fragment {
         videoUri = root.findViewById(R.id.home_uri_text);
         videoUri.setVisibility(View.INVISIBLE);
 
-        uploudButton.setOnClickListener(new View.OnClickListener() {
+        uploadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent pickVideo = new Intent(Intent.ACTION_GET_CONTENT);
