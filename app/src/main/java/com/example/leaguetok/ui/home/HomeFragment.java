@@ -4,11 +4,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -25,7 +25,8 @@ public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
     ProgressBar uploadProgress;
-    TextView videoUri;
+    TextView progressText;
+    EditText videoUri;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -38,6 +39,8 @@ public class HomeFragment extends Fragment {
         Button uploudButton = root.findViewById(R.id.home_upload_video_btn);
         uploadProgress = root.findViewById(R.id.home_upload_progress);
         uploadProgress.setVisibility(View.INVISIBLE);
+        progressText = root.findViewById(R.id.home_progress_text);
+        progressText.setVisibility(View.INVISIBLE);
         videoUri = root.findViewById(R.id.home_uri_text);
         videoUri.setVisibility(View.INVISIBLE);
 
@@ -78,6 +81,8 @@ public class HomeFragment extends Fragment {
                 public void onProgress(int progress) {
                     uploadProgress.setVisibility(View.VISIBLE);
                     uploadProgress.setProgress(progress);
+                    progressText.setVisibility(View.VISIBLE);
+                    progressText.setText(progress + "%");
                 }
             });
         }
