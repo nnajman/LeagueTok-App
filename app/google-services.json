@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "743119772866",
+    "project_id": "leaguetok",
+    "storage_bucket": "leaguetok.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:743119772866:android:ceb1d86429375f74e62f5b",
+        "android_client_info": {
+          "package_name": "com.example.leaguetok"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "743119772866-08hhesqgq9c306g2j83aek5sng0elo91.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcMWtuIL-q_4M2doKWpA8S733xP01l8xk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "743119772866-08hhesqgq9c306g2j83aek5sng0elo91.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
