@@ -85,6 +85,7 @@ public class HomeFragment extends Fragment {
         if (resultCode == Activity.RESULT_OK && requestCode == 1 && data != null) {
             String uid = "123";
             String origName = "test";
+            String soruceId = "1";
             Uri selectedVideo = data.getData();
             Model.instance.uploadVideo(selectedVideo, uid, origName, new Model.DataAsyncListener<String>() {
                 @Override
@@ -92,7 +93,9 @@ public class HomeFragment extends Fragment {
                     videoUri.setVisibility(View.VISIBLE);
 //                    videoUri.setText(data);
                     HashMap<String, String> params = new HashMap<String,String>();
-                    params.put("data", data); // the entered data as the body.
+                    params.put("url", data); // the entered data as the body.
+                    params.put("uid", uid); // the entered data as the body.
+                    params.put("sid", soruceId); // the entered data as the body.
 
                     JsonObjectRequest jsObjRequest = new
                             JsonObjectRequest(Request.Method.POST,
