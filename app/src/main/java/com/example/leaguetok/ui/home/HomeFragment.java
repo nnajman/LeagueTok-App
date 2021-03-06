@@ -18,8 +18,19 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.android.volley.Request;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.leaguetok.R;
 import com.example.leaguetok.model.Model;
+import com.android.volley.toolbox.Volley;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
 
 public class HomeFragment extends Fragment {
 
@@ -27,6 +38,9 @@ public class HomeFragment extends Fragment {
     ProgressBar uploadProgress;
     TextView progressText;
     EditText videoUri;
+
+    final RequestQueue queue = Volley.newRequestQueue(getActivity().getApplicationContext());
+    final String url = "http://serverdomainorip/postdata"; // your URL
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -43,6 +57,8 @@ public class HomeFragment extends Fragment {
         progressText.setVisibility(View.INVISIBLE);
         videoUri = root.findViewById(R.id.home_uri_text);
         videoUri.setVisibility(View.INVISIBLE);
+
+        queue.start();
 
         uploadButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,7 +90,30 @@ public class HomeFragment extends Fragment {
                 @Override
                 public void onComplete(String data) {
                     videoUri.setVisibility(View.VISIBLE);
-                    videoUri.setText(data);
+//                    videoUri.setText(data);
+                    HashMap<String, String> params = new HashMap<String,String>();
+                    params.put("data", data); // the entered data as the body.
+
+                    JsonObjectRequest jsObjRequest = new
+                            JsonObjectRequest(Request.Method.POST,
+                            url,
+                            new JSONObject(params),
+                            new Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                    try {
+                                        videoUri.setText(response.getString("message"));
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            videoUri.setText("That didn't work!");
+                        }
+                    });
+                    queue.add(jsObjRequest);
                 }
 
                 @Override
