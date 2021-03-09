@@ -39,7 +39,9 @@ public class HomeFragment extends Fragment {
     private HomeViewModel homeViewModel;
     ProgressBar uploadProgress;
     TextView progressText;
-    EditText videoUri;
+    TextView gradeTitle;
+    TextView gradeText;
+    TextView errorText;
 
     private RequestQueue queue;
     final String postVideoURL = "http://10.0.0.21:8080/video"; // Server URL
@@ -59,8 +61,9 @@ public class HomeFragment extends Fragment {
         uploadProgress.setVisibility(View.INVISIBLE);
         progressText = root.findViewById(R.id.home_progress_text);
         progressText.setVisibility(View.INVISIBLE);
-        videoUri = root.findViewById(R.id.home_uri_text);
-        videoUri.setVisibility(View.INVISIBLE);
+        gradeTitle = root.findViewById(R.id.home_grade_title);
+        gradeText = root.findViewById(R.id.home_grade_txt);
+        errorText= root.findViewById(R.id.home_error_label);
 
         uploadButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,6 +71,9 @@ public class HomeFragment extends Fragment {
                 Intent pickVideo = new Intent(Intent.ACTION_GET_CONTENT);
                 pickVideo.setType("video/*");
                 startActivityForResult(Intent.createChooser(pickVideo,"Select Video"), 1);
+                gradeTitle.setVisibility(View.INVISIBLE);
+                gradeText.setVisibility(View.INVISIBLE);
+                errorText.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -93,7 +99,6 @@ public class HomeFragment extends Fragment {
             Model.instance.uploadVideo(selectedVideo, uid, origName, new Model.DataAsyncListener<String>() {
                 @Override
                 public void onComplete(String data) {
-                    videoUri.setVisibility(View.VISIBLE);
                     HashMap<String, String> params = new HashMap<String,String>();
                     params.put("link", data);
                     params.put("uid", uid);
@@ -107,7 +112,9 @@ public class HomeFragment extends Fragment {
                                 @Override
                                 public void onResponse(JSONObject response) {
                                     try {
-                                        videoUri.setText(response.getString("result"));
+                                        gradeTitle.setVisibility(View.VISIBLE);
+                                        gradeText.setVisibility(View.VISIBLE);
+                                        gradeText.setText(response.getString("result"));
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
@@ -115,12 +122,12 @@ public class HomeFragment extends Fragment {
                             }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            videoUri.setText("That didn't work!");
+                            errorText.setVisibility(View.VISIBLE);
                         }
                     });
 
                     jsObjRequest.setShouldCache(false);
-                    jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(30000,
+                    jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(10000,
                             DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                             DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
