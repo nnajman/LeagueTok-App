@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -39,14 +41,16 @@ public class HomeFragment extends Fragment {
     TextView progressText;
     EditText videoUri;
 
-    final RequestQueue queue = Volley.newRequestQueue(getActivity().getApplicationContext());
-    final String url = "http://serverdomainorip/postdata"; // your URL
+    private RequestQueue queue;
+    final String postVideoURL = "http://10.0.0.21:8080/video"; // Server URL
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         homeViewModel =
                 new ViewModelProvider(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
+
+        queue = Volley.newRequestQueue(getActivity().getApplicationContext());
 
         // For POC this code is for uploading video from galley.
         // After POC need to be transferred to upload video fragment
@@ -57,8 +61,6 @@ public class HomeFragment extends Fragment {
         progressText.setVisibility(View.INVISIBLE);
         videoUri = root.findViewById(R.id.home_uri_text);
         videoUri.setVisibility(View.INVISIBLE);
-
-        queue.start();
 
         uploadButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,6 +84,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         if (resultCode == Activity.RESULT_OK && requestCode == 1 && data != null) {
             String uid = "123";
             String origName = "test";
@@ -91,21 +94,20 @@ public class HomeFragment extends Fragment {
                 @Override
                 public void onComplete(String data) {
                     videoUri.setVisibility(View.VISIBLE);
-//                    videoUri.setText(data);
                     HashMap<String, String> params = new HashMap<String,String>();
-                    params.put("url", data); // the entered data as the body.
-                    params.put("uid", uid); // the entered data as the body.
-                    params.put("sid", soruceId); // the entered data as the body.
+                    params.put("link", data);
+                    params.put("uid", uid);
+                    params.put("sourceId", soruceId);
 
                     JsonObjectRequest jsObjRequest = new
                             JsonObjectRequest(Request.Method.POST,
-                            url,
+                            postVideoURL,
                             new JSONObject(params),
                             new Response.Listener<JSONObject>() {
                                 @Override
                                 public void onResponse(JSONObject response) {
                                     try {
-                                        videoUri.setText(response.getString("message"));
+                                        videoUri.setText(response.getString("result"));
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
@@ -116,6 +118,12 @@ public class HomeFragment extends Fragment {
                             videoUri.setText("That didn't work!");
                         }
                     });
+
+                    jsObjRequest.setShouldCache(false);
+                    jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(30000,
+                            DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
                     queue.add(jsObjRequest);
                 }
 
