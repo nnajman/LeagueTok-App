@@ -22,6 +22,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.leaguetok.LeagueTokApplication;
 import com.example.leaguetok.R;
 import com.example.leaguetok.model.Model;
 import com.example.leaguetok.ui.home.HomeViewModel;
@@ -39,7 +40,7 @@ public class UploadVideoFragment extends Fragment {
     TextView errorText;
 
     private RequestQueue queue;
-    final String postVideoURL = "http://192.168.1.107:8080/video"; // Server URL
+    final String postVideoURL = LeagueTokApplication.serverUrl + "/video"; // Server URL
 
     public UploadVideoFragment() {
         // Required empty public constructor
