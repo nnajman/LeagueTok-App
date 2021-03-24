@@ -35,7 +35,7 @@ public class Model {
             refreshAllOrigVideos(listener);
         }
         else {
-            listener.onComplete(null);
+            if(listener != null) listener.onComplete(null);
         }
 
         return origVideosList;
