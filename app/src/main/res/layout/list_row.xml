@@ -3,51 +3,64 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent"
+    android:background="@android:color/black">
 
     <com.google.android.exoplayer2.ui.StyledPlayerView
         android:id="@+id/listrow_video"
         android:layout_width="0dp"
-        android:layout_height="220dp"
-        android:layout_marginTop="8dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:show_buffering="when_playing"
-        app:use_controller="true" />
+        app:show_buffering="when_playing" />
 
-    <TextView
-        android:id="@+id/listrow_video_title"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginRight="24dp"
-        android:gravity="center"
-        android:text="TextView"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/listrow_video" />
+    <LinearLayout
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="30dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/listrow_count_tries"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginRight="24dp"
-        android:gravity="center"
-        android:text="- 100 people tried it -"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/listrow_video_title" />
+        <TextView
+            android:id="@+id/listrow_video_title"
+            android:paddingStart="5dp"
+            android:paddingTop="5dp"
+            android:paddingEnd="5dp"
+            android:shadowColor="@android:color/black"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="15"
+            android:textColor="@android:color/white"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-    <Button
+        <TextView
+            android:id="@+id/listrow_count_tries"
+            android:paddingStart="5dp"
+            android:paddingTop="5dp"
+            android:paddingEnd="5dp"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="15"
+            android:textColor="@android:color/white"
+            android:textSize="15sp"
+            android:shadowColor="@android:color/black"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="- 100 people tried it -" />
+    </LinearLayout>
+
+
+
+
+
+    <!--Button
         android:id="@+id/listrow_try_btn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -76,5 +89,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/listrow_try_btn"
-        app:layout_constraintTop_toTopOf="@+id/listrow_try_btn" />
+        app:layout_constraintTop_toTopOf="@+id/listrow_try_btn" /-->
 </androidx.constraintlayout.widget.ConstraintLayout>

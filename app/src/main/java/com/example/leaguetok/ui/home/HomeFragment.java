@@ -4,17 +4,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.leaguetok.R;
 import com.example.leaguetok.model.Model;
@@ -35,7 +31,7 @@ public class HomeFragment extends Fragment {
         //Button btnUpload = root.findViewById(R.id.home_upload_btn);
         //btnUpload.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_navigation_home_to_uploadVideoFragment));
 
-        RecyclerView list = root.findViewById(R.id.home_orig_videos_recycler_v);
+        ViewPager2 list = root.findViewById(R.id.viewPagerVideos);
         SwipeRefreshLayout swiper = root.findViewById(R.id.home_swipe_to_refresh);
 
         swiper.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -51,7 +47,6 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        list.setLayoutManager(new LinearLayoutManager(getContext()));
         OrigVideoAdapter adapter = new OrigVideoAdapter(homeViewModel);
         list.setAdapter(adapter);
         adapter.setOnItemClicklistener(new OrigVideoAdapter.onItemClicklistener() {
