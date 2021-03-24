@@ -8,6 +8,8 @@
     <string name="upload_title">Upload a version of yourself trying the - The Turkey Dance by Gilad</string>
     <string name="grade">Grade:</string>
     <string name="error_message">Oops... We are sorry but there was a problem while uploading your video :(</string>
+    <string name="action_try">Try It</string>
+    <string name="league_table">League Table</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
