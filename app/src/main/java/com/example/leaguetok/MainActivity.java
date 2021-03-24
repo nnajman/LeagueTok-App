@@ -1,5 +1,6 @@
 package com.example.leaguetok;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import com.example.leaguetok.model.Model;
@@ -26,13 +27,6 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
-
-        Model.instance.getAllOriginalVideos(new Model.AsyncListener() {
-            @Override
-            public void onComplete(Object data) {
-                Model.instance.refreshAllOrigVideos(null);
-            }
-        });
     }
 
 }

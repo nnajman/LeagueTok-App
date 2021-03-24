@@ -11,7 +11,7 @@ import java.util.List;
 
 @Dao
 public interface OriginalVideoDao {
-    @Query("select * from OriginalVideo")
+    @Query("select * from OriginalVideo order by uploadDate desc")
     LiveData<List<OriginalVideo>> getAllOriginalVideos();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

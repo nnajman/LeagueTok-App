@@ -4,16 +4,17 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class HomeViewModel extends ViewModel {
+import com.example.leaguetok.model.Model;
+import com.example.leaguetok.model.OriginalVideo;
 
-    private MutableLiveData<String> mText;
+import java.util.List;
+
+public class HomeViewModel extends ViewModel {
+    private LiveData<List<OriginalVideo>> stList;
 
     public HomeViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is home fragment");
+        stList = Model.instance.getAllOriginalVideos(null);
     }
 
-    public LiveData<String> getText() {
-        return mText;
-    }
+    public LiveData<List<OriginalVideo>> getList() { return stList; }
 }
