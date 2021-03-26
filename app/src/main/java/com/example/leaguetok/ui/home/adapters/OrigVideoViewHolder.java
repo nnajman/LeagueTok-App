@@ -88,21 +88,14 @@ public class OrigVideoViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onPrepared(MediaPlayer mp) {
                 loading.setVisibility(View.GONE);
+                imgPlay.setVisibility(View.INVISIBLE);
                 mp.start();
-
-                float videoRatio = mp.getVideoWidth() / (float)mp.getVideoHeight();
-                float screenRatio = videoView.getWidth() / (float)videoView.getHeight();
-                float scale  = videoRatio / screenRatio;
-                if (scale >= 1f){
-                    videoView.setScaleX(scale);
-                }else {
-                    videoView.setScaleY(1f / scale);
-                }
             }
         });
         videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
+                imgPlay.setVisibility(View.INVISIBLE);
                 mp.start();
             }
         });
