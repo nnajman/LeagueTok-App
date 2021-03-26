@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.VideoView;
@@ -24,6 +25,7 @@ public class OrigVideoViewHolder extends RecyclerView.ViewHolder {
     TextView txtVideoTitle;
     TextView txtCountTries;
     ProgressBar loading;
+    ImageView imgPlay;
     Button btnTryIt;
     Button btnLeagueTable;
     boolean bIsPlaying = true;
@@ -47,6 +49,7 @@ public class OrigVideoViewHolder extends RecyclerView.ViewHolder {
         txtVideoTitle = itemView.findViewById(R.id.listrow_video_title);
         txtCountTries = itemView.findViewById(R.id.listrow_count_tries);
         loading = itemView.findViewById(R.id.listrow_loading);
+        imgPlay = itemView.findViewById(R.id.listrow_play_btn);
         //btnTryIt = itemView.findViewById(R.id.listrow_try_btn);
         //btnLeagueTable = itemView.findViewById(R.id.listrow_league_table_btn);
 
@@ -56,8 +59,10 @@ public class OrigVideoViewHolder extends RecyclerView.ViewHolder {
                 Log.d("TAG", "pressed");
                 if (videoView.isPlaying()) {
                     videoView.pause();
+                    imgPlay.setVisibility(View.VISIBLE);
                 } else {
                     videoView.start();
+                    imgPlay.setVisibility(View.INVISIBLE);
                 }
                 return false;
             }
