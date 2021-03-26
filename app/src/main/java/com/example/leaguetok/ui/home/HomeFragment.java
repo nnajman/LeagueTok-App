@@ -1,6 +1,7 @@
 package com.example.leaguetok.ui.home;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,10 +54,18 @@ public class HomeFragment extends Fragment {
 
         OrigVideoAdapter adapter = new OrigVideoAdapter(homeViewModel);
         list.setAdapter(adapter);
-        adapter.setOnItemClicklistener(new OrigVideoAdapter.onItemClicklistener() {
+
+        adapter.setOnLeagueClickListener(new OrigVideoAdapter.onLeagueClickListener() {
             @Override
             public void onClick(int position) {
-                //TODO: navigate to video details
+                Log.d("TAG", homeViewModel.getList().getValue().get(position).getName());
+            }
+        });
+
+        adapter.setOnTryClickListener(new OrigVideoAdapter.onTryClickListener() {
+            @Override
+            public void onClick(int position) {
+                Log.d("TAG", homeViewModel.getList().getValue().get(position).getName());
             }
         });
 
@@ -66,6 +75,7 @@ public class HomeFragment extends Fragment {
                 adapter.notifyDataSetChanged();
             }
         });
+
         return root;
     }
 }

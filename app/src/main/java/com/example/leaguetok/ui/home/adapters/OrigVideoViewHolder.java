@@ -7,6 +7,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.VideoView;
@@ -26,37 +27,25 @@ public class OrigVideoViewHolder extends RecyclerView.ViewHolder {
     TextView txtCountTries;
     ProgressBar loading;
     ImageView imgPlay;
-    Button btnTryIt;
-    Button btnLeagueTable;
-    boolean bIsPlaying = true;
+    LinearLayout btnTryIt;
+    LinearLayout btnLeagueTable;
 
-    public OrigVideoViewHolder(@NonNull View itemView, final OrigVideoAdapter.onItemClicklistener listener) {
+    public OrigVideoViewHolder(@NonNull View itemView,
+                               OrigVideoAdapter.onLeagueClickListener leagueListener,
+                               OrigVideoAdapter.onTryClickListener tryListener) {
         super(itemView);
-
-        itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (listener != null) {
-                    int position = getAdapterPosition();
-                    if (position != RecyclerView.NO_POSITION) {
-                        listener.onClick(position);
-                    }
-                }
-            }
-        });
 
         videoView = itemView.findViewById(R.id.listrow_video);
         txtVideoTitle = itemView.findViewById(R.id.listrow_video_title);
         txtCountTries = itemView.findViewById(R.id.listrow_count_tries);
         loading = itemView.findViewById(R.id.listrow_loading);
         imgPlay = itemView.findViewById(R.id.listrow_play_btn);
-        //btnTryIt = itemView.findViewById(R.id.listrow_try_btn);
-        //btnLeagueTable = itemView.findViewById(R.id.listrow_league_table_btn);
+        btnTryIt = itemView.findViewById(R.id.listrow_try_btn);
+        btnLeagueTable = itemView.findViewById(R.id.listrow_league_table_btn);
 
         videoView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                Log.d("TAG", "pressed");
                 if (videoView.isPlaying()) {
                     videoView.pause();
                     imgPlay.setVisibility(View.VISIBLE);
@@ -65,6 +54,30 @@ public class OrigVideoViewHolder extends RecyclerView.ViewHolder {
                     imgPlay.setVisibility(View.INVISIBLE);
                 }
                 return false;
+            }
+        });
+
+        btnLeagueTable.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (leagueListener != null) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        leagueListener.onClick(position);
+                    }
+                }
+            }
+        });
+
+        btnTryIt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (leagueListener != null) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        leagueListener.onClick(position);
+                    }
+                }
             }
         });
     }

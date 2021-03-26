@@ -14,25 +14,35 @@ import com.example.leaguetok.ui.home.HomeViewModel;
 
 
 public class OrigVideoAdapter extends RecyclerView.Adapter<OrigVideoViewHolder> {
-    public interface onItemClicklistener{
+    public interface onLeagueClickListener{
+        void onClick(int position);
+    }
+
+    public interface onTryClickListener{
         void onClick(int position);
     }
 
     HomeViewModel data;
-    private onItemClicklistener listener;
+    private onLeagueClickListener leagueListener;
+    private onTryClickListener tryListener;
 
     public OrigVideoAdapter(HomeViewModel data) {
         this.data = data;
     }
-    public void setOnItemClicklistener(onItemClicklistener listener) {
-        this.listener = listener;
+
+    public void setOnLeagueClickListener(onLeagueClickListener listener) {
+        this.leagueListener = listener;
+    }
+
+    public void setOnTryClickListener(onTryClickListener listener) {
+        this.tryListener = listener;
     }
 
     @NonNull
     @Override
     public OrigVideoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_row, parent, false);
-        OrigVideoViewHolder holder = new OrigVideoViewHolder(view, this.listener);
+        OrigVideoViewHolder holder = new OrigVideoViewHolder(view, this.leagueListener, this.tryListener);
         return holder;
     }
 
