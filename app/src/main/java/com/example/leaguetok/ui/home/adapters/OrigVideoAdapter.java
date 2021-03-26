@@ -40,7 +40,7 @@ public class OrigVideoAdapter extends RecyclerView.Adapter<OrigVideoViewHolder> 
     public void onBindViewHolder(@NonNull OrigVideoViewHolder holder, int position) {
         OriginalVideo originalVideo = data.getList().getValue().get(position);
         holder.txtVideoTitle.setText(originalVideo.getName());
-        holder.setVideoPlayer(Uri.parse(originalVideo.getUri()));
+        holder.setVideoPlayer(originalVideo.getUri());
     }
 
     @Override
