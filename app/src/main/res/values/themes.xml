@@ -14,4 +14,13 @@
         <!-- Customize your theme here. -->
         <item name="colorAccent">@color/aqua</item>
     </style>
+
+    <style name="Theme.LeagueTok.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.LeagueTok.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.LeagueTok.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>
