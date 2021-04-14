@@ -60,7 +60,7 @@ public class OrigVideoViewHolder extends RecyclerView.ViewHolder {
         btnLeagueTable.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (leagueListener != null) {
+                if (tryListener != null) {
                     int position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
                         leagueListener.onClick(position);
@@ -72,10 +72,10 @@ public class OrigVideoViewHolder extends RecyclerView.ViewHolder {
         btnTryIt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (leagueListener != null) {
+                if (tryListener != null) {
                     int position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
-                        leagueListener.onClick(position);
+                        tryListener.onClick(position);
                     }
                 }
             }

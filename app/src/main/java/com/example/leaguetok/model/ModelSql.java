@@ -2,6 +2,8 @@ package com.example.leaguetok.model;
 
 import android.os.AsyncTask;
 
+import androidx.lifecycle.LiveData;
+
 public class ModelSql {
     public void insertOrigVideo(OriginalVideo originalVideo, Model.AsyncListener listener) {
         class MyAsyncTask extends AsyncTask {
@@ -41,5 +43,9 @@ public class ModelSql {
         }
 
         new MyAsyncTask().execute();
+    }
+
+    public LiveData<OriginalVideo> getOrigVideoById(String id) {
+        return AppLocalDB.db.originalVideoDao().getOrigVideoByID(id);
     }
 }

@@ -74,4 +74,8 @@ public class Model {
             }
         });
     }
+
+    public LiveData<OriginalVideo> getOrigVideoById(String id) {
+        return modelSql.getOrigVideoById(id);
+    }
 }
