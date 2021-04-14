@@ -34,5 +34,8 @@
         <action
             android:id="@+id/action_uploadVideoFragment_to_navigation_home"
             app:popUpTo="@id/navigation_home" />
+        <argument
+            android:name="OriginalVideoID"
+            app:argType="string" />
     </fragment>
 </navigation>

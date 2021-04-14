@@ -25,6 +25,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.leaguetok.LeagueTokApplication;
 import com.example.leaguetok.R;
 import com.example.leaguetok.model.Model;
+import com.example.leaguetok.model.OriginalVideo;
 import com.example.leaguetok.ui.home.HomeViewModel;
 
 import org.json.JSONException;
@@ -33,6 +34,8 @@ import org.json.JSONObject;
 import java.util.HashMap;
 
 public class UploadVideoFragment extends Fragment {
+    OriginalVideo originalVideo;
+
     ProgressBar uploadProgress;
     TextView progressText;
     TextView gradeTitle;
@@ -54,8 +57,6 @@ public class UploadVideoFragment extends Fragment {
 
         queue = Volley.newRequestQueue(getActivity().getApplicationContext());
 
-        // For POC this code is for uploading video from galley.
-        // After POC need to be transferred to upload video fragment
         Button uploadButton = view.findViewById(R.id.upload_video_btn);
         uploadProgress = view.findViewById(R.id.upload_progress);
         uploadProgress.setVisibility(View.INVISIBLE);
@@ -64,6 +65,9 @@ public class UploadVideoFragment extends Fragment {
         gradeTitle = view.findViewById(R.id.upload_grade_title);
         gradeText = view.findViewById(R.id.upload_grade_txt);
         errorText= view.findViewById(R.id.upload_error_label);
+
+        String origVideoId = UploadVideoFragmentArgs.fromBundle(getArguments()).getOriginalVideoID();
+
 
         uploadButton.setOnClickListener(new View.OnClickListener() {
             @Override
