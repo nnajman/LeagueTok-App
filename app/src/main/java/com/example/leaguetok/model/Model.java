@@ -7,6 +7,8 @@ import androidx.lifecycle.LiveData;
 
 import com.example.leaguetok.LeagueTokApplication;
 
+import org.json.JSONObject;
+
 import java.util.List;
 
 public class Model {
@@ -27,6 +29,10 @@ public class Model {
 
     public void uploadVideo(Uri videoUri, String uid, String origName,  DataAsyncListener<String> listener) {
         modelFirebase.uploadVideo(videoUri, uid, origName, listener);
+    }
+
+    public void uploadVideoToServer(String uri, String uid, String origVideoId, NodeService.RequestListener<JSONObject> listener) {
+        nodejsService.uploadVideo(uri, uid, origVideoId, listener);
     }
 
     public LiveData<List<OriginalVideo>> getAllOriginalVideos(AsyncListener listener) {
@@ -73,5 +79,9 @@ public class Model {
                 }
             }
         });
+    }
+
+    public LiveData<OriginalVideo> getOrigVideoById(String id) {
+        return modelSql.getOrigVideoById(id);
     }
 }

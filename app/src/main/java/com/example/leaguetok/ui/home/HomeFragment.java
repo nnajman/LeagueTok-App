@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -55,6 +56,7 @@ public class HomeFragment extends Fragment {
         OrigVideoAdapter adapter = new OrigVideoAdapter(homeViewModel);
         list.setAdapter(adapter);
 
+        // League Table listener
         adapter.setOnLeagueClickListener(new OrigVideoAdapter.onLeagueClickListener() {
             @Override
             public void onClick(int position) {
@@ -62,10 +64,13 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        // Try It listener
         adapter.setOnTryClickListener(new OrigVideoAdapter.onTryClickListener() {
             @Override
             public void onClick(int position) {
-                Log.d("TAG", homeViewModel.getList().getValue().get(position).getName());
+                Navigation
+                .findNavController(root)
+                .navigate(HomeFragmentDirections.actionNavigationHomeToUploadVideoFragment(homeViewModel.getList().getValue().get(position).getId()));
             }
         });
 

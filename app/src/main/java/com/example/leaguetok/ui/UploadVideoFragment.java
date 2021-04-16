@@ -7,40 +7,35 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.leaguetok.LeagueTokApplication;
 import com.example.leaguetok.R;
 import com.example.leaguetok.model.Model;
-import com.example.leaguetok.ui.home.HomeViewModel;
+import com.example.leaguetok.model.NodeService;
+import com.example.leaguetok.model.OriginalVideo;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
-
 public class UploadVideoFragment extends Fragment {
-    ProgressBar uploadProgress;
-    TextView progressText;
+    OriginalVideo origVideo;
+
     TextView gradeTitle;
     TextView gradeText;
     TextView errorText;
-
-    private RequestQueue queue;
-    final String postVideoURL = LeagueTokApplication.serverUrl + "/video"; // Server URL
+    TextView uploadTitle;
+    CircularProgressIndicator progressBar;
 
     public UploadVideoFragment() {
         // Required empty public constructor
@@ -52,18 +47,22 @@ public class UploadVideoFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_upload_video, container, false);
 
-        queue = Volley.newRequestQueue(getActivity().getApplicationContext());
-
-        // For POC this code is for uploading video from galley.
-        // After POC need to be transferred to upload video fragment
         Button uploadButton = view.findViewById(R.id.upload_video_btn);
-        uploadProgress = view.findViewById(R.id.upload_progress);
-        uploadProgress.setVisibility(View.INVISIBLE);
-        progressText = view.findViewById(R.id.upload_progress_text);
-        progressText.setVisibility(View.INVISIBLE);
         gradeTitle = view.findViewById(R.id.upload_grade_title);
         gradeText = view.findViewById(R.id.upload_grade_txt);
-        errorText= view.findViewById(R.id.upload_error_label);
+        errorText = view.findViewById(R.id.upload_error_label);
+
+        uploadTitle = view.findViewById(R.id.upload_video_title);
+        progressBar = view.findViewById(R.id.upload_progress_bar);
+
+        String origVideoId = UploadVideoFragmentArgs.fromBundle(getArguments()).getOriginalVideoID();
+        Model.instance.getOrigVideoById(origVideoId).observe(getActivity(), new Observer<OriginalVideo>() {
+            @Override
+            public void onChanged(OriginalVideo originalVideo) {
+                origVideo = originalVideo;
+                uploadTitle.setText(getString(R.string.upload_title, originalVideo.getName(), originalVideo.getPerformer()));
+            }
+        });
 
         uploadButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,53 +85,40 @@ public class UploadVideoFragment extends Fragment {
 
         if (resultCode == Activity.RESULT_OK && requestCode == 1 && data != null) {
             String uid = "123";
-            String origName = "test";
-            String soruceId = "1";
+            String origName = origVideo.getName();
+            String origVideoId = origVideo.getId();
             Uri selectedVideo = data.getData();
             Model.instance.uploadVideo(selectedVideo, uid, origName, new Model.DataAsyncListener<String>() {
                 @Override
                 public void onComplete(String data) {
-                    HashMap<String, String> params = new HashMap<String,String>();
-                    params.put("link", data);
-                    params.put("uid", uid);
-                    params.put("sourceId", soruceId);
-
-                    JsonObjectRequest jsObjRequest = new
-                            JsonObjectRequest(Request.Method.POST,
-                            postVideoURL,
-                            new JSONObject(params),
-                            new Response.Listener<JSONObject>() {
-                                @Override
-                                public void onResponse(JSONObject response) {
-                                    try {
-                                        gradeTitle.setVisibility(View.VISIBLE);
-                                        gradeText.setVisibility(View.VISIBLE);
-                                        gradeText.setText(response.getString("result"));
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            }, new Response.ErrorListener() {
+                    progressBar.setVisibility(View.INVISIBLE);
+                    progressBar.setIndeterminate(true);
+                    progressBar.setVisibility(View.VISIBLE);
+                    Model.instance.uploadVideoToServer(data, uid, origVideoId, new NodeService.RequestListener<JSONObject>() {
                         @Override
-                        public void onErrorResponse(VolleyError error) {
+                        public void onSuccess(JSONObject response) {
+                            progressBar.setVisibility(View.INVISIBLE);
+                            try {
+                                gradeTitle.setVisibility(View.VISIBLE);
+                                gradeText.setVisibility(View.VISIBLE);
+                                gradeText.setText(response.getString("result"));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onError(VolleyError error) {
+                            progressBar.setVisibility(View.INVISIBLE);
                             errorText.setVisibility(View.VISIBLE);
                         }
                     });
-
-                    jsObjRequest.setShouldCache(false);
-                    jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(10000,
-                            DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-
-                    queue.add(jsObjRequest);
                 }
 
                 @Override
                 public void onProgress(int progress) {
-                    uploadProgress.setVisibility(View.VISIBLE);
-                    uploadProgress.setProgress(progress);
-                    progressText.setVisibility(View.VISIBLE);
-                    progressText.setText(progress + "%");
+                    progressBar.setVisibility(View.VISIBLE);
+                    progressBar.setProgressCompat(progress, true);
                 }
             });
         }
