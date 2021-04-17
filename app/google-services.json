@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "743119772866",
+    "firebase_url": "https://leaguetok-default-rtdb.firebaseio.com",
     "project_id": "leaguetok",
     "storage_bucket": "leaguetok.appspot.com"
   },
@@ -13,6 +14,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "743119772866-o4eml3p7eg3pqb26j4gu8mrudsbnh3q5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.leaguetok",
+            "certificate_hash": "39ea6c9e407016ebfe8896a0029ee75f3c3705d8"
+          }
+        },
         {
           "client_id": "743119772866-08hhesqgq9c306g2j83aek5sng0elo91.apps.googleusercontent.com",
           "client_type": 3
