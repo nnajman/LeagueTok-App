@@ -32,7 +32,7 @@ public class HomeFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
         // Hide action bar
-        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+//        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
 
         //Button btnUpload = root.findViewById(R.id.home_upload_btn);
         //btnUpload.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_navigation_home_to_uploadVideoFragment));
