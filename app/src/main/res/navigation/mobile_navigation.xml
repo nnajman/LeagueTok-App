@@ -9,7 +9,12 @@
         android:id="@+id/navigation_home"
         android:name="com.example.leaguetok.ui.home.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_navigation_home_to_uploadVideoFragment"
+            app:destination="@id/uploadVideoFragment"
+            app:enterAnim="@android:anim/slide_in_left" />
+    </fragment>
 
     <fragment
         android:id="@+id/searchFragment"
@@ -21,4 +26,16 @@
         android:name="com.example.leaguetok.ui.profile.ProfileFragment"
         android:label="@string/title_profile"
         tools:layout="@layout/profile_fragment" />
+    <fragment
+        android:id="@+id/uploadVideoFragment"
+        android:name="com.example.leaguetok.ui.UploadVideoFragment"
+        android:label="fragment_upload_video"
+        tools:layout="@layout/fragment_upload_video" >
+        <action
+            android:id="@+id/action_uploadVideoFragment_to_navigation_home"
+            app:popUpTo="@id/navigation_home" />
+        <argument
+            android:name="OriginalVideoID"
+            app:argType="string" />
+    </fragment>
 </navigation>
