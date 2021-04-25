@@ -105,7 +105,6 @@ public class OriginalVideo {
         result.put("uri", uri);
         result.put("performer", performer);
         result.put("uploadDate", uploadDate);
-        //result.put("lastUpdated", FieldValue.serverTimestamp());
         result.put("isDeleted", isDeleted);
         return result;
     }
