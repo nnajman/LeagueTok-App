@@ -21,13 +21,16 @@ import java.util.HashMap;
 import java.util.List;
 
 public class NodeService {
+    private final String IMIT_VIDEOS_API = "imitationVideo";
+    private final String ORIG_VIDEOS_API = "originalVideo";
+
     public interface RequestListener<JSONObject> {
         void onSuccess(JSONObject response);
         void onError(VolleyError error);
     }
 
     public void getAllOrigVideos(Long lastUpdated, Model.AsyncListener<List<OriginalVideo>> listener) {
-        final String getVideosURL = LeagueTokApplication.serverUrl + "/originalVideo/" + lastUpdated;
+        final String getVideosURL = LeagueTokApplication.serverUrl + "/" + ORIG_VIDEOS_API + "/" + lastUpdated;
         JsonArrayRequest jsArrRequest = new
                 JsonArrayRequest(Request.Method.GET,
                 getVideosURL,
@@ -64,8 +67,46 @@ public class NodeService {
         Volley.newRequestQueue(LeagueTokApplication.context).add(jsArrRequest);
     }
 
+    public void getAllImitVideos(Long lastUpdated, Model.AsyncListener<List<ImitationVideo>> listener) {
+        final String getVideosURL = LeagueTokApplication.serverUrl + "/" + IMIT_VIDEOS_API + "/" + lastUpdated;
+        JsonArrayRequest jsArrRequest = new
+                JsonArrayRequest(Request.Method.GET,
+                getVideosURL,
+                null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        List<ImitationVideo> imitationVideos = new ArrayList<ImitationVideo>();
+                        for(int i = 0; i < response.length(); i++) {
+                            ImitationVideo iv = new ImitationVideo();
+                            try {
+                                iv.fromMap(((JSONObject)response.get(i)));
+                                imitationVideos.add(iv);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        listener.onComplete(imitationVideos);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // TODO: Change action on error
+                Log.d("TAG", error.getMessage());
+            }
+        });
+
+        jsArrRequest.setShouldCache(false);
+        jsArrRequest.setRetryPolicy(new DefaultRetryPolicy(10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        Volley.newRequestQueue(LeagueTokApplication.context).add(jsArrRequest);
+    }
+
     public void uploadVideo(String uri, String uid, String origVideoId, RequestListener<JSONObject> listener) {
-        final String postVideoURL = LeagueTokApplication.serverUrl + "/video";
+        final String postVideoURL = LeagueTokApplication.serverUrl + "/" + IMIT_VIDEOS_API;
         HashMap<String, String> params = new HashMap<String,String>();
         params.put("link", uri);
         params.put("uid", uid);

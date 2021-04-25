@@ -26,6 +26,7 @@ public class Model {
     NodeService nodejsService = new NodeService();
     ModelSql modelSql = new ModelSql();
     private LiveData<List<OriginalVideo>> origVideosList;
+    private LiveData<List<ImitationVideo>> imitVideosList;
 
     public void uploadVideo(Uri videoUri, String uid, String origName,  DataAsyncListener<String> listener) {
         modelFirebase.uploadVideo(videoUri, uid, origName, listener);
@@ -83,5 +84,51 @@ public class Model {
 
     public LiveData<OriginalVideo> getOrigVideoById(String id) {
         return modelSql.getOrigVideoById(id);
+    }
+
+    public LiveData<List<ImitationVideo>> getAllImitationVideos(AsyncListener listener) {
+        if (imitVideosList == null) {
+            imitVideosList = AppLocalDB.db.imitationVideoDao().getAllImitationVideos();
+            refreshAllImitVideos(listener);
+        }
+        else {
+            if(listener != null) listener.onComplete(null);
+        }
+
+        return imitVideosList;
+    }
+
+    public void refreshAllImitVideos(AsyncListener listener) {
+        Long lastUpdated = LeagueTokApplication.context
+                .getSharedPreferences("TAG", Context.MODE_PRIVATE)
+                .getLong("imitVideosLastUpdateDate", 0);
+        nodejsService.getAllImitVideos(lastUpdated, new AsyncListener<List<ImitationVideo>>() {
+            @Override
+            public void onComplete(List<ImitationVideo> data) {
+                long lastUpdated = 0;
+
+                for (ImitationVideo imitVideo : data) {
+                    if (imitVideo.isDeleted()) {
+                        modelSql.deleteImitVideo(imitVideo, null);
+                    }
+                    else {
+                        modelSql.insertImitVideo(imitVideo, null);
+                        if(imitVideo.getLastUpdated() > lastUpdated) {
+                            lastUpdated = imitVideo.getLastUpdated();
+                        }
+                    }
+                }
+
+                LeagueTokApplication.context
+                        .getSharedPreferences("TAG", Context.MODE_PRIVATE)
+                        .edit()
+                        .putLong("imitVideosLastUpdateDate", lastUpdated)
+                        .apply();
+
+                if (listener != null) {
+                    listener.onComplete(null);
+                }
+            }
+        });
     }
 }
