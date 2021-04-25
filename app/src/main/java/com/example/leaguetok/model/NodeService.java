@@ -46,6 +46,7 @@ public class NodeService {
                                 originalVideos.add(ov);
                             } catch (JSONException e) {
                                 e.printStackTrace();
+                                listener.onError(null);
                             }
                         }
 
@@ -54,13 +55,12 @@ public class NodeService {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                // TODO: Change action on error
-                Log.d("TAG", error.getMessage());
+                listener.onError(null);
             }
         });
 
         jsArrRequest.setShouldCache(false);
-        jsArrRequest.setRetryPolicy(new DefaultRetryPolicy(10000,
+        jsArrRequest.setRetryPolicy(new DefaultRetryPolicy(3000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
@@ -84,6 +84,7 @@ public class NodeService {
                                 imitationVideos.add(iv);
                             } catch (JSONException e) {
                                 e.printStackTrace();
+                                listener.onError(null);
                             }
                         }
 
@@ -92,8 +93,7 @@ public class NodeService {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                // TODO: Change action on error
-                Log.d("TAG", error.getMessage());
+                listener.onError(null);
             }
         });
 

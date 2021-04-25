@@ -19,6 +19,7 @@ public class Model {
 
     public interface AsyncListener<T> {
         void onComplete(T data);
+        void onError(T error);
     }
 
     public final static Model instance = new Model();
@@ -79,6 +80,11 @@ public class Model {
                     listener.onComplete(null);
                 }
             }
+
+            @Override
+            public void onError(List<OriginalVideo> error) {
+                listener.onError(null);
+            }
         });
     }
 
@@ -128,6 +134,11 @@ public class Model {
                 if (listener != null) {
                     listener.onComplete(null);
                 }
+            }
+
+            @Override
+            public void onError(List<ImitationVideo> error) {
+                listener.onError(null);
             }
         });
     }
