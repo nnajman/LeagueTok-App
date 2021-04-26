@@ -14,10 +14,6 @@
             android:id="@+id/action_navigation_home_to_uploadVideoFragment"
             app:destination="@id/uploadVideoFragment"
             app:enterAnim="@android:anim/slide_in_left" />
-        <action
-            android:id="@+id/action_navigation_home_to_tableLeagueFragment"
-            app:destination="@id/tableLeagueFragment"
-            app:enterAnim="@android:anim/slide_in_left" />
     </fragment>
 
     <fragment
@@ -38,15 +34,6 @@
         <action
             android:id="@+id/action_uploadVideoFragment_to_navigation_home"
             app:popUpTo="@id/navigation_home" />
-        <argument
-            android:name="OriginalVideoID"
-            app:argType="string" />
-    </fragment>
-    <fragment
-        android:id="@+id/tableLeagueFragment"
-        android:name="com.example.leaguetok.ui.league.TableLeagueFragment"
-        android:label="fragment_table_league"
-        tools:layout="@layout/fragment_table_league" >
         <argument
             android:name="OriginalVideoID"
             app:argType="string" />
