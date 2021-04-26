@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,13 +31,6 @@ public class HomeFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
-
-        // Hide action bar
-//        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
-
-        //Button btnUpload = root.findViewById(R.id.home_upload_btn);
-        //btnUpload.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_navigation_home_to_uploadVideoFragment));
-
         ViewPager2 list = root.findViewById(R.id.viewPagerVideos);
         SwipeRefreshLayout swiper = root.findViewById(R.id.home_swipe_to_refresh);
 
@@ -47,6 +41,12 @@ public class HomeFragment extends Fragment {
                 Model.instance.refreshAllOrigVideos(new Model.AsyncListener() {
                     @Override
                     public void onComplete(Object data) {
+                        swiper.setRefreshing(false);
+                    }
+
+                    @Override
+                    public void onError(Object error) {
+                        Toast.makeText(getActivity(), "Network connection error", Toast.LENGTH_SHORT).show();
                         swiper.setRefreshing(false);
                     }
                 });

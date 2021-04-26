@@ -10,11 +10,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.leaguetok.LeagueTokApplication;
 import com.example.leaguetok.R;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.Player;
@@ -97,6 +99,14 @@ public class OrigVideoViewHolder extends RecyclerView.ViewHolder {
             public void onCompletion(MediaPlayer mp) {
                 imgPlay.setVisibility(View.INVISIBLE);
                 mp.start();
+            }
+        });
+        videoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+            @Override
+            public boolean onError(MediaPlayer mediaPlayer, int i, int i1) {
+                Toast.makeText(LeagueTokApplication.context, "Can't play this video", Toast.LENGTH_SHORT).show();
+                loading.setVisibility(View.GONE);
+                return true;
             }
         });
     }
