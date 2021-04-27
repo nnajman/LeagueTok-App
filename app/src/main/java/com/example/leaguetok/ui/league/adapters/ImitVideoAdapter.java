@@ -9,49 +9,33 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.leaguetok.R;
-import com.example.leaguetok.model.OriginalVideo;
-import com.example.leaguetok.ui.home.HomeViewModel;
-import com.example.leaguetok.ui.home.adapters.OrigVideoAdapter;
-import com.example.leaguetok.ui.home.adapters.OrigVideoViewHolder;
+import com.example.leaguetok.model.ImitationVideo;
+import com.example.leaguetok.ui.league.LeagueViewModel;
+import com.example.leaguetok.ui.league.adapters.ImitVideoAdapter;
+import com.example.leaguetok.ui.league.adapters.ImitVideoViewHolder;
 
-public class ImitVideoAdapter extends RecyclerView.Adapter<OrigVideoViewHolder> {
-    public interface onLeagueClickListener{
-        void onClick(int position);
-    }
+public class ImitVideoAdapter extends RecyclerView.Adapter<ImitVideoViewHolder> {
 
-    public interface onTryClickListener{
-        void onClick(int position);
-    }
+    LeagueViewModel data;
 
-    HomeViewModel data;
-    private OrigVideoAdapter.onLeagueClickListener leagueListener;
-    private OrigVideoAdapter.onTryClickListener tryListener;
-
-    public ImitVideoAdapter(HomeViewModel data) {
+    public ImitVideoAdapter(LeagueViewModel data) {
         this.data = data;
-    }
-
-    public void setOnLeagueClickListener(OrigVideoAdapter.onLeagueClickListener listener) {
-        this.leagueListener = listener;
-    }
-
-    public void setOnTryClickListener(OrigVideoAdapter.onTryClickListener listener) {
-        this.tryListener = listener;
     }
 
     @NonNull
     @Override
-    public OrigVideoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_row, parent, false);
-        OrigVideoViewHolder holder = new OrigVideoViewHolder(view, this.leagueListener, this.tryListener);
+    public ImitVideoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.league_list_row, parent, false);
+        ImitVideoViewHolder holder = new ImitVideoViewHolder(view);
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull OrigVideoViewHolder holder, int position) {
-        OriginalVideo originalVideo = data.getList().getValue().get(position);
-//        holder.txtVideoTitle.setText(originalVideo.getName());
-        holder.setVideoPlayer(originalVideo.getUri());
+    public void onBindViewHolder(@NonNull ImitVideoViewHolder holder, int position) {
+        ImitationVideo imitationVideo = data.getList().getValue().get(position);
+        holder.txtImitPlace.setText(String.valueOf(position+1));
+        holder.txtImitName.setText(imitationVideo.getUid());
+        holder.txtImitGrade.setText(String.valueOf(imitationVideo.getScore()));
     }
 
     @Override

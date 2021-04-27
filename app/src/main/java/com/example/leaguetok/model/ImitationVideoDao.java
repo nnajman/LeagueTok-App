@@ -14,6 +14,9 @@ public interface ImitationVideoDao {
     @Query("select * from ImitationVideo order by uploadDate desc")
     LiveData<List<ImitationVideo>> getAllImitationVideos();
 
+    @Query("select * from ImitationVideo where sourceId = :sourceID order by uploadDate desc")
+    LiveData<List<ImitationVideo>> getAllImitVideosBySourceID(String sourceID);
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(ImitationVideo... imitationVideos);
 
