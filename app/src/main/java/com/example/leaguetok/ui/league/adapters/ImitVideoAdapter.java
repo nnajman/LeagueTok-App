@@ -33,7 +33,27 @@ public class ImitVideoAdapter extends RecyclerView.Adapter<ImitVideoViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull ImitVideoViewHolder holder, int position) {
         ImitationVideo imitationVideo = data.getList().getValue().get(position);
-        holder.txtImitPlace.setText(String.valueOf(position+1));
+        switch(position) {
+            case 0:
+                holder.imgImitPlace.setImageResource(R.drawable.ic_outline_looks_one_24);
+                holder.imgImitPlace.setVisibility(View.VISIBLE);
+                holder.txtImitPlace.setVisibility(View.INVISIBLE);
+                break;
+            case 1:
+                holder.imgImitPlace.setImageResource(R.drawable.ic_outline_looks_two_24);
+                holder.imgImitPlace.setVisibility(View.VISIBLE);
+                holder.txtImitPlace.setVisibility(View.INVISIBLE);
+                break;
+            case 2:
+                holder.imgImitPlace.setImageResource(R.drawable.ic_outline_looks_3_24);
+                holder.imgImitPlace.setVisibility(View.VISIBLE);
+                holder.txtImitPlace.setVisibility(View.INVISIBLE);
+                break;
+            default:
+                holder.txtImitPlace.setText(String.valueOf(position+1));
+                holder.imgImitPlace.setVisibility(View.INVISIBLE);
+                break;
+        }
         holder.txtImitName.setText(imitationVideo.getUid());
         holder.txtImitGrade.setText(String.valueOf(imitationVideo.getScore()));
     }
