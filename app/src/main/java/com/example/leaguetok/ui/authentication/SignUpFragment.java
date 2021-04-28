@@ -22,6 +22,7 @@ import com.example.leaguetok.R;
 import com.example.leaguetok.utils.Listeners;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
@@ -34,12 +35,14 @@ import java.util.List;
 public class SignUpFragment extends Fragment {
     private FirebaseAuth mAuth;
     private View view;
+    private CircularProgressIndicator progressBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_sign_up, container, false);
+        progressBar = view.findViewById(R.id.sign_up_progress_bar);
 
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
@@ -72,15 +75,19 @@ public class SignUpFragment extends Fragment {
 
     private void createAccount(String email, String password, String repassword) {
         if (email.length() == 0 || password.length() == 0 || repassword.length() == 0) {
-            Toast.makeText(getActivity(), "אנא מלא את כל הפרטים",
+            Toast.makeText(getActivity(), "Please fill all the fields",
                     Toast.LENGTH_SHORT).show();
             return;
         }
         if (!password.equals(repassword)) {
-            Toast.makeText(getActivity(), "הסיסמה והאימות שלה לא זהים",
+            Toast.makeText(getActivity(), "Password doesn't match the repassword",
                     Toast.LENGTH_SHORT).show();
             return;
         }
+
+        progressBar.setVisibility(View.INVISIBLE);
+        progressBar.setIndeterminate(true);
+        progressBar.setVisibility(View.VISIBLE);
 
         mAuth.fetchSignInMethodsForEmail(email)
                 .addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>() {
@@ -89,9 +96,9 @@ public class SignUpFragment extends Fragment {
                         if (task.isSuccessful()) {
                             SignInMethodQueryResult result = task.getResult();
                             List<String> signInMethods = result.getSignInMethods();
-                            if (signInMethods.contains(EmailAuthProvider.EMAIL_PASSWORD_SIGN_IN_METHOD)) {
+                            if (signInMethods.size() > 0) {
                                 // User can sign in with email/password
-                                Toast.makeText(getActivity(), "משתמש זה כבר קיים במערכת",
+                                Toast.makeText(getActivity(), "The user already exists",
                                         Toast.LENGTH_SHORT).show();
                             }  else {
                                 mAuth.createUserWithEmailAndPassword(email, password)
@@ -101,10 +108,7 @@ public class SignUpFragment extends Fragment {
                                                 if (task.isSuccessful()) {
                                                     // Sign in success, update UI with the signed-in user's information
                                                     Log.d("TAG", "createUserWithEmail:success");
-                                                    Toast.makeText(getActivity(), "נרשמת בהצלחה",
-                                                            Toast.LENGTH_SHORT).show();
-                                                    NavController navCtrl = Navigation.findNavController(view);
-                                                    navCtrl.popBackStack();
+                                                    launchMainActivity();
                                                 }
                                             }
                                         });
@@ -112,10 +116,18 @@ public class SignUpFragment extends Fragment {
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w("TAG", "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(getActivity(), "מייל לא תקין",
+                            Toast.makeText(getActivity(), "Invalid email",
                                     Toast.LENGTH_SHORT).show();
                         }
+
+                        progressBar.setVisibility(View.INVISIBLE);
                     }
                 });
+    }
+
+    private void launchMainActivity() {
+        Intent i = new Intent(getActivity(), MainActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(i);
     }
 }
