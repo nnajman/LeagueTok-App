@@ -20,7 +20,6 @@ import com.example.leaguetok.R;
 import com.example.leaguetok.model.Model;
 import com.example.leaguetok.model.OriginalVideo;
 import com.example.leaguetok.ui.home.adapters.OrigVideoAdapter;
-import com.example.leaguetok.ui.league.TableLeagueFragment;
 
 import java.util.List;
 
@@ -62,8 +61,6 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(int position) {
                 Log.d("TAG", homeViewModel.getList().getValue().get(position).getName());
-                Navigation.findNavController(root)
-                .navigate(HomeFragmentDirections.actionNavigationHomeToTableLeagueFragment(homeViewModel.getList().getValue().get(position).getId()));
             }
         });
 
