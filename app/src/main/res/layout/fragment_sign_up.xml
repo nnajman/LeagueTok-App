@@ -13,10 +13,35 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
-        android:layout_marginBottom="30dp"
         android:layout_marginLeft="30dp"
         android:text="Register"
         android:textSize="50sp" />
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/sign_up_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:visibility="invisible"
+        tools:visibility="invisible" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/sign_up_full_name_layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:hint="Full name"
+        app:helperTextEnabled="true">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/sign_up_full_name_et"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="textEmailAddress"
+            android:textSize="15sp" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/sign_up_email_layout"
@@ -25,10 +50,10 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="10dp"
-        android:layout_marginTop="100dp"
-        android:hint="email"
+        android:hint="Email"
         app:helperTextEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -48,7 +73,8 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
         android:layout_marginRight="20dp"
-        android:hint="password"
+        android:hint="Password"
+        app:passwordToggleEnabled="true"
         app:helperTextEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -68,7 +94,8 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
         android:layout_marginRight="20dp"
-        android:hint="enter password again"
+        android:hint="Enter password again"
+        app:passwordToggleEnabled="true"
         app:helperTextEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText

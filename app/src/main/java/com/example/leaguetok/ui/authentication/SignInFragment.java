@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,17 +27,20 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.squareup.picasso.Picasso;
 
 public class SignInFragment extends Fragment {
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 1001;
+    private CircularProgressIndicator progressBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,6 +56,10 @@ public class SignInFragment extends Fragment {
         TextInputEditText passwordEt = view.findViewById(R.id.sign_in_password_et);
         Button signInBtn = view.findViewById(R.id.sign_in_btn);
         Button signInWithGoogleBtn = view.findViewById(R.id.sign_in_with_google_btn);
+        progressBar = view.findViewById(R.id.sign_in_progress_bar);
+
+        ImageView logo = view.findViewById(R.id.sign_in_logo);
+        Picasso.get().load("https://firebasestorage.googleapis.com/v0/b/leaguetok.appspot.com/o/logo_pic.jpeg?alt=media&token=6da71041-0ff7-4e1a-83b6-0b83ade8ed57").into(logo);
 
         signInBtn.setOnClickListener(b -> {
             login(emailEt.getText().toString(), passwordEt.getText().toString());
@@ -91,6 +99,10 @@ public class SignInFragment extends Fragment {
     private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
         Log.d("TAG", "firebaseAuthWithGoogle:" + account.getId());
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+        progressBar.setVisibility(View.INVISIBLE);
+        progressBar.setIndeterminate(true);
+        progressBar.setVisibility(View.VISIBLE);
+
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                     @Override
@@ -103,19 +115,25 @@ public class SignInFragment extends Fragment {
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w("TAG", "signInWithCredential:failure", task.getException());
-                            Toast.makeText(getActivity(), "התחברות נכשלה",
+                            Toast.makeText(getActivity(), "Login failed",
                                     Toast.LENGTH_SHORT).show();
                         }
+
+                        progressBar.setVisibility(View.INVISIBLE);
                     }
                 });
     }
 
     private void login(String email, String password) {
         if (email.length() == 0 || password.length() == 0) {
-            Toast.makeText(getActivity(), "שם המשתמש/סיסמה לא נכונים",
+            Toast.makeText(getActivity(), "Please fill all the fields",
                     Toast.LENGTH_SHORT).show();
             return;
         }
+
+        progressBar.setVisibility(View.INVISIBLE);
+        progressBar.setIndeterminate(true);
+        progressBar.setVisibility(View.VISIBLE);
 
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
@@ -125,9 +143,11 @@ public class SignInFragment extends Fragment {
                             launchMainActivity();
                         } else {
                             // If sign in fails, display a message to the user.
-                            Toast.makeText(getActivity(), "שם המשתמש/סיסמה לא נכונים",
+                            Toast.makeText(getActivity(), "Invalid Username/Password",
                                     Toast.LENGTH_SHORT).show();
                         }
+
+                        progressBar.setVisibility(View.INVISIBLE);
                     }
                 });
     }
