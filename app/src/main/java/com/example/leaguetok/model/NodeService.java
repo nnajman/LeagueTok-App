@@ -123,7 +123,7 @@ public class NodeService {
     }
 
     public void uploadVideo(String uri, String uid, String origVideoId, RequestListener<JSONObject> listener) {
-        final String postVideoURL = LeagueTokApplication.serverUrl + "/" + IMIT_VIDEOS_API;
+        final String postVideoURL = getServerUrl() + "/" + IMIT_VIDEOS_API;
         HashMap<String, String> params = new HashMap<String,String>();
         params.put("link", uri);
         params.put("uid", uid);

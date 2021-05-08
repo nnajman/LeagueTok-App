@@ -7,7 +7,6 @@ import androidx.multidex.MultiDexApplication;
 
 public class LeagueTokApplication extends MultiDexApplication {
     public static Context context;
-    public static String serverUrl = "http://10.0.0.16:8080";
 
     @Override
     public void onCreate() {
