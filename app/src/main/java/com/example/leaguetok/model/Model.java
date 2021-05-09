@@ -106,11 +106,14 @@ public class Model {
     }
 
     public LiveData<List<ImitationVideo>> getAllImitVideosBySourceID(String sourceID, AsyncListener listener) {
-
         refreshAllImitVideos(listener);
         imitVideosBySource = AppLocalDB.db.imitationVideoDao().getAllImitVideosBySourceID(sourceID);
         return imitVideosBySource;
 
+    }
+
+    public void getNumOfImitBySourceId(String sourceID, AsyncListener<Integer> listener) {
+        modelSql.getNumOfImitBySourceId(sourceID, listener);
     }
 
     public void refreshAllImitVideos(AsyncListener listener) {

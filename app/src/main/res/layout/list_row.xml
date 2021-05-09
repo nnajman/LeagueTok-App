@@ -52,7 +52,7 @@
             android:shadowDx="0"
             android:shadowDy="0"
             android:shadowRadius="15"
-            android:text="- 100 people tried it -"
+            android:text="@string/count_tries"
             android:textColor="@android:color/white"
             android:textSize="15sp" />
     </LinearLayout>

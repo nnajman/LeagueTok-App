@@ -88,4 +88,28 @@ public class ModelSql {
 
         new MyAsyncTask().execute();
     }
+
+    public void getNumOfImitBySourceId(String sourceId, Model.AsyncListener<Integer> listener) {
+        class MyAsyncTask extends AsyncTask {
+            Integer num = 0;
+
+            @Override
+            protected Object doInBackground(Object[] objects) {
+                num = AppLocalDB.db.imitationVideoDao().getNumOfImitBySourceId(sourceId);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Object o) {
+                super.onPostExecute(o);
+
+                if (listener != null) {
+                    listener.onComplete(num);
+                }
+
+            }
+        }
+
+        new MyAsyncTask().execute();
+    }
 }

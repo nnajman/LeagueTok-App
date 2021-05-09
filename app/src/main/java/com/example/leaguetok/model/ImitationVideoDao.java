@@ -17,6 +17,9 @@ public interface ImitationVideoDao {
     @Query("select * from ImitationVideo where sourceId = :sourceID order by uploadDate desc")
     LiveData<List<ImitationVideo>> getAllImitVideosBySourceID(String sourceID);
 
+    @Query("select count(*) from ImitationVideo where sourceId = :sourceID")
+    Integer getNumOfImitBySourceId(String sourceID);
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(ImitationVideo... imitationVideos);
 
