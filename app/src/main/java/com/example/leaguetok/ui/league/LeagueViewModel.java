@@ -1,8 +1,13 @@
 package com.example.leaguetok.ui.league;
 
+import android.util.Log;
+import android.view.Display;
 import android.widget.Toast;
 
+import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.example.leaguetok.LeagueTokApplication;
@@ -17,8 +22,7 @@ public class LeagueViewModel extends ViewModel {
     public LeagueViewModel() {
         stList = Model.instance.getAllImitationVideos(new Model.AsyncListener() {
             @Override
-            public void onComplete(Object data) {
-            }
+            public void onComplete(Object data) {}
 
             @Override
             public void onError(Object error) {
@@ -27,5 +31,11 @@ public class LeagueViewModel extends ViewModel {
         });
     }
 
-    public LiveData<List<ImitationVideo>> getList() { return stList; }
+    public void filter(String sourceId) {
+        stList = Transformations.switchMap(stList, list -> Model.instance.getAllImitVideosBySourceID(sourceId, null));
+    }
+
+    public LiveData<List<ImitationVideo>> getList() {
+        return stList;
+    }
 }

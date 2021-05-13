@@ -42,14 +42,16 @@ public class TableLeagueFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         leagueViewModel = new ViewModelProvider(this).get(LeagueViewModel.class);
         View root = inflater.inflate(R.layout.fragment_table_league, container, false);
-        String origVideoId = UploadVideoFragmentArgs.fromBundle(getArguments()).getOriginalVideoID();
+        String origVideoId = TableLeagueFragmentArgs.fromBundle(getArguments()).getOriginalVideoID();
         RecyclerView list = root.findViewById(R.id.imitVideosList);
-
 
         list.setHasFixedSize(true);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         list.setLayoutManager((layoutManager));
+        leagueViewModel.filter(origVideoId);
+        ImitVideoAdapter adapter = new ImitVideoAdapter(leagueViewModel);
+        list.setAdapter(adapter);
 
 //        SwipeRefreshLayout swiper = root.findViewById(R.id.home_swipe_to_refresh);
 
@@ -71,9 +73,6 @@ public class TableLeagueFragment extends Fragment {
 //                });
 //            }
 //        });
-
-        ImitVideoAdapter adapter = new ImitVideoAdapter(leagueViewModel);
-        list.setAdapter(adapter);
 
         leagueViewModel.getList().observe(getViewLifecycleOwner(), new Observer<List<ImitationVideo>>() {
             @Override
