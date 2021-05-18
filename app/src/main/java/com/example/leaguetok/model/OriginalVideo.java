@@ -8,11 +8,12 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 @Entity
-public class OriginalVideo {
+public class OriginalVideo implements Serializable {
     @PrimaryKey
     @NonNull
     private String id;

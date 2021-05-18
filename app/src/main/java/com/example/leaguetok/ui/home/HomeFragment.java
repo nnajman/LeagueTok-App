@@ -32,6 +32,8 @@ public class HomeFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+        setHasOptionsMenu(false);
         ViewPager2 list = root.findViewById(R.id.viewPagerVideos);
         SwipeRefreshLayout swiper = root.findViewById(R.id.home_swipe_to_refresh);
 
