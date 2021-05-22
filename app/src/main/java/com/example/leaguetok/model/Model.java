@@ -28,7 +28,6 @@ public class Model {
     ModelSql modelSql = new ModelSql();
     private LiveData<List<OriginalVideo>> origVideosList;
     private LiveData<List<ImitationVideo>> imitVideosList;
-    private LiveData<List<ImitationVideo>> imitVideosBySource;
 
     public void uploadVideo(Uri videoUri, String uid, String origName,  DataAsyncListener<String> listener) {
         modelFirebase.uploadVideo(videoUri, uid, origName, listener);
@@ -106,11 +105,12 @@ public class Model {
     }
 
     public LiveData<List<ImitationVideo>> getAllImitVideosBySourceID(String sourceID, AsyncListener listener) {
-
         refreshAllImitVideos(listener);
-        imitVideosBySource = AppLocalDB.db.imitationVideoDao().getAllImitVideosBySourceID(sourceID);
-        return imitVideosBySource;
+        return AppLocalDB.db.imitationVideoDao().getAllImitVideosBySourceID(sourceID);
+    }
 
+    public void getNumOfImitBySourceId(String sourceID, AsyncListener<Integer> listener) {
+        modelSql.getNumOfImitBySourceId(sourceID, listener);
     }
 
     public void refreshAllImitVideos(AsyncListener listener) {

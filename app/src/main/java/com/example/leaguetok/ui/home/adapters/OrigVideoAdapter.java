@@ -1,16 +1,23 @@
 package com.example.leaguetok.ui.home.adapters;
 
 import android.net.Uri;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.leaguetok.LeagueTokApplication;
 import com.example.leaguetok.R;
+import com.example.leaguetok.model.Model;
 import com.example.leaguetok.model.OriginalVideo;
 import com.example.leaguetok.ui.home.HomeViewModel;
+
+import java.util.Collection;
+import java.util.Collections;
 
 
 public class OrigVideoAdapter extends RecyclerView.Adapter<OrigVideoViewHolder> {
@@ -46,11 +53,21 @@ public class OrigVideoAdapter extends RecyclerView.Adapter<OrigVideoViewHolder> 
         return holder;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onBindViewHolder(@NonNull OrigVideoViewHolder holder, int position) {
         OriginalVideo originalVideo = data.getList().getValue().get(position);
         holder.txtVideoTitle.setText(originalVideo.getName());
         holder.setVideoPlayer(originalVideo.getUri());
+        Model.instance.getNumOfImitBySourceId(originalVideo.getId(), new Model.AsyncListener<Integer>() {
+            @Override
+            public void onComplete(Integer data) {
+                holder.txtCountTries.setText(LeagueTokApplication.context.getString(R.string.count_tries, data));
+            }
+
+            @Override
+            public void onError(Integer error) {}
+        });
     }
 
     @Override

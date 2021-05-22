@@ -1,5 +1,6 @@
 package com.example.leaguetok.model;
 
+import android.content.res.Resources;
 import android.util.Log;
 import android.view.View;
 
@@ -11,14 +12,18 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.leaguetok.LeagueTokApplication;
+import com.example.leaguetok.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Properties;
 
 public class NodeService {
     private final String IMIT_VIDEOS_API = "imitationVideo";
@@ -29,8 +34,20 @@ public class NodeService {
         void onError(VolleyError error);
     }
 
+    private String getServerUrl() {
+        try {
+            InputStream rawResource = LeagueTokApplication.context.getResources().openRawResource(R.raw.config);
+            Properties properties = new Properties();
+            properties.load(rawResource);
+            return properties.getProperty("serverUrl");
+        }
+        catch (IOException e) {
+            return null;
+        }
+    }
+
     public void getAllOrigVideos(Long lastUpdated, Model.AsyncListener<List<OriginalVideo>> listener) {
-        final String getVideosURL = LeagueTokApplication.serverUrl + "/" + ORIG_VIDEOS_API + "/" + lastUpdated;
+        final String getVideosURL = getServerUrl() + "/" + ORIG_VIDEOS_API + "/" + lastUpdated;
         JsonArrayRequest jsArrRequest = new
                 JsonArrayRequest(Request.Method.GET,
                 getVideosURL,
@@ -68,7 +85,7 @@ public class NodeService {
     }
 
     public void getAllImitVideos(Long lastUpdated, Model.AsyncListener<List<ImitationVideo>> listener) {
-        final String getVideosURL = LeagueTokApplication.serverUrl + "/" + IMIT_VIDEOS_API + "/" + lastUpdated;
+        final String getVideosURL = getServerUrl() + "/" + IMIT_VIDEOS_API + "/" + lastUpdated;
         JsonArrayRequest jsArrRequest = new
                 JsonArrayRequest(Request.Method.GET,
                 getVideosURL,
@@ -106,7 +123,7 @@ public class NodeService {
     }
 
     public void uploadVideo(String uri, String uid, String origVideoId, RequestListener<JSONObject> listener) {
-        final String postVideoURL = LeagueTokApplication.serverUrl + "/" + IMIT_VIDEOS_API;
+        final String postVideoURL = getServerUrl() + "/" + IMIT_VIDEOS_API;
         HashMap<String, String> params = new HashMap<String,String>();
         params.put("link", uri);
         params.put("uid", uid);

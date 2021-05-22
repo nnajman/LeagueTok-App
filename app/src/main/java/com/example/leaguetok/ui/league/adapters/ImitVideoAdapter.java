@@ -1,6 +1,7 @@
 package com.example.leaguetok.ui.league.adapters;
 
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,6 +55,7 @@ public class ImitVideoAdapter extends RecyclerView.Adapter<ImitVideoViewHolder> 
                 holder.imgImitPlace.setVisibility(View.INVISIBLE);
                 break;
         }
+
         holder.txtImitName.setText(imitationVideo.getUid());
         holder.txtImitGrade.setText(String.valueOf(imitationVideo.getScore()));
     }

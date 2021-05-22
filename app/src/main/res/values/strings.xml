@@ -10,6 +10,7 @@
     <string name="error_message">Oops... We are sorry but there was a problem while uploading your video :(</string>
     <string name="action_try">Try It</string>
     <string name="league_table">League</string>
+    <string name="count_tries">- %1$d people tried it -</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="league_place">Place</string>
