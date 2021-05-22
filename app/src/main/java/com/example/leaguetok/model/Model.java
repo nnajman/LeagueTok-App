@@ -104,8 +104,7 @@ public class Model {
         return imitVideosList;
     }
 
-    public LiveData<List<ImitationVideo>> getAllImitVideosBySourceID(String sourceID, AsyncListener listener) {
-        refreshAllImitVideos(listener);
+    public LiveData<List<ImitationVideo>> getAllImitVideosBySourceID(String sourceID) {
         return AppLocalDB.db.imitationVideoDao().getAllImitVideosBySourceID(sourceID);
     }
 
