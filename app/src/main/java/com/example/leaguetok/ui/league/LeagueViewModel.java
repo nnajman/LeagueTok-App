@@ -32,7 +32,7 @@ public class LeagueViewModel extends ViewModel {
     }
 
     public void filter(String sourceId) {
-        stList = Transformations.switchMap(stList, list -> Model.instance.getAllImitVideosBySourceID(sourceId, null));
+        stList = Transformations.switchMap(stList, list -> Model.instance.getAllImitVideosBySourceID(sourceId));
     }
 
     public LiveData<List<ImitationVideo>> getList() {
