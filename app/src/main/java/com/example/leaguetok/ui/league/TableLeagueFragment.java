@@ -53,26 +53,26 @@ public class TableLeagueFragment extends Fragment {
         ImitVideoAdapter adapter = new ImitVideoAdapter(leagueViewModel);
         list.setAdapter(adapter);
 
-//        SwipeRefreshLayout swiper = root.findViewById(R.id.home_swipe_to_refresh);
+        SwipeRefreshLayout swiper = root.findViewById(R.id.league_swipe_to_refresh);
 
-//        swiper.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//                swiper.setRefreshing(true);
-//                Model.instance.refreshAllOrigVideos(new Model.AsyncListener() {
-//                    @Override
-//                    public void onComplete(Object data) {
-//                        swiper.setRefreshing(false);
-//                    }
-//
-//                    @Override
-//                    public void onError(Object error) {
-//                        Toast.makeText(getActivity(), "Network connection error", Toast.LENGTH_SHORT).show();
-//                        swiper.setRefreshing(false);
-//                    }
-//                });
-//            }
-//        });
+        swiper.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swiper.setRefreshing(true);
+                Model.instance.refreshAllImitVideos(new Model.AsyncListener() {
+                    @Override
+                    public void onComplete(Object data) {
+                        swiper.setRefreshing(false);
+                    }
+
+                    @Override
+                    public void onError(Object error) {
+                        Toast.makeText(getActivity(), "Network connection error", Toast.LENGTH_SHORT).show();
+                        swiper.setRefreshing(false);
+                    }
+                });
+            }
+        });
 
         leagueViewModel.getList().observe(getViewLifecycleOwner(), new Observer<List<ImitationVideo>>() {
             @Override
