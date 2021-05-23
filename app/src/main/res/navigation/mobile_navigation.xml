@@ -33,7 +33,15 @@
         android:id="@+id/profileFragment"
         android:name="com.example.leaguetok.ui.profile.ProfileFragment"
         android:label="@string/title_profile"
-        tools:layout="@layout/profile_fragment" />
+        tools:layout="@layout/profile_fragment" >
+        <argument
+            android:name="uid"
+            app:argType="string"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_profileFragment_to_profileVideoFragment"
+            app:destination="@id/profileVideoFragment" />
+    </fragment>
     <fragment
         android:id="@+id/uploadVideoFragment"
         android:name="com.example.leaguetok.ui.UploadVideoFragment"
@@ -62,5 +70,14 @@
         <argument
             android:name="originalVideo"
             app:argType="com.example.leaguetok.model.OriginalVideo" />
+    </fragment>
+    <action android:id="@+id/action_global_profileFragment" app:destination="@id/profileFragment" />
+    <fragment
+        android:id="@+id/profileVideoFragment"
+        android:name="com.example.leaguetok.ui.profile.ProfileVideoFragment"
+        android:label="ProfileVideoFragment" >
+        <argument
+            android:name="imitationVideo"
+            app:argType="com.example.leaguetok.model.ImitationVideo" />
     </fragment>
 </navigation>

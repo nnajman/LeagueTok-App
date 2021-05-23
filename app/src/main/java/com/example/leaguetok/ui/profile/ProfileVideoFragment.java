@@ -1,4 +1,4 @@
-package com.example.leaguetok.ui.search;
+package com.example.leaguetok.ui.profile;
 
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -13,7 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,19 +20,17 @@ import android.widget.VideoView;
 
 import com.example.leaguetok.LeagueTokApplication;
 import com.example.leaguetok.R;
-import com.example.leaguetok.model.OriginalVideo;
+import com.example.leaguetok.model.ImitationVideo;
 
-public class SearchVideoFragment extends Fragment {
+public class ProfileVideoFragment extends Fragment {
 
     VideoView videoView;
     TextView txtVideoTitle;
     TextView txtCountTries;
     ProgressBar loading;
     ImageView imgPlay;
-    LinearLayout btnTryIt;
-    LinearLayout btnLeagueTable;
 
-    public SearchVideoFragment() {
+    public ProfileVideoFragment() {
         // Required empty public constructor
     }
 
@@ -42,20 +39,20 @@ public class SearchVideoFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.list_row, container, false);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().show();
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().show();
         setHasOptionsMenu(true);
-        OriginalVideo originalVideo = SearchVideoFragmentArgs.fromBundle(getArguments()).getOriginalVideo();
+        ImitationVideo imitationVideo = ProfileVideoFragmentArgs.fromBundle(getArguments()).getImitationVideo();
         videoView = view.findViewById(R.id.listrow_video);
         txtVideoTitle = view.findViewById(R.id.listrow_video_title);
         txtCountTries = view.findViewById(R.id.listrow_count_tries);
         loading = view.findViewById(R.id.listrow_loading);
         imgPlay = view.findViewById(R.id.listrow_play_btn);
-        btnTryIt = view.findViewById(R.id.listrow_try_btn);
-        btnLeagueTable = view.findViewById(R.id.listrow_league_table_btn);
+        view.findViewById(R.id.listrow_try_btn).setVisibility(View.INVISIBLE);
+        view.findViewById(R.id.listrow_league_table_btn).setVisibility(View.INVISIBLE);
 
-        txtVideoTitle.setText(originalVideo.getName());
-        setVideoPlayer(originalVideo.getUri());
+//        txtVideoTitle.setText(imitationVideo.get());
+        setVideoPlayer(imitationVideo.getUrl());
         return view;
     }
 
@@ -67,7 +64,6 @@ public class SearchVideoFragment extends Fragment {
         }
         return super.onOptionsItemSelected(item);
     }
-
 
     public void setVideoPlayer(String videoUri) {
         videoView.setVideoPath(videoUri);
