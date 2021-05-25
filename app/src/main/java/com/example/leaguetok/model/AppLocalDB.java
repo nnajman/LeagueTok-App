@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase;
 import com.example.leaguetok.LeagueTokApplication;
 
 // If entity is modified, change the version to higher number
-@Database(entities = {OriginalVideo.class, ImitationVideo.class}, version = 6)
+@Database(entities = {OriginalVideo.class, ImitationVideo.class, User.class}, version = 6)
 abstract class AppLocalDBRepository extends RoomDatabase {
     public abstract OriginalVideoDao originalVideoDao();
     public abstract ImitationVideoDao imitationVideoDao();
