@@ -28,6 +28,7 @@ public class Model {
     ModelSql modelSql = new ModelSql();
     private LiveData<List<OriginalVideo>> origVideosList;
     private LiveData<List<ImitationVideo>> imitVideosList;
+    private LiveData<List<User>> usersList;
 
     public void uploadVideo(Uri videoUri, String uid, String origName,  DataAsyncListener<String> listener) {
         modelFirebase.uploadVideo(videoUri, uid, origName, listener);
@@ -146,6 +147,57 @@ public class Model {
 
             @Override
             public void onError(List<ImitationVideo> error) {
+                listener.onError(null);
+            }
+        });
+    }
+
+    public LiveData<List<User>> getAllUsers(AsyncListener listener) {
+        if (usersList == null) {
+            usersList = AppLocalDB.db.userDao().getAllUsers();
+            refreshAllUsers(listener);
+        }
+        else {
+            if(listener != null) listener.onComplete(null);
+        }
+
+        return usersList;
+    }
+
+    public void refreshAllUsers(AsyncListener listener) {
+        Long lastUpdated = LeagueTokApplication.context
+                .getSharedPreferences("TAG", Context.MODE_PRIVATE)
+                .getLong("usersLastUpdateDate", 0);
+        nodejsService.getAllUsers(lastUpdated, new AsyncListener<List<User>>() {
+            @Override
+            public void onComplete(List<User> data) {
+                long lastUpdated = 0;
+
+                for (User user : data) {
+                    if (user.isDeleted()) {
+                        modelSql.deleteUser(user, null);
+                    }
+                    else {
+                        modelSql.insertUser(user, null);
+                        if(user.getLastUpdated() > lastUpdated) {
+                            lastUpdated = user.getLastUpdated();
+                        }
+                    }
+                }
+
+                LeagueTokApplication.context
+                        .getSharedPreferences("TAG", Context.MODE_PRIVATE)
+                        .edit()
+                        .putLong("usersLastUpdateDate", lastUpdated)
+                        .apply();
+
+                if (listener != null) {
+                    listener.onComplete(null);
+                }
+            }
+
+            @Override
+            public void onError(List<User> error) {
                 listener.onError(null);
             }
         });

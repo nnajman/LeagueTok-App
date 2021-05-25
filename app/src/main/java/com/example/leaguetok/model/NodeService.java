@@ -28,6 +28,7 @@ import java.util.Properties;
 public class NodeService {
     private final String IMIT_VIDEOS_API = "imitationVideo";
     private final String ORIG_VIDEOS_API = "originalVideo";
+    private final String USERS_API = "user";
 
     public interface RequestListener<JSONObject> {
         void onSuccess(JSONObject response);
@@ -106,6 +107,44 @@ public class NodeService {
                         }
 
                         listener.onComplete(imitationVideos);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                listener.onError(null);
+            }
+        });
+
+        jsArrRequest.setShouldCache(false);
+        jsArrRequest.setRetryPolicy(new DefaultRetryPolicy(10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        Volley.newRequestQueue(LeagueTokApplication.context).add(jsArrRequest);
+    }
+
+    public void getAllUsers(Long lastUpdated, Model.AsyncListener<List<User>> listener) {
+        final String getUsersURL = getServerUrl() + "/" + USERS_API + "/" + lastUpdated;
+        JsonArrayRequest jsArrRequest = new
+                JsonArrayRequest(Request.Method.GET,
+                getUsersURL,
+                null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        List<User> users = new ArrayList<User>();
+                        for(int i = 0; i < response.length(); i++) {
+                            User user = new User();
+                            try {
+                                user.fromMap(((JSONObject)response.get(i)));
+                                users.add(user);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                listener.onError(null);
+                            }
+                        }
+
+                        listener.onComplete(users);
                     }
                 }, new Response.ErrorListener() {
             @Override
