@@ -1,5 +1,7 @@
 package com.example.leaguetok.ui.league.adapters;
 
+import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -34,6 +36,7 @@ public class ImitVideoAdapter extends RecyclerView.Adapter<ImitVideoViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull ImitVideoViewHolder holder, int position) {
         ImitationVideo imitationVideo = data.getList().getValue().get(position);
+
         switch(position) {
             case 0:
                 holder.imgImitPlace.setImageResource(R.drawable.ic_outline_looks_one_24);
@@ -52,6 +55,7 @@ public class ImitVideoAdapter extends RecyclerView.Adapter<ImitVideoViewHolder> 
                 break;
             default:
                 holder.txtImitPlace.setText(String.valueOf(position+1));
+                holder.txtImitPlace.setVisibility(View.VISIBLE);
                 holder.imgImitPlace.setVisibility(View.INVISIBLE);
                 break;
         }

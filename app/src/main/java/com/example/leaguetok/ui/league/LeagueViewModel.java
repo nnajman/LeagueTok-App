@@ -13,11 +13,13 @@ import androidx.lifecycle.ViewModel;
 import com.example.leaguetok.LeagueTokApplication;
 import com.example.leaguetok.model.Model;
 import com.example.leaguetok.model.ImitationVideo;
+import com.example.leaguetok.model.OriginalVideo;
 
 import java.util.List;
 
 public class LeagueViewModel extends ViewModel {
     private LiveData<List<ImitationVideo>> stList;
+    private LiveData<OriginalVideo> originalVideo;
 
     public LeagueViewModel() {
         stList = Model.instance.getAllImitationVideos(new Model.AsyncListener() {
@@ -33,9 +35,14 @@ public class LeagueViewModel extends ViewModel {
 
     public void filter(String sourceId) {
         stList = Transformations.switchMap(stList, list -> Model.instance.getAllImitVideosBySourceID(sourceId));
+        originalVideo = Model.instance.getOrigVideoById(sourceId);
     }
 
     public LiveData<List<ImitationVideo>> getList() {
         return stList;
+    }
+
+    public LiveData<OriginalVideo> getOriginalVideo() {
+        return originalVideo;
     }
 }

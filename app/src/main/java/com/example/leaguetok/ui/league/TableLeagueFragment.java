@@ -3,6 +3,7 @@ package com.example.leaguetok.ui.league;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -44,12 +45,18 @@ public class TableLeagueFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_table_league, container, false);
         String origVideoId = TableLeagueFragmentArgs.fromBundle(getArguments()).getOriginalVideoID();
         RecyclerView list = root.findViewById(R.id.imitVideosList);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().show();
 
         list.setHasFixedSize(true);
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         list.setLayoutManager((layoutManager));
         leagueViewModel.filter(origVideoId);
+        leagueViewModel.getOriginalVideo().observe(getViewLifecycleOwner(), new Observer<OriginalVideo>() {
+            @Override
+            public void onChanged(OriginalVideo originalVideo) {
+                ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(originalVideo.getName());
+            }
+        });
         ImitVideoAdapter adapter = new ImitVideoAdapter(leagueViewModel);
         list.setAdapter(adapter);
 
