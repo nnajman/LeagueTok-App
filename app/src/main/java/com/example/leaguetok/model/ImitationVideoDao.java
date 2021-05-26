@@ -20,9 +20,15 @@ public interface ImitationVideoDao {
     @Query("select count(*) from ImitationVideo where sourceId = :sourceID")
     Integer getNumOfImitBySourceId(String sourceID);
 
+    @Query("select * from ImitationVideo where uid = :uid")
+    LiveData<List<ImitationVideo>> getAllImitVideosByUid(String uid);
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(ImitationVideo... imitationVideos);
 
     @Delete
     void delete(ImitationVideo imitationVideo);
+
+    @Query("delete from ImitationVideo")
+    void deleteAll();
 }

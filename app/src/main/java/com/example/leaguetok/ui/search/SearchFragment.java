@@ -11,7 +11,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
@@ -32,7 +31,7 @@ import java.util.List;
 
 public class SearchFragment extends Fragment {
     private HomeViewModel homeViewModel;
-    private RecyclerView courseRV;
+    private RecyclerView recyclerView;
     private SearchAdapter adapter;
     private List<OriginalVideo> videos;
     private List<OriginalVideo> filteredVideos;
@@ -45,13 +44,15 @@ public class SearchFragment extends Fragment {
         View view = inflater.inflate(R.layout.search_fragment, container, false);
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         ((AppCompatActivity) getActivity()).getSupportActionBar().show();
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         setHasOptionsMenu(true);
-        courseRV = view.findViewById(R.id.idRVCourses);
+        recyclerView = view.findViewById(R.id.search_results);
 
         homeViewModel.getList().observe(getViewLifecycleOwner(), new Observer<List<OriginalVideo>>() {
             @Override
             public void onChanged(List<OriginalVideo> originalVideos) {
                 videos = originalVideos;
+                filteredVideos = originalVideos;
                 buildRecyclerView();
                 adapter.notifyDataSetChanged();
                 adapter.setOnItemClickListener((position) -> {
@@ -138,17 +139,16 @@ public class SearchFragment extends Fragment {
         adapter = new SearchAdapter(videos, getContext());
 
         // adding layout manager to our recycler view.
-//        LinearLayoutManager manager = new LinearLayoutManager(getContext());
         GridLayoutManager manager = new GridLayoutManager(getContext(), 2, GridLayoutManager.VERTICAL, false);
-        courseRV.setHasFixedSize(true);
+        recyclerView.setHasFixedSize(true);
 
         // setting layout manager
         // to our recycler view.
-        courseRV.setLayoutManager(manager);
+        recyclerView.setLayoutManager(manager);
 
         // setting adapter to
         // our recycler view.
-        courseRV.setAdapter(adapter);
+        recyclerView.setAdapter(adapter);
     }
 
 }

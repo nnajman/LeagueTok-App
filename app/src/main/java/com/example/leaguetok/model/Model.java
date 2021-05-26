@@ -2,6 +2,7 @@ package com.example.leaguetok.model;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 
@@ -35,6 +36,10 @@ public class Model {
 
     public void uploadVideoToServer(String uri, String uid, String origVideoId, NodeService.RequestListener<JSONObject> listener) {
         nodejsService.uploadVideo(uri, uid, origVideoId, listener);
+    }
+
+    public void addNewUser(String uid, String fullName, AsyncListener listener) {
+        nodejsService.addNewUser(uid, fullName, listener);
     }
 
     public LiveData<List<OriginalVideo>> getAllOriginalVideos(AsyncListener listener) {
@@ -92,6 +97,14 @@ public class Model {
         return modelSql.getOrigVideoById(id);
     }
 
+    public LiveData<List<ImitationVideo>> getImitiationVideosByUid(String uid, AsyncListener listener) {
+        LiveData<List<ImitationVideo>> userImitVideos =
+                AppLocalDB.db.imitationVideoDao().getAllImitVideosByUid(uid);
+
+        refreshUserImitVideos(uid, listener);
+        return userImitVideos;
+    }
+
     public LiveData<List<ImitationVideo>> getAllImitationVideos(AsyncListener listener) {
         if (imitVideosList == null) {
             imitVideosList = AppLocalDB.db.imitationVideoDao().getAllImitationVideos();
@@ -137,6 +150,45 @@ public class Model {
                         .getSharedPreferences("TAG", Context.MODE_PRIVATE)
                         .edit()
                         .putLong("imitVideosLastUpdateDate", lastUpdated)
+                        .apply();
+
+                if (listener != null) {
+                    listener.onComplete(null);
+                }
+            }
+
+            @Override
+            public void onError(List<ImitationVideo> error) {
+                listener.onError(null);
+            }
+        });
+    }
+
+    public void refreshUserImitVideos(String uid, AsyncListener listener) {
+        Long lastUpdated = LeagueTokApplication.context
+                .getSharedPreferences("TAG", Context.MODE_PRIVATE)
+                .getLong("userImitVideosLastUpdateDate", 0);
+        nodejsService.getUserImitVideos(uid, lastUpdated, new AsyncListener<List<ImitationVideo>>() {
+            @Override
+            public void onComplete(List<ImitationVideo> data) {
+                long lastUpdated = 0;
+
+                for (ImitationVideo imitVideo : data) {
+                    if (imitVideo.isDeleted()) {
+                        modelSql.deleteImitVideo(imitVideo, null);
+                    }
+                    else {
+                        modelSql.insertImitVideo(imitVideo, null);
+                        if(imitVideo.getLastUpdated() > lastUpdated) {
+                            lastUpdated = imitVideo.getLastUpdated();
+                        }
+                    }
+                }
+
+                LeagueTokApplication.context
+                        .getSharedPreferences("TAG", Context.MODE_PRIVATE)
+                        .edit()
+                        .putLong("userImitVideosLastUpdateDate", lastUpdated)
                         .apply();
 
                 if (listener != null) {
