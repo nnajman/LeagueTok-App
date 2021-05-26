@@ -23,6 +23,7 @@ import com.example.leaguetok.R;
 import com.example.leaguetok.model.ImitationVideo;
 import com.example.leaguetok.model.Model;
 import com.example.leaguetok.model.OriginalVideo;
+import com.example.leaguetok.model.User;
 import com.example.leaguetok.ui.UploadVideoFragmentArgs;
 import com.example.leaguetok.ui.home.HomeFragmentDirections;
 import com.example.leaguetok.ui.home.HomeViewModel;
@@ -84,6 +85,13 @@ public class TableLeagueFragment extends Fragment {
         leagueViewModel.getList().observe(getViewLifecycleOwner(), new Observer<List<ImitationVideo>>() {
             @Override
             public void onChanged(List<ImitationVideo> imitationVideos) {
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+        leagueViewModel.getUsersList().observe(getViewLifecycleOwner(), new Observer<List<User>>() {
+            @Override
+            public void onChanged(List<User> users) {
                 adapter.notifyDataSetChanged();
             }
         });
