@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.example.leaguetok.MainActivity;
 import com.example.leaguetok.R;
+import com.example.leaguetok.model.Model;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -111,7 +112,17 @@ public class SignInFragment extends Fragment {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = mAuth.getCurrentUser();
                             Log.d("TAG", "signInWithCredential:success: currentUser: " + user.getEmail());
-                            launchMainActivity();
+                            Model.instance.addNewUser(mAuth.getCurrentUser().getUid(), mAuth.getCurrentUser().getDisplayName(), new Model.AsyncListener() {
+                                @Override
+                                public void onComplete(Object data) {
+                                    launchMainActivity();
+                                }
+
+                                @Override
+                                public void onError(Object error) {
+
+                                }
+                            });
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w("TAG", "signInWithCredential:failure", task.getException());

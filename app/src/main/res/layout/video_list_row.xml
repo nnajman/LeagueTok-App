@@ -6,8 +6,8 @@
     android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/search_list_row_video"
-        android:layout_width="300dp"
+        android:id="@+id/video_list_row_video"
+        android:layout_width="wrap_content"
         android:layout_height="300dp"
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -16,14 +16,14 @@
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
-        android:id="@+id/search_list_row_name"
+        android:id="@+id/video_list_row_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="16dp"
         android:text="TextView"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/search_list_row_video"
-        app:layout_constraintStart_toStartOf="@+id/search_list_row_video"
-        app:layout_constraintTop_toBottomOf="@+id/search_list_row_video" />
+        app:layout_constraintEnd_toEndOf="@+id/video_list_row_video"
+        app:layout_constraintStart_toStartOf="@+id/video_list_row_video"
+        app:layout_constraintTop_toBottomOf="@+id/video_list_row_video" />
 </androidx.constraintlayout.widget.ConstraintLayout>
