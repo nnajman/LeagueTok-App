@@ -13,7 +13,8 @@
     <string name="count_tries">- %1$d people tried it -</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="league_place">Place</string>
+    <string name="league_rank">Rank</string>
     <string name="league_name">Name</string>
-    <string name="league_grade">Grade</string>
+    <string name="league_score">Score</string>
+    <string name="league_table_title">League Table</string>
 </resources>
