@@ -79,6 +79,14 @@ public class TableLeagueFragment extends Fragment {
                         swiper.setRefreshing(false);
                     }
                 });
+
+                Model.instance.refreshAllUsers(new Model.AsyncListener() {
+                    @Override
+                    public void onComplete(Object data) {}
+
+                    @Override
+                    public void onError(Object error) {}
+                });
             }
         });
 
