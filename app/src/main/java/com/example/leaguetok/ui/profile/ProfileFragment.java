@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.leaguetok.R;
@@ -40,6 +41,7 @@ public class ProfileFragment extends Fragment {
     private ProfileViewModel profileViewModel;
     private String uid;
     private ImageView profileImg;
+    private TextView profileName;
 
     @Nullable
     @Override
@@ -47,15 +49,17 @@ public class ProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.profile_fragment, container, false);
         mAuth = FirebaseAuth.getInstance();
         profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+
         ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
         setHasOptionsMenu(false);
+
         recyclerView = view.findViewById(R.id.profile_videos);
         profileImg = view.findViewById(R.id.profile_img);
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getContext());
-//        Picasso.get().load("https://firebasestorage.googleapis.com/v0/b/leaguetok.appspot.com/o/logo_pic.jpeg?alt=media&token=6da71041-0ff7-4e1a-83b6-0b83ade8ed57").into(profileImg);
         Glide.with(getContext()).load(account.getPhotoUrl().toString()).into(profileImg);
-//        Glide.with(this).load("https://firebasestorage.googleapis.com/v0/b/leaguetok.appspot.com/o/logo_pic.jpeg?alt=media&token=6da71041-0ff7-4e1a-83b6-0b83ade8ed57").into(profileImg);
 
+        profileName = view.findViewById(R.id.profile_name);
+        profileName.setText(mAuth.getCurrentUser().getDisplayName());
         try {
             uid = ProfileFragmentArgs.fromBundle(getArguments()).getUid();
         }
@@ -87,7 +91,7 @@ public class ProfileFragment extends Fragment {
         adapter = new ProfileAdapter(videos, getContext());
 
         // adding layout manager to our recycler view.
-        GridLayoutManager manager = new GridLayoutManager(getContext(), 1, GridLayoutManager.VERTICAL, false);
+        GridLayoutManager manager = new GridLayoutManager(getContext(), 2, GridLayoutManager.VERTICAL, false);
         recyclerView.setHasFixedSize(true);
 
         // setting layout manager
