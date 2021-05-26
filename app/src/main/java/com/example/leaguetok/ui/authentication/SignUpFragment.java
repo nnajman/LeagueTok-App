@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.example.leaguetok.MainActivity;
 import com.example.leaguetok.R;
+import com.example.leaguetok.model.Model;
 import com.example.leaguetok.utils.Listeners;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -47,6 +48,10 @@ public class SignUpFragment extends Fragment {
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
+        TextInputLayout fullNameLayout = view.findViewById(R.id.sign_up_full_name_layout);
+        TextInputEditText fullNameEt = view.findViewById(R.id.sign_up_full_name_et);
+        Listeners.addListenerToRequiredEditText(fullNameLayout, fullNameEt);
+
         TextInputLayout emailLayout = view.findViewById(R.id.sign_up_email_layout);
         TextInputEditText emailEt = view.findViewById(R.id.sign_up_email_et);
         Listeners.addListenerToRequiredEditText(emailLayout, emailEt);
@@ -61,7 +66,7 @@ public class SignUpFragment extends Fragment {
         Button registerBtn = view.findViewById(R.id.sign_up_btn);
 
         registerBtn.setOnClickListener(b -> {
-            createAccount(emailEt.getText().toString(), passwordEt.getText().toString(), passwordEt.getText().toString());
+            createAccount(fullNameEt.getText().toString(), emailEt.getText().toString(), passwordEt.getText().toString(), passwordEt.getText().toString());
         });
 
         TextView navigationText = view.findViewById(R.id.sign_up_navigation_txt);
@@ -73,8 +78,8 @@ public class SignUpFragment extends Fragment {
         return view;
     }
 
-    private void createAccount(String email, String password, String repassword) {
-        if (email.length() == 0 || password.length() == 0 || repassword.length() == 0) {
+    private void createAccount(String fullName, String email, String password, String repassword) {
+        if (fullName.length() == 0 || email.length() == 0 || password.length() == 0 || repassword.length() == 0) {
             Toast.makeText(getActivity(), "Please fill all the fields",
                     Toast.LENGTH_SHORT).show();
             return;
@@ -108,7 +113,17 @@ public class SignUpFragment extends Fragment {
                                                 if (task.isSuccessful()) {
                                                     // Sign in success, update UI with the signed-in user's information
                                                     Log.d("TAG", "createUserWithEmail:success");
-                                                    launchMainActivity();
+                                                    Model.instance.addNewUser(mAuth.getCurrentUser().getUid(), fullName, new Model.AsyncListener() {
+                                                        @Override
+                                                        public void onComplete(Object data) {
+                                                            launchMainActivity();
+                                                        }
+
+                                                        @Override
+                                                        public void onError(Object error) {
+
+                                                        }
+                                                    });
                                                 }
                                             }
                                         });

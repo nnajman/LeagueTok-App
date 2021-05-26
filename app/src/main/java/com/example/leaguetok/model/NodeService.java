@@ -28,6 +28,7 @@ import java.util.Properties;
 public class NodeService {
     private final String IMIT_VIDEOS_API = "imitationVideo";
     private final String ORIG_VIDEOS_API = "originalVideo";
+    private final String USER_VIDEOS_API = "user";
 
     public interface RequestListener<JSONObject> {
         void onSuccess(JSONObject response);
@@ -175,6 +176,36 @@ public class NodeService {
                     @Override
                     public void onResponse(JSONObject response) {
                         listener.onSuccess(response);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                listener.onError(error);
+            }
+        });
+
+        jsObjRequest.setShouldCache(false);
+        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        Volley.newRequestQueue(LeagueTokApplication.context).add(jsObjRequest);
+    }
+
+    public void addNewUser(String uid, String fullName, Model.AsyncListener listener) {
+        final String addNewUserUrl = getServerUrl() + "/" + USER_VIDEOS_API + "/sign-up";
+        HashMap<String, String> params = new HashMap<String,String>();
+        params.put("uid", uid);
+        params.put("fullName", fullName);
+
+        JsonObjectRequest jsObjRequest = new
+                JsonObjectRequest(Request.Method.POST,
+                addNewUserUrl,
+                new JSONObject(params),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        listener.onComplete(null);
                     }
                 }, new Response.ErrorListener() {
             @Override

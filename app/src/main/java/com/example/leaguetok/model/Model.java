@@ -38,6 +38,10 @@ public class Model {
         nodejsService.uploadVideo(uri, uid, origVideoId, listener);
     }
 
+    public void addNewUser(String uid, String fullName, AsyncListener listener) {
+        nodejsService.addNewUser(uid, fullName, listener);
+    }
+
     public LiveData<List<OriginalVideo>> getAllOriginalVideos(AsyncListener listener) {
         if (origVideosList == null) {
             origVideosList = AppLocalDB.db.originalVideoDao().getAllOriginalVideos();
