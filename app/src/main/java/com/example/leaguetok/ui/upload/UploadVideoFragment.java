@@ -28,6 +28,7 @@ import com.example.leaguetok.model.OriginalVideo;
 import com.example.leaguetok.ui.home.HomeFragmentDirections;
 import com.example.leaguetok.ui.upload.UploadVideoFragmentDirections;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -85,20 +86,20 @@ public class UploadVideoFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == Activity.RESULT_OK && requestCode == 1 && data != null) {
-            String uid = "123";
-            String origName = origVideo.getName();
+            String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
             String origVideoId = origVideo.getId();
             Uri selectedVideo = data.getData();
-            Model.instance.uploadVideo(selectedVideo, uid, origName, new Model.DataAsyncListener<String>() {
+            Model.instance.uploadVideo(selectedVideo, uid, origVideoId, new Model.DataAsyncListener<String>() {
                 @Override
                 public void onComplete(String data) {
+                    uploadImg.setVisibility(View.INVISIBLE);
                     progressBar.setVisibility(View.INVISIBLE);
                     progressBar.setIndeterminate(true);
-                    uploadImg.setVisibility(View.INVISIBLE);
                     progressBar.setVisibility(View.VISIBLE);
                     Model.instance.uploadVideoToServer(data, uid, origVideoId, new NodeService.RequestListener<JSONObject>() {
                         @Override
                         public void onSuccess(JSONObject response) {
+                            Model.instance.refreshAllImitVideos(null);
                             progressBar.setVisibility(View.INVISIBLE);
                             uploadImg.setVisibility(View.VISIBLE);
                             try {
