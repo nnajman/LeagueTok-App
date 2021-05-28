@@ -88,4 +88,68 @@ public class ModelSql {
 
         new MyAsyncTask().execute();
     }
+
+    public void insertUser(User user, Model.AsyncListener listener) {
+        class MyAsyncTask extends AsyncTask {
+            @Override
+            protected Object doInBackground(Object[] objects) {
+                AppLocalDB.db.userDao().insertAll(user);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Object o) {
+                super.onPostExecute(o);
+                if (listener != null) listener.onComplete(user);
+            }
+        }
+
+        new MyAsyncTask().execute();
+    }
+
+    public void deleteUser(User user, Model.AsyncListener<Boolean> listener) {
+        class MyAsyncTask extends AsyncTask {
+            @Override
+            protected Object doInBackground(Object[] objects) {
+                AppLocalDB.db.userDao().delete(user);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Object o) {
+                super.onPostExecute(o);
+
+                if (listener != null) {
+                    listener.onComplete(true);
+                }
+
+            }
+        }
+
+        new MyAsyncTask().execute();
+    }
+
+    public void getNumOfImitBySourceId(String sourceId, Model.AsyncListener<Integer> listener) {
+        class MyAsyncTask extends AsyncTask {
+            Integer num = 0;
+
+            @Override
+            protected Object doInBackground(Object[] objects) {
+                num = AppLocalDB.db.imitationVideoDao().getNumOfImitBySourceId(sourceId);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Object o) {
+                super.onPostExecute(o);
+
+                if (listener != null) {
+                    listener.onComplete(num);
+                }
+
+            }
+        }
+
+        new MyAsyncTask().execute();
+    }
 }

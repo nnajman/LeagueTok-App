@@ -1,5 +1,6 @@
 package com.example.leaguetok.ui.home;
 
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.lifecycle.LiveData;
@@ -13,10 +14,10 @@ import com.example.leaguetok.model.OriginalVideo;
 import java.util.List;
 
 public class HomeViewModel extends ViewModel {
-    private LiveData<List<OriginalVideo>> stList;
+    private LiveData<List<OriginalVideo>> origList;
 
     public HomeViewModel() {
-        stList = Model.instance.getAllOriginalVideos(new Model.AsyncListener() {
+        origList = Model.instance.getAllOriginalVideos(new Model.AsyncListener() {
             @Override
             public void onComplete(Object data) {
             }
@@ -26,7 +27,22 @@ public class HomeViewModel extends ViewModel {
                 Toast.makeText(LeagueTokApplication.context, "Network connection error", Toast.LENGTH_SHORT).show();
             }
         });
+
+        Model.instance.getAllImitationVideos(new Model.AsyncListener() {
+            @Override
+            public void onComplete(Object data) {}
+
+            @Override
+            public void onError(Object error) {}
+        });
+        Model.instance.getAllUsers(new Model.AsyncListener() {
+            @Override
+            public void onComplete(Object data) {}
+
+            @Override
+            public void onError(Object error) {}
+        });
     }
 
-    public LiveData<List<OriginalVideo>> getList() { return stList; }
+    public LiveData<List<OriginalVideo>> getList() { return origList; }
 }

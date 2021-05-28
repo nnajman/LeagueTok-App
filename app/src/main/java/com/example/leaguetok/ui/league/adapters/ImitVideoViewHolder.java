@@ -3,15 +3,11 @@ package com.example.leaguetok.ui.league.adapters;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.leaguetok.LeagueTokApplication;
 import com.example.leaguetok.R;
-import com.example.leaguetok.ui.league.adapters.ImitVideoAdapter;
 
 public class ImitVideoViewHolder extends RecyclerView.ViewHolder {
     ImageView imgImitPlace;
@@ -24,9 +20,9 @@ public class ImitVideoViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
 
         imgImitPlace = itemView.findViewById(R.id.league_listrow_imgplace);
-        txtImitPlace = itemView.findViewById(R.id.league_lsitrow_place);
-        txtImitName = itemView.findViewById(R.id.league_lsitrow_name);
-        txtImitGrade = itemView.findViewById(R.id.league_lsitrow_grade);
+        txtImitPlace = itemView.findViewById(R.id.league_lisitrow_rank);
+        txtImitName = itemView.findViewById(R.id.league_lisitrow_name);
+        txtImitGrade = itemView.findViewById(R.id.league_lisitrow_score);
 
     }
 }

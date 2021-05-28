@@ -2,6 +2,7 @@ package com.example.leaguetok.model;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 
@@ -28,7 +29,7 @@ public class Model {
     ModelSql modelSql = new ModelSql();
     private LiveData<List<OriginalVideo>> origVideosList;
     private LiveData<List<ImitationVideo>> imitVideosList;
-    private LiveData<List<ImitationVideo>> imitVideosBySource;
+    private LiveData<List<User>> usersList;
 
     public void uploadVideo(Uri videoUri, String uid, String origName,  DataAsyncListener<String> listener) {
         modelFirebase.uploadVideo(videoUri, uid, origName, listener);
@@ -36,6 +37,10 @@ public class Model {
 
     public void uploadVideoToServer(String uri, String uid, String origVideoId, NodeService.RequestListener<JSONObject> listener) {
         nodejsService.uploadVideo(uri, uid, origVideoId, listener);
+    }
+
+    public void addNewUser(String uid, String fullName, AsyncListener listener) {
+        nodejsService.addNewUser(uid, fullName, listener);
     }
 
     public LiveData<List<OriginalVideo>> getAllOriginalVideos(AsyncListener listener) {
@@ -93,6 +98,14 @@ public class Model {
         return modelSql.getOrigVideoById(id);
     }
 
+    public LiveData<List<ImitationVideo>> getImitiationVideosByUid(String uid, AsyncListener listener) {
+        LiveData<List<ImitationVideo>> userImitVideos =
+                AppLocalDB.db.imitationVideoDao().getAllImitVideosByUid(uid);
+
+        refreshUserImitVideos(uid, listener);
+        return userImitVideos;
+    }
+
     public LiveData<List<ImitationVideo>> getAllImitationVideos(AsyncListener listener) {
         if (imitVideosList == null) {
             imitVideosList = AppLocalDB.db.imitationVideoDao().getAllImitationVideos();
@@ -105,12 +118,12 @@ public class Model {
         return imitVideosList;
     }
 
-    public LiveData<List<ImitationVideo>> getAllImitVideosBySourceID(String sourceID, AsyncListener listener) {
+    public LiveData<List<ImitationVideo>> getAllImitVideosBySourceID(String sourceID) {
+        return AppLocalDB.db.imitationVideoDao().getAllImitVideosBySourceID(sourceID);
+    }
 
-        refreshAllImitVideos(listener);
-        imitVideosBySource = AppLocalDB.db.imitationVideoDao().getAllImitVideosBySourceID(sourceID);
-        return imitVideosBySource;
-
+    public void getNumOfImitBySourceId(String sourceID, AsyncListener<Integer> listener) {
+        modelSql.getNumOfImitBySourceId(sourceID, listener);
     }
 
     public void refreshAllImitVideos(AsyncListener listener) {
@@ -147,6 +160,96 @@ public class Model {
 
             @Override
             public void onError(List<ImitationVideo> error) {
+                listener.onError(null);
+            }
+        });
+    }
+
+    public void refreshUserImitVideos(String uid, AsyncListener listener) {
+        Long lastUpdated = LeagueTokApplication.context
+                .getSharedPreferences("TAG", Context.MODE_PRIVATE)
+                .getLong("userImitVideosLastUpdateDate", 0);
+        nodejsService.getUserImitVideos(uid, lastUpdated, new AsyncListener<List<ImitationVideo>>() {
+            @Override
+            public void onComplete(List<ImitationVideo> data) {
+                long lastUpdated = 0;
+
+                for (ImitationVideo imitVideo : data) {
+                    if (imitVideo.isDeleted()) {
+                        modelSql.deleteImitVideo(imitVideo, null);
+                    }
+                    else {
+                        modelSql.insertImitVideo(imitVideo, null);
+                        if(imitVideo.getLastUpdated() > lastUpdated) {
+                            lastUpdated = imitVideo.getLastUpdated();
+                        }
+                    }
+                }
+
+                LeagueTokApplication.context
+                        .getSharedPreferences("TAG", Context.MODE_PRIVATE)
+                        .edit()
+                        .putLong("userImitVideosLastUpdateDate", lastUpdated)
+                        .apply();
+
+                if (listener != null) {
+                    listener.onComplete(null);
+                }
+            }
+
+            @Override
+            public void onError(List<ImitationVideo> error) {
+                listener.onError(null);
+            }
+        });
+    }
+
+    public LiveData<List<User>> getAllUsers(AsyncListener listener) {
+        if (usersList == null) {
+            usersList = AppLocalDB.db.userDao().getAllUsers();
+            refreshAllUsers(listener);
+        }
+        else {
+            if(listener != null) listener.onComplete(null);
+        }
+
+        return usersList;
+    }
+
+    public void refreshAllUsers(AsyncListener listener) {
+        Long lastUpdated = LeagueTokApplication.context
+                .getSharedPreferences("TAG", Context.MODE_PRIVATE)
+                .getLong("usersLastUpdateDate", 0);
+        nodejsService.getAllUsers(lastUpdated, new AsyncListener<List<User>>() {
+            @Override
+            public void onComplete(List<User> data) {
+                long lastUpdated = 0;
+
+                for (User user : data) {
+                    if (user.isDeleted()) {
+                        modelSql.deleteUser(user, null);
+                    }
+                    else {
+                        modelSql.insertUser(user, null);
+                        if(user.getLastUpdated() > lastUpdated) {
+                            lastUpdated = user.getLastUpdated();
+                        }
+                    }
+                }
+
+                LeagueTokApplication.context
+                        .getSharedPreferences("TAG", Context.MODE_PRIVATE)
+                        .edit()
+                        .putLong("usersLastUpdateDate", lastUpdated)
+                        .apply();
+
+                if (listener != null) {
+                    listener.onComplete(null);
+                }
+            }
+
+            @Override
+            public void onError(List<User> error) {
                 listener.onError(null);
             }
         });

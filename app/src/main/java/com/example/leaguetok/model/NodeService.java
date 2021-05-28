@@ -1,5 +1,6 @@
 package com.example.leaguetok.model;
 
+import android.content.res.Resources;
 import android.util.Log;
 import android.view.View;
 
@@ -11,26 +12,43 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.leaguetok.LeagueTokApplication;
+import com.example.leaguetok.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Properties;
 
 public class NodeService {
     private final String IMIT_VIDEOS_API = "imitationVideo";
     private final String ORIG_VIDEOS_API = "originalVideo";
+    private final String USERS_API = "user";
 
     public interface RequestListener<JSONObject> {
         void onSuccess(JSONObject response);
         void onError(VolleyError error);
     }
 
+    private String getServerUrl() {
+        try {
+            InputStream rawResource = LeagueTokApplication.context.getResources().openRawResource(R.raw.config);
+            Properties properties = new Properties();
+            properties.load(rawResource);
+            return properties.getProperty("serverUrl");
+        }
+        catch (IOException e) {
+            return null;
+        }
+    }
+
     public void getAllOrigVideos(Long lastUpdated, Model.AsyncListener<List<OriginalVideo>> listener) {
-        final String getVideosURL = LeagueTokApplication.serverUrl + "/" + ORIG_VIDEOS_API + "/" + lastUpdated;
+        final String getVideosURL = getServerUrl() + "/" + ORIG_VIDEOS_API + "/" + lastUpdated;
         JsonArrayRequest jsArrRequest = new
                 JsonArrayRequest(Request.Method.GET,
                 getVideosURL,
@@ -68,7 +86,83 @@ public class NodeService {
     }
 
     public void getAllImitVideos(Long lastUpdated, Model.AsyncListener<List<ImitationVideo>> listener) {
-        final String getVideosURL = LeagueTokApplication.serverUrl + "/" + IMIT_VIDEOS_API + "/" + lastUpdated;
+        final String getVideosURL = getServerUrl() + "/" + IMIT_VIDEOS_API + "/" + lastUpdated;
+        JsonArrayRequest jsArrRequest = new
+                JsonArrayRequest(Request.Method.GET,
+                getVideosURL,
+                null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        List<ImitationVideo> imitationVideos = new ArrayList<ImitationVideo>();
+                        for(int i = 0; i < response.length(); i++) {
+                            ImitationVideo iv = new ImitationVideo();
+                            try {
+                                iv.fromMap(((JSONObject)response.get(i)));
+                                imitationVideos.add(iv);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                listener.onError(null);
+                            }
+                        }
+
+                        listener.onComplete(imitationVideos);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                listener.onError(null);
+            }
+        });
+
+        jsArrRequest.setShouldCache(false);
+        jsArrRequest.setRetryPolicy(new DefaultRetryPolicy(10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        Volley.newRequestQueue(LeagueTokApplication.context).add(jsArrRequest);
+    }
+
+    public void getAllUsers(Long lastUpdated, Model.AsyncListener<List<User>> listener) {
+        final String getUsersURL = getServerUrl() + "/" + USERS_API + "/" + lastUpdated;
+        JsonArrayRequest jsArrRequest = new
+                JsonArrayRequest(Request.Method.GET,
+                getUsersURL,
+                null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        List<User> users = new ArrayList<User>();
+                        for(int i = 0; i < response.length(); i++) {
+                            User user = new User();
+                            try {
+                                user.fromMap(((JSONObject)response.get(i)));
+                                users.add(user);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                listener.onError(null);
+                            }
+                        }
+
+                        listener.onComplete(users);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                listener.onError(null);
+            }
+        });
+
+        jsArrRequest.setShouldCache(false);
+        jsArrRequest.setRetryPolicy(new DefaultRetryPolicy(10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        Volley.newRequestQueue(LeagueTokApplication.context).add(jsArrRequest);
+    }
+
+    public void getUserImitVideos(String uid, Long lastUpdated, Model.AsyncListener<List<ImitationVideo>> listener) {
+        final String getVideosURL = getServerUrl() + "/" + IMIT_VIDEOS_API + "/" + uid + "/" + lastUpdated;
         JsonArrayRequest jsArrRequest = new
                 JsonArrayRequest(Request.Method.GET,
                 getVideosURL,
@@ -106,7 +200,7 @@ public class NodeService {
     }
 
     public void uploadVideo(String uri, String uid, String origVideoId, RequestListener<JSONObject> listener) {
-        final String postVideoURL = LeagueTokApplication.serverUrl + "/" + IMIT_VIDEOS_API;
+        final String postVideoURL = getServerUrl() + "/" + IMIT_VIDEOS_API;
         HashMap<String, String> params = new HashMap<String,String>();
         params.put("link", uri);
         params.put("uid", uid);
@@ -120,6 +214,36 @@ public class NodeService {
                     @Override
                     public void onResponse(JSONObject response) {
                         listener.onSuccess(response);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                listener.onError(error);
+            }
+        });
+
+        jsObjRequest.setShouldCache(false);
+        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        Volley.newRequestQueue(LeagueTokApplication.context).add(jsObjRequest);
+    }
+
+    public void addNewUser(String uid, String fullName, Model.AsyncListener listener) {
+        final String addNewUserUrl = getServerUrl() + "/" + USERS_API + "/sign-up";
+        HashMap<String, String> params = new HashMap<String,String>();
+        params.put("uid", uid);
+        params.put("fullName", fullName);
+
+        JsonObjectRequest jsObjRequest = new
+                JsonObjectRequest(Request.Method.POST,
+                addNewUserUrl,
+                new JSONObject(params),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        listener.onComplete(null);
                     }
                 }, new Response.ErrorListener() {
             @Override

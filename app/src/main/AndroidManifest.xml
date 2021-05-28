@@ -27,8 +27,7 @@
 
         <activity
             android:name=".MainActivity"
-            android:label="MainActivity"
-            android:theme="@style/Theme.LeagueTok.NoActionBar">
+            android:label="LeagueTok">
         </activity>
     </application>
 
