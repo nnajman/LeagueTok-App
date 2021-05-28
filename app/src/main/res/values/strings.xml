@@ -5,8 +5,13 @@
     <string name="title_profile">Profile</string>
 
     <string name="action_upload">Upload</string>
-    <string name="grade">Grade:</string>
-    <string name="upload_title">Upload a version of yourself trying the - %1$s by %2$s</string>
+    <string name="grade">Your Score</string>
+    <string name="league_title">View League Table</string>
+    <string name="league">League</string>
+    <string name="rank">Your League Rank</string>
+    <string name="upload_upper_title">Lets see you try</string>
+    <string name="upload_title">%1$s by %2$s</string>
+    <string name="gallery_upload">Upload from gallery your TikTok dance</string>
     <string name="error_message">Oops... We are sorry but there was a problem while uploading your video :(</string>
     <string name="action_try">Try It</string>
     <string name="league_table">League</string>

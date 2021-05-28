@@ -24,7 +24,7 @@ import com.example.leaguetok.model.ImitationVideo;
 import com.example.leaguetok.model.Model;
 import com.example.leaguetok.model.OriginalVideo;
 import com.example.leaguetok.model.User;
-import com.example.leaguetok.ui.UploadVideoFragmentArgs;
+import com.example.leaguetok.ui.upload.UploadVideoFragmentArgs;
 import com.example.leaguetok.ui.home.HomeFragmentDirections;
 import com.example.leaguetok.ui.home.HomeViewModel;
 import com.example.leaguetok.ui.home.adapters.OrigVideoAdapter;
