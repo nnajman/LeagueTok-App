@@ -124,7 +124,7 @@ public class NodeService {
     }
 
     public void getAllUsers(Long lastUpdated, Model.AsyncListener<List<User>> listener) {
-        final String getUsersURL = getServerUrl() + "/" + USERS_API + "/" + lastUpdated;
+        final String getUsersURL = getServerUrl() + "/" + USERS_API + "/all/" + lastUpdated;
         JsonArrayRequest jsArrRequest = new
                 JsonArrayRequest(Request.Method.GET,
                 getUsersURL,

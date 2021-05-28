@@ -31,8 +31,8 @@ public class Model {
     private LiveData<List<ImitationVideo>> imitVideosList;
     private LiveData<List<User>> usersList;
 
-    public void uploadVideo(Uri videoUri, String uid, String origName,  DataAsyncListener<String> listener) {
-        modelFirebase.uploadVideo(videoUri, uid, origName, listener);
+    public void uploadVideo(Uri videoUri, String uid, String origVideoId,  DataAsyncListener<String> listener) {
+        modelFirebase.uploadVideo(videoUri, uid, origVideoId, listener);
     }
 
     public void uploadVideoToServer(String uri, String uid, String origVideoId, NodeService.RequestListener<JSONObject> listener) {

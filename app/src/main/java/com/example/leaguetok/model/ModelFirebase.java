@@ -18,9 +18,9 @@ public class ModelFirebase {
 
     // For POC this method is for uploading imitation videos only.
     // Need to generalize in order to upload original videos as well. (add type of video as param, check which type, etc.)
-    public void uploadVideo(Uri videoUri, String uid, String origName, Model.DataAsyncListener<String> listener) {
+    public void uploadVideo(Uri videoUri, String uid, String origVideoId, Model.DataAsyncListener<String> listener) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
-        final StorageReference videosRef = storage.getReference().child(IMIT_VID).child(uid + "_" + origName);
+        final StorageReference videosRef = storage.getReference().child(IMIT_VID).child(uid + "_" + origVideoId);
 
         // Upload video
         videosRef.putFile(videoUri).addOnFailureListener(new OnFailureListener() {
