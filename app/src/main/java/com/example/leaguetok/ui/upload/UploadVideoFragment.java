@@ -92,7 +92,6 @@ public class UploadVideoFragment extends Fragment {
             Model.instance.uploadVideo(selectedVideo, uid, origVideoId, new Model.DataAsyncListener<String>() {
                 @Override
                 public void onComplete(String data) {
-                    uploadImg.setVisibility(View.INVISIBLE);
                     progressBar.setVisibility(View.INVISIBLE);
                     progressBar.setIndeterminate(true);
                     progressBar.setVisibility(View.VISIBLE);
@@ -122,6 +121,7 @@ public class UploadVideoFragment extends Fragment {
 
                 @Override
                 public void onProgress(int progress) {
+                    uploadImg.setVisibility(View.INVISIBLE);
                     progressBar.setVisibility(View.VISIBLE);
                     progressBar.setProgressCompat(progress, true);
                 }
