@@ -112,7 +112,10 @@ public class SignInFragment extends Fragment {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = mAuth.getCurrentUser();
                             Log.d("TAG", "signInWithCredential:success: currentUser: " + user.getEmail());
-                            Model.instance.addNewUser(mAuth.getCurrentUser().getUid(), mAuth.getCurrentUser().getDisplayName(), new Model.AsyncListener() {
+                            Model.instance.addNewUser(mAuth.getCurrentUser().getUid(),
+                                    mAuth.getCurrentUser().getDisplayName(),
+                                    mAuth.getCurrentUser().getPhotoUrl().toString(),
+                                    new Model.AsyncListener() {
                                 @Override
                                 public void onComplete(Object data) {
                                     launchMainActivity();

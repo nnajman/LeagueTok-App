@@ -31,7 +31,7 @@ public class NodeService {
     private final String USERS_API = "user";
 
     public interface RequestListener<JSONObject> {
-        void onSuccess(JSONObject response);
+        void onSuccess(JSONObject response) throws JSONException;
         void onError(VolleyError error);
     }
 
@@ -123,44 +123,6 @@ public class NodeService {
         Volley.newRequestQueue(LeagueTokApplication.context).add(jsArrRequest);
     }
 
-    public void getAllUsers(Long lastUpdated, Model.AsyncListener<List<User>> listener) {
-        final String getUsersURL = getServerUrl() + "/" + USERS_API + "/all/" + lastUpdated;
-        JsonArrayRequest jsArrRequest = new
-                JsonArrayRequest(Request.Method.GET,
-                getUsersURL,
-                null,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        List<User> users = new ArrayList<User>();
-                        for(int i = 0; i < response.length(); i++) {
-                            User user = new User();
-                            try {
-                                user.fromMap(((JSONObject)response.get(i)));
-                                users.add(user);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                                listener.onError(null);
-                            }
-                        }
-
-                        listener.onComplete(users);
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                listener.onError(null);
-            }
-        });
-
-        jsArrRequest.setShouldCache(false);
-        jsArrRequest.setRetryPolicy(new DefaultRetryPolicy(10000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-
-        Volley.newRequestQueue(LeagueTokApplication.context).add(jsArrRequest);
-    }
-
     public void getUserImitVideos(String uid, Long lastUpdated, Model.AsyncListener<List<ImitationVideo>> listener) {
         final String getVideosURL = getServerUrl() + "/" + IMIT_VIDEOS_API + "/" + uid + "/" + lastUpdated;
         JsonArrayRequest jsArrRequest = new
@@ -213,7 +175,11 @@ public class NodeService {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        listener.onSuccess(response);
+                        try {
+                            listener.onSuccess(response);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -230,11 +196,12 @@ public class NodeService {
         Volley.newRequestQueue(LeagueTokApplication.context).add(jsObjRequest);
     }
 
-    public void addNewUser(String uid, String fullName, Model.AsyncListener listener) {
+    public void addNewUser(String uid, String fullName, String photoUrl, Model.AsyncListener listener) {
         final String addNewUserUrl = getServerUrl() + "/" + USERS_API + "/sign-up";
         HashMap<String, String> params = new HashMap<String,String>();
         params.put("uid", uid);
         params.put("fullName", fullName);
+        params.put("photoUrl", photoUrl);
 
         JsonObjectRequest jsObjRequest = new
                 JsonObjectRequest(Request.Method.POST,
@@ -244,6 +211,75 @@ public class NodeService {
                     @Override
                     public void onResponse(JSONObject response) {
                         listener.onComplete(null);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                listener.onError(error);
+            }
+        });
+
+        jsObjRequest.setShouldCache(false);
+        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        Volley.newRequestQueue(LeagueTokApplication.context).add(jsObjRequest);
+    }
+
+    public void getAllUsers(Long lastUpdated, Model.AsyncListener<List<User>> listener) {
+        final String getUsersURL = getServerUrl() + "/" + USERS_API + "/all/" + lastUpdated;
+        JsonArrayRequest jsArrRequest = new
+                JsonArrayRequest(Request.Method.GET,
+                getUsersURL,
+                null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        List<User> users = new ArrayList<User>();
+                        for(int i = 0; i < response.length(); i++) {
+                            User user = new User();
+                            try {
+                                user.fromMap(((JSONObject)response.get(i)));
+                                users.add(user);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                listener.onError(null);
+                            }
+                        }
+
+                        listener.onComplete(users);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                listener.onError(null);
+            }
+        });
+
+        jsArrRequest.setShouldCache(false);
+        jsArrRequest.setRetryPolicy(new DefaultRetryPolicy(10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        Volley.newRequestQueue(LeagueTokApplication.context).add(jsArrRequest);
+    }
+
+    public void getUserById(String uid, RequestListener<JSONObject> listener) {
+        final String getUserByIdUrl = getServerUrl() + "/" + USERS_API + "/" + uid;
+
+        JsonObjectRequest jsObjRequest = new
+                JsonObjectRequest(Request.Method.GET,
+                getUserByIdUrl,
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            listener.onSuccess(response);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }, new Response.ErrorListener() {
             @Override

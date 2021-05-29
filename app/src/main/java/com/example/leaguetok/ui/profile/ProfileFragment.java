@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,19 +17,31 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
+import com.example.leaguetok.AuthenticationActivity;
 import com.example.leaguetok.R;
 import com.example.leaguetok.model.ImitationVideo;
+import com.example.leaguetok.model.Model;
+import com.example.leaguetok.model.NodeService;
 import com.example.leaguetok.ui.profile.adapters.ProfileAdapter;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -40,6 +54,7 @@ public class ProfileFragment extends Fragment {
     private ProfileViewModel profileViewModel;
     private String uid;
     private ImageView profileImg;
+    private TextView profileName;
 
     @Nullable
     @Override
@@ -47,14 +62,13 @@ public class ProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.profile_fragment, container, false);
         mAuth = FirebaseAuth.getInstance();
         profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
-        setHasOptionsMenu(false);
+
+        ((AppCompatActivity) getActivity()).getSupportActionBar().show();
+        setHasOptionsMenu(true);
+
         recyclerView = view.findViewById(R.id.profile_videos);
         profileImg = view.findViewById(R.id.profile_img);
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getContext());
-//        Picasso.get().load("https://firebasestorage.googleapis.com/v0/b/leaguetok.appspot.com/o/logo_pic.jpeg?alt=media&token=6da71041-0ff7-4e1a-83b6-0b83ade8ed57").into(profileImg);
-        Glide.with(getContext()).load(account.getPhotoUrl().toString()).into(profileImg);
-//        Glide.with(this).load("https://firebasestorage.googleapis.com/v0/b/leaguetok.appspot.com/o/logo_pic.jpeg?alt=media&token=6da71041-0ff7-4e1a-83b6-0b83ade8ed57").into(profileImg);
+        profileName = view.findViewById(R.id.profile_name);
 
         try {
             uid = ProfileFragmentArgs.fromBundle(getArguments()).getUid();
@@ -62,6 +76,19 @@ public class ProfileFragment extends Fragment {
         catch (Exception e) {
             uid = mAuth.getCurrentUser().getUid();
         }
+
+        Model.instance.getUserById(uid, new NodeService.RequestListener<JSONObject>() {
+            @Override
+            public void onSuccess(JSONObject response) throws JSONException {
+                profileName.setText(response.get("name").toString());
+                Glide.with(getContext()).load(response.get("photoUrl").toString()).into(profileImg);
+            }
+
+            @Override
+            public void onError(VolleyError error) {
+
+            }
+        });
 
         profileViewModel.getList(uid).observe(getViewLifecycleOwner(), new Observer<List<ImitationVideo>>() {
             @Override
@@ -81,13 +108,37 @@ public class ProfileFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.profile_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_logout:
+                FirebaseAuth.getInstance().signOut();
+                GoogleSignInOptions gso = new GoogleSignInOptions.
+                        Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).
+                        build();
+                GoogleSignIn.getClient(getContext(), gso).signOut();
+                Intent i = new Intent(getActivity(), AuthenticationActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                startActivity(i);
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
     private void buildRecyclerView() {
 
         // initializing our adapter class.
         adapter = new ProfileAdapter(videos, getContext());
 
         // adding layout manager to our recycler view.
-        GridLayoutManager manager = new GridLayoutManager(getContext(), 1, GridLayoutManager.VERTICAL, false);
+        GridLayoutManager manager = new GridLayoutManager(getContext(), 2, GridLayoutManager.VERTICAL, false);
         recyclerView.setHasFixedSize(true);
 
         // setting layout manager

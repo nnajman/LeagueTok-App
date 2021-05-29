@@ -31,16 +31,16 @@ public class Model {
     private LiveData<List<ImitationVideo>> imitVideosList;
     private LiveData<List<User>> usersList;
 
-    public void uploadVideo(Uri videoUri, String uid, String origVideoId,  DataAsyncListener<String> listener) {
-        modelFirebase.uploadVideo(videoUri, uid, origVideoId, listener);
+    public void uploadVideo(Uri videoUri, String uid, String origName,  DataAsyncListener<String> listener) {
+        modelFirebase.uploadVideo(videoUri, uid, origName, listener);
     }
 
     public void uploadVideoToServer(String uri, String uid, String origVideoId, NodeService.RequestListener<JSONObject> listener) {
         nodejsService.uploadVideo(uri, uid, origVideoId, listener);
     }
 
-    public void addNewUser(String uid, String fullName, AsyncListener listener) {
-        nodejsService.addNewUser(uid, fullName, listener);
+    public void addNewUser(String uid, String fullName, String photoUrl, AsyncListener listener) {
+        nodejsService.addNewUser(uid, fullName, photoUrl, listener);
     }
 
     public LiveData<List<OriginalVideo>> getAllOriginalVideos(AsyncListener listener) {
@@ -96,6 +96,18 @@ public class Model {
 
     public LiveData<OriginalVideo> getOrigVideoById(String id) {
         return modelSql.getOrigVideoById(id);
+    }
+
+    public LiveData<List<User>> getAllUsers(AsyncListener listener) {
+        if (usersList == null) {
+            usersList = AppLocalDB.db.userDao().getAllUsers();
+            refreshAllUsers(listener);
+        }
+        else {
+            if(listener != null) listener.onComplete(null);
+        }
+
+        return usersList;
     }
 
     public LiveData<List<ImitationVideo>> getImitiationVideosByUid(String uid, AsyncListener listener) {
@@ -204,18 +216,6 @@ public class Model {
         });
     }
 
-    public LiveData<List<User>> getAllUsers(AsyncListener listener) {
-        if (usersList == null) {
-            usersList = AppLocalDB.db.userDao().getAllUsers();
-            refreshAllUsers(listener);
-        }
-        else {
-            if(listener != null) listener.onComplete(null);
-        }
-
-        return usersList;
-    }
-
     public void refreshAllUsers(AsyncListener listener) {
         Long lastUpdated = LeagueTokApplication.context
                 .getSharedPreferences("TAG", Context.MODE_PRIVATE)
@@ -253,5 +253,9 @@ public class Model {
                 listener.onError(null);
             }
         });
+    }
+
+    public void getUserById(String uid, NodeService.RequestListener<JSONObject> listener) {
+        nodejsService.getUserById(uid, listener);
     }
 }
