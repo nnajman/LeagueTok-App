@@ -6,12 +6,17 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
 import android.util.Log;
 import android.widget.RemoteViews;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDeepLink;
+import androidx.navigation.NavDeepLinkBuilder;
+import androidx.navigation.Navigation;
 
 import com.example.leaguetok.MainActivity;
 import com.example.leaguetok.R;
@@ -23,6 +28,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class FcmMessageService extends FirebaseMessagingService {
@@ -38,11 +44,6 @@ public class FcmMessageService extends FirebaseMessagingService {
                 // Get new FCM registration token
                 String token = task.getResult();
 
-//                // Log and toast
-//                String msg = "InstanceID Token:" + token;
-//                Log.d("TAG", msg);
-//                Toast.makeText(LeagueTokApplication.context, msg, Toast.LENGTH_SHORT).show();
-//
                 // Send device token to server
                 Model.instance.sendDeviceToken(FirebaseAuth.getInstance().getCurrentUser().getUid(), token, new Model.AsyncListener() {
                     @Override
@@ -81,9 +82,18 @@ public class FcmMessageService extends FirebaseMessagingService {
             remoteViews.setTextViewText(R.id.notification_title, data.get("title"));
             remoteViews.setTextViewText(R.id.notification_text, data.get("message"));
 
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+            Bundle bundle = new Bundle();
+            bundle.putString("ImitVideoResult", data.get("score"));
+            bundle.putString("OriginalVideoID", data.get("sourceId"));
+            PendingIntent pendingIntent = new NavDeepLinkBuilder(this)
+                    .setComponentName(MainActivity.class)
+                    .setGraph(R.navigation.mobile_navigation)
+                    .setDestination(R.id.uploadResultFragment2)
+                    .setArguments(bundle)
+                    .createPendingIntent();
+            //Intent intent = new Intent(this, MainActivity.class);
+            //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            //PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
 
             String channel_id = "notification_channel";
             NotificationCompat.Builder builder = new NotificationCompat
