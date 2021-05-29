@@ -17,6 +17,8 @@ import com.example.leaguetok.R;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.util.Map;
+
 public class FcmMessageService extends FirebaseMessagingService {
     @Override
     public void onNewToken(@NonNull String s) {
@@ -25,16 +27,15 @@ public class FcmMessageService extends FirebaseMessagingService {
         //TODO: send new token to server
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
-        super.onMessageReceived(remoteMessage);
+        if (remoteMessage.getData().size() > 0) {
+            Map<String, String> data = remoteMessage.getData();
 
-        if (remoteMessage.getNotification() != null) {
             // Set custom notification layout
             RemoteViews remoteViews = new RemoteViews(getApplicationContext().getPackageName(), R.layout.notification);
-            remoteViews.setTextViewText(R.id.notification_title, remoteMessage.getNotification().getTitle());
-            remoteViews.setTextViewText(R.id.notification_text, remoteMessage.getNotification().getBody());
+            remoteViews.setTextViewText(R.id.notification_title, data.get("title"));
+            remoteViews.setTextViewText(R.id.notification_text, data.get("message"));
 
             Intent intent = new Intent(this, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -45,12 +46,26 @@ public class FcmMessageService extends FirebaseMessagingService {
                     .Builder(getApplicationContext(), channel_id)
                     .setAutoCancel(true)
                     .setVibrate(new long[]{1000, 1000, 1000, 1000, 1000})
+                    .setSmallIcon(R.drawable.ic_notification)
                     .setOnlyAlertOnce(true)
-                    .setContentIntent(pendingIntent)
-                    .setContent(remoteViews);
+                    .setContentIntent(pendingIntent);
 
-            ((NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE)).notify(0, builder.build());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                builder.setCustomContentView(remoteViews);
+            }
+            else {
+                builder = builder.setContentTitle(remoteMessage.getNotification().getTitle())
+                        .setContentText(remoteMessage.getNotification().getBody())
+                        .setSmallIcon(R.drawable.ic_notification);
+            }
 
+            NotificationManager notificationManager= (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
+                NotificationChannel notificationChannel=new NotificationChannel(channel_id,"notification",NotificationManager.IMPORTANCE_HIGH);
+                notificationManager.createNotificationChannel(notificationChannel);
+            }
+
+            notificationManager.notify(0, builder.build());
         }
     }
 }
