@@ -70,7 +70,17 @@ public class TableLeagueFragment extends Fragment {
                 Model.instance.refreshAllImitVideos(new Model.AsyncListener() {
                     @Override
                     public void onComplete(Object data) {
-                        swiper.setRefreshing(false);
+                        Model.instance.refreshAllUsers(new Model.AsyncListener() {
+                            @Override
+                            public void onComplete(Object data) {
+                                swiper.setRefreshing(false);
+                            }
+
+                            @Override
+                            public void onError(Object error) {
+                                swiper.setRefreshing(false);
+                            }
+                        });
                     }
 
                     @Override
@@ -78,14 +88,6 @@ public class TableLeagueFragment extends Fragment {
                         Toast.makeText(getActivity(), "Network connection error", Toast.LENGTH_SHORT).show();
                         swiper.setRefreshing(false);
                     }
-                });
-
-                Model.instance.refreshAllUsers(new Model.AsyncListener() {
-                    @Override
-                    public void onComplete(Object data) {}
-
-                    @Override
-                    public void onError(Object error) {}
                 });
             }
         });
