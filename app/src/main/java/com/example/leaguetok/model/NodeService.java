@@ -259,4 +259,34 @@ public class NodeService {
 
         Volley.newRequestQueue(LeagueTokApplication.context).add(jsObjRequest);
     }
+
+    public void sendDeviceToken(String uid, String token, Model.AsyncListener listener) {
+        final String sendDeviceTokenUrl = getServerUrl() + "/" + USERS_API + "/device";
+        HashMap<String, String> params = new HashMap<String,String>();
+        params.put("uid", uid);
+        params.put("token", token);
+
+        JsonObjectRequest jsObjRequest = new
+                JsonObjectRequest(Request.Method.PUT,
+                sendDeviceTokenUrl,
+                new JSONObject(params),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        listener.onComplete(null);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                listener.onError(error);
+            }
+        });
+
+        jsObjRequest.setShouldCache(false);
+        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        Volley.newRequestQueue(LeagueTokApplication.context).add(jsObjRequest);
+    }
 }

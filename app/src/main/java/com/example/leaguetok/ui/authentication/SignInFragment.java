@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.example.leaguetok.MainActivity;
 import com.example.leaguetok.R;
 import com.example.leaguetok.model.Model;
+import com.example.leaguetok.utils.FcmMessageService;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -164,6 +165,7 @@ public class SignInFragment extends Fragment {
     }
 
     private void launchMainActivity() {
+        FcmMessageService.getDeviceToken();
         Intent i = new Intent(getActivity(), MainActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(i);

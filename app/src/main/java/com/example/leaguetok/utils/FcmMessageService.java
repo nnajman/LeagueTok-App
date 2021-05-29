@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 import androidx.annotation.NonNull;
@@ -14,17 +15,60 @@ import androidx.core.app.NotificationCompat;
 
 import com.example.leaguetok.MainActivity;
 import com.example.leaguetok.R;
+import com.example.leaguetok.model.Model;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 import java.util.Map;
 
 public class FcmMessageService extends FirebaseMessagingService {
-    @Override
-    public void onNewToken(@NonNull String s) {
-        super.onNewToken(s);
+    public static void getDeviceToken() {
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+                if (!task.isSuccessful()) {
+                    Log.w("TAG", "Fetching FCM registration token failed", task.getException());
+                    return;
+                }
 
-        //TODO: send new token to server
+                // Get new FCM registration token
+                String token = task.getResult();
+
+//                // Log and toast
+//                String msg = "InstanceID Token:" + token;
+//                Log.d("TAG", msg);
+//                Toast.makeText(LeagueTokApplication.context, msg, Toast.LENGTH_SHORT).show();
+//
+                // Send device token to server
+                Model.instance.sendDeviceToken(FirebaseAuth.getInstance().getCurrentUser().getUid(), token, new Model.AsyncListener() {
+                    @Override
+                    public void onComplete(Object data) {}
+
+                    @Override
+                    public void onError(Object error) {}
+                });
+            }
+        });
+    }
+
+    @Override
+    public void onNewToken(@NonNull String token) {
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            // Send device token to server
+            Model.instance.sendDeviceToken(FirebaseAuth.getInstance().getCurrentUser().getUid(), token, new Model.AsyncListener() {
+                @Override
+                public void onComplete(Object data) {
+                }
+
+                @Override
+                public void onError(Object error) {
+                }
+            });
+        }
     }
 
     @Override

@@ -254,4 +254,8 @@ public class Model {
             }
         });
     }
+
+    public void sendDeviceToken(String uid, String token, Model.AsyncListener listener) {
+        nodejsService.sendDeviceToken(uid, token, listener);
+    }
 }
