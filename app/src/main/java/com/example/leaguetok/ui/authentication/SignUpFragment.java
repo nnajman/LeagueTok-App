@@ -142,7 +142,6 @@ public class SignUpFragment extends Fragment {
     }
 
     private void launchMainActivity() {
-        FcmMessageService.getDeviceToken();
         Intent i = new Intent(getActivity(), MainActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(i);
