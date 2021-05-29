@@ -7,11 +7,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import java.util.HashMap;
 import java.util.Map;
 
 @Entity
-public class User implements Serializable {
+public class User implements Serializable {    
+	@PrimaryKey
+    @NonNull
     private String id;
     private String name;
     private String photoUrl;
@@ -23,12 +29,11 @@ public class User implements Serializable {
         this.name = name;
         this.photoUrl = photoUrl;
         this.lastUpdated = lastUpdated;
-        this.isDeleted = isDeleted;
-    }
+		this.isDeleted = isDeleted;
+	}
 
     public User(){}
 
-    @NotNull
     public String getId() {
         return id;
     }
@@ -47,8 +52,7 @@ public class User implements Serializable {
         return isDeleted;
     }
 
-
-    public void setId(@NotNull String id) {
+    public void setId(@NonNull String id) {
         this.id = id;
     }
 

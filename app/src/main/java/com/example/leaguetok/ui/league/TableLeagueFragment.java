@@ -3,6 +3,7 @@ package com.example.leaguetok.ui.league;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -22,7 +23,8 @@ import com.example.leaguetok.R;
 import com.example.leaguetok.model.ImitationVideo;
 import com.example.leaguetok.model.Model;
 import com.example.leaguetok.model.OriginalVideo;
-import com.example.leaguetok.ui.UploadVideoFragmentArgs;
+import com.example.leaguetok.model.User;
+import com.example.leaguetok.ui.upload.UploadVideoFragmentArgs;
 import com.example.leaguetok.ui.home.HomeFragmentDirections;
 import com.example.leaguetok.ui.home.HomeViewModel;
 import com.example.leaguetok.ui.home.adapters.OrigVideoAdapter;
@@ -44,12 +46,18 @@ public class TableLeagueFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_table_league, container, false);
         String origVideoId = TableLeagueFragmentArgs.fromBundle(getArguments()).getOriginalVideoID();
         RecyclerView list = root.findViewById(R.id.imitVideosList);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().show();
 
         list.setHasFixedSize(true);
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         list.setLayoutManager((layoutManager));
         leagueViewModel.filter(origVideoId);
+        leagueViewModel.getOriginalVideo().observe(getViewLifecycleOwner(), new Observer<OriginalVideo>() {
+            @Override
+            public void onChanged(OriginalVideo originalVideo) {
+                ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(originalVideo.getName());
+            }
+        });
         ImitVideoAdapter adapter = new ImitVideoAdapter(leagueViewModel);
         list.setAdapter(adapter);
 
@@ -71,12 +79,27 @@ public class TableLeagueFragment extends Fragment {
                         swiper.setRefreshing(false);
                     }
                 });
+
+                Model.instance.refreshAllUsers(new Model.AsyncListener() {
+                    @Override
+                    public void onComplete(Object data) {}
+
+                    @Override
+                    public void onError(Object error) {}
+                });
             }
         });
 
         leagueViewModel.getList().observe(getViewLifecycleOwner(), new Observer<List<ImitationVideo>>() {
             @Override
             public void onChanged(List<ImitationVideo> imitationVideos) {
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+        leagueViewModel.getUsersList().observe(getViewLifecycleOwner(), new Observer<List<User>>() {
+            @Override
+            public void onChanged(List<User> users) {
                 adapter.notifyDataSetChanged();
             }
         });
