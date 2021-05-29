@@ -47,17 +47,22 @@ public class TableLeagueFragment extends Fragment {
         String origVideoId = TableLeagueFragmentArgs.fromBundle(getArguments()).getOriginalVideoID();
         RecyclerView list = root.findViewById(R.id.imitVideosList);
         ((AppCompatActivity) getActivity()).getSupportActionBar().show();
+        Model.instance.getOrigVideoById(origVideoId, new Model.AsyncListener<OriginalVideo>() {
+            @Override
+            public void onComplete(OriginalVideo data) {
+                ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(data.getName());
+            }
+
+            @Override
+            public void onError(OriginalVideo error) {
+
+            }
+        });
 
         list.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         list.setLayoutManager((layoutManager));
         leagueViewModel.filter(origVideoId);
-        leagueViewModel.getOriginalVideo().observe(getViewLifecycleOwner(), new Observer<OriginalVideo>() {
-            @Override
-            public void onChanged(OriginalVideo originalVideo) {
-                ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(originalVideo.getName());
-            }
-        });
         ImitVideoAdapter adapter = new ImitVideoAdapter(leagueViewModel);
         list.setAdapter(adapter);
 

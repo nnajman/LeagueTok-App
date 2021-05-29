@@ -21,5 +21,5 @@ public interface OriginalVideoDao {
     void delete(OriginalVideo originalVideo);
 
     @Query("select * from OriginalVideo where id = :id")
-    LiveData<OriginalVideo> getOrigVideoByID(String id);
+    OriginalVideo getOrigVideoByID(String id);
 }

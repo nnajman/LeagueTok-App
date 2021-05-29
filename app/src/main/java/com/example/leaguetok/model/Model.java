@@ -94,8 +94,8 @@ public class Model {
         });
     }
 
-    public LiveData<OriginalVideo> getOrigVideoById(String id) {
-        return modelSql.getOrigVideoById(id);
+    public void getOrigVideoById(String id, AsyncListener<OriginalVideo> listener) {
+        modelSql.getOrigVideoById(id, listener);
     }
 
     public LiveData<List<ImitationVideo>> getImitiationVideosByUid(String uid, AsyncListener listener) {
