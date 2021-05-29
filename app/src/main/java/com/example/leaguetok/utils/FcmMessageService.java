@@ -26,7 +26,7 @@ import com.google.firebase.messaging.RemoteMessage;
 import java.util.Map;
 
 public class FcmMessageService extends FirebaseMessagingService {
-    public static void getDeviceToken() {
+    public static void sendDeviceToken() {
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
             @Override
             public void onComplete(@NonNull Task<String> task) {
