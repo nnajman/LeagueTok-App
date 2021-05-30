@@ -63,7 +63,7 @@ public class UploadResultFragment extends Fragment {
         rankText = view.findViewById(R.id.upload_rank_txt);
         rankImage = view.findViewById(R.id.upload_rank_img);
         lowerScoreText = view.findViewById(R.id.upload_lower_score_txt);
-
+        lowerScoreText.setVisibility(View.INVISIBLE);
         final KonfettiView konfettiView = view.findViewById(R.id.viewKonfetti);
         gradeText.setText(String.valueOf(Math.round(Float.parseFloat(imitVideoResult))));
 
