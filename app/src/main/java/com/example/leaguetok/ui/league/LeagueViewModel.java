@@ -20,7 +20,6 @@ import java.util.List;
 
 public class LeagueViewModel extends ViewModel {
     private LiveData<List<ImitationVideo>> imitList;
-    private LiveData<OriginalVideo> originalVideo;
     private LiveData<List<User>> usersList;
 
     public LeagueViewModel() {
@@ -44,15 +43,10 @@ public class LeagueViewModel extends ViewModel {
 
     public void filter(String sourceId) {
         imitList = Transformations.switchMap(imitList, list -> Model.instance.getAllImitVideosBySourceID(sourceId));
-        originalVideo = Model.instance.getOrigVideoById(sourceId);
     }
 
     public LiveData<List<ImitationVideo>> getList() {
         return imitList;
-    }
-
-    public LiveData<OriginalVideo> getOriginalVideo() {
-        return originalVideo;
     }
 
     public LiveData<List<User>> getUsersList() {
