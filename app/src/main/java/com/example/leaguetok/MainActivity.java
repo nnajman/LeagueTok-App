@@ -1,9 +1,18 @@
 package com.example.leaguetok;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
 
+import com.example.leaguetok.model.Model;
+import com.example.leaguetok.utils.FcmMessageService;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.messaging.FirebaseMessaging;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -24,6 +33,6 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupWithNavController(navView, navController);
+        FcmMessageService.sendDeviceToken();
     }
-
 }

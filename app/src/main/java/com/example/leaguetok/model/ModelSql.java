@@ -45,8 +45,23 @@ public class ModelSql {
         new MyAsyncTask().execute();
     }
 
-    public LiveData<OriginalVideo> getOrigVideoById(String id) {
-        return AppLocalDB.db.originalVideoDao().getOrigVideoByID(id);
+    public void getOrigVideoById(String id, Model.AsyncListener<OriginalVideo> listener) {
+        class MyAsyncTask extends AsyncTask {
+            OriginalVideo originalVideo = null;
+            @Override
+            protected Object doInBackground(Object[] objects) {
+                originalVideo =  AppLocalDB.db.originalVideoDao().getOrigVideoByID(id);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Object o) {
+                super.onPostExecute(o);
+                if (listener != null) listener.onComplete(originalVideo);
+            }
+        }
+
+        new MyAsyncTask().execute();
     }
 
     public void insertImitVideo(ImitationVideo imitationVideo, Model.AsyncListener listener) {

@@ -60,11 +60,16 @@ public class UploadVideoFragment extends Fragment {
         pickVideo.setType("video/*");
 
         String origVideoId = UploadVideoFragmentArgs.fromBundle(getArguments()).getOriginalVideoID();
-        Model.instance.getOrigVideoById(origVideoId).observe(getActivity(), new Observer<OriginalVideo>() {
+        Model.instance.getOrigVideoById(origVideoId, new Model.AsyncListener<OriginalVideo>() {
             @Override
-            public void onChanged(OriginalVideo originalVideo) {
-                origVideo = originalVideo;
-                uploadTitle.setText(getString(R.string.upload_title, originalVideo.getName(), originalVideo.getPerformer()));
+            public void onComplete(OriginalVideo data) {
+                origVideo = data;
+                uploadTitle.setText(getString(R.string.upload_title, origVideo.getName(), origVideo.getPerformer()));
+            }
+
+            @Override
+            public void onError(OriginalVideo error) {
+
             }
         });
 
@@ -92,35 +97,40 @@ public class UploadVideoFragment extends Fragment {
             Model.instance.uploadVideo(selectedVideo, uid, origVideoId, new Model.DataAsyncListener<String>() {
                 @Override
                 public void onComplete(String data) {
-                    uploadImg.setVisibility(View.INVISIBLE);
                     progressBar.setVisibility(View.INVISIBLE);
                     progressBar.setIndeterminate(true);
                     progressBar.setVisibility(View.VISIBLE);
                     Model.instance.uploadVideoToServer(data, uid, origVideoId, new NodeService.RequestListener<JSONObject>() {
                         @Override
                         public void onSuccess(JSONObject response) {
-                            Model.instance.refreshAllImitVideos(null);
-                            progressBar.setVisibility(View.INVISIBLE);
-                            uploadImg.setVisibility(View.VISIBLE);
-                            try {
-                                Navigation
-                                        .findNavController(view)
-                                        .navigate(UploadVideoFragmentDirections.actionUploadVideoFragmentToUploadResultFragment2(response.getString("result"), origVideoId));
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                            if (isResumed()) {
+                                Model.instance.refreshAllImitVideos(null);
+                                Model.instance.refreshAllUsers(null);
+                                progressBar.setVisibility(View.INVISIBLE);
+                                uploadImg.setVisibility(View.VISIBLE);
+                                try {
+                                    Navigation
+                                            .findNavController(view)
+                                            .navigate(UploadVideoFragmentDirections.actionUploadVideoFragmentToUploadResultFragment2(response.getString("result"), origVideoId));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                             }
                         }
 
                         @Override
                         public void onError(VolleyError error) {
-                            progressBar.setVisibility(View.INVISIBLE);
-                            errorText.setVisibility(View.VISIBLE);
+                            if (isResumed()) {
+                                progressBar.setVisibility(View.INVISIBLE);
+                                errorText.setVisibility(View.VISIBLE);
+                            }
                         }
                     });
                 }
 
                 @Override
                 public void onProgress(int progress) {
+                    uploadImg.setVisibility(View.INVISIBLE);
                     progressBar.setVisibility(View.VISIBLE);
                     progressBar.setProgressCompat(progress, true);
                 }

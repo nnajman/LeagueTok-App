@@ -47,17 +47,22 @@ public class TableLeagueFragment extends Fragment {
         String origVideoId = TableLeagueFragmentArgs.fromBundle(getArguments()).getOriginalVideoID();
         RecyclerView list = root.findViewById(R.id.imitVideosList);
         ((AppCompatActivity) getActivity()).getSupportActionBar().show();
+        Model.instance.getOrigVideoById(origVideoId, new Model.AsyncListener<OriginalVideo>() {
+            @Override
+            public void onComplete(OriginalVideo data) {
+                ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(data.getName());
+            }
+
+            @Override
+            public void onError(OriginalVideo error) {
+
+            }
+        });
 
         list.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         list.setLayoutManager((layoutManager));
         leagueViewModel.filter(origVideoId);
-        leagueViewModel.getOriginalVideo().observe(getViewLifecycleOwner(), new Observer<OriginalVideo>() {
-            @Override
-            public void onChanged(OriginalVideo originalVideo) {
-                ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(originalVideo.getName());
-            }
-        });
         ImitVideoAdapter adapter = new ImitVideoAdapter(leagueViewModel);
         list.setAdapter(adapter);
 
@@ -70,7 +75,17 @@ public class TableLeagueFragment extends Fragment {
                 Model.instance.refreshAllImitVideos(new Model.AsyncListener() {
                     @Override
                     public void onComplete(Object data) {
-                        swiper.setRefreshing(false);
+                        Model.instance.refreshAllUsers(new Model.AsyncListener() {
+                            @Override
+                            public void onComplete(Object data) {
+                                swiper.setRefreshing(false);
+                            }
+
+                            @Override
+                            public void onError(Object error) {
+                                swiper.setRefreshing(false);
+                            }
+                        });
                     }
 
                     @Override
@@ -78,14 +93,6 @@ public class TableLeagueFragment extends Fragment {
                         Toast.makeText(getActivity(), "Network connection error", Toast.LENGTH_SHORT).show();
                         swiper.setRefreshing(false);
                     }
-                });
-
-                Model.instance.refreshAllUsers(new Model.AsyncListener() {
-                    @Override
-                    public void onComplete(Object data) {}
-
-                    @Override
-                    public void onError(Object error) {}
                 });
             }
         });

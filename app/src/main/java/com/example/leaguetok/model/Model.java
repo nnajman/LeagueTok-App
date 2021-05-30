@@ -31,8 +31,8 @@ public class Model {
     private LiveData<List<ImitationVideo>> imitVideosList;
     private LiveData<List<User>> usersList;
 
-    public void uploadVideo(Uri videoUri, String uid, String origName,  DataAsyncListener<String> listener) {
-        modelFirebase.uploadVideo(videoUri, uid, origName, listener);
+    public void uploadVideo(Uri videoUri, String uid, String origVideoId,  DataAsyncListener<String> listener) {
+        modelFirebase.uploadVideo(videoUri, uid, origVideoId, listener);
     }
 
     public void uploadVideoToServer(String uri, String uid, String origVideoId, NodeService.RequestListener<JSONObject> listener) {
@@ -94,20 +94,8 @@ public class Model {
         });
     }
 
-    public LiveData<OriginalVideo> getOrigVideoById(String id) {
-        return modelSql.getOrigVideoById(id);
-    }
-
-    public LiveData<List<User>> getAllUsers(AsyncListener listener) {
-        if (usersList == null) {
-            usersList = AppLocalDB.db.userDao().getAllUsers();
-            refreshAllUsers(listener);
-        }
-        else {
-            if(listener != null) listener.onComplete(null);
-        }
-
-        return usersList;
+    public void getOrigVideoById(String id, AsyncListener<OriginalVideo> listener) {
+        modelSql.getOrigVideoById(id, listener);
     }
 
     public LiveData<List<ImitationVideo>> getImitiationVideosByUid(String uid, AsyncListener listener) {
@@ -216,6 +204,18 @@ public class Model {
         });
     }
 
+    public LiveData<List<User>> getAllUsers(AsyncListener listener) {
+        if (usersList == null) {
+            usersList = AppLocalDB.db.userDao().getAllUsers();
+            refreshAllUsers(listener);
+        }
+        else {
+            if(listener != null) listener.onComplete(null);
+        }
+
+        return usersList;
+    }
+
     public void refreshAllUsers(AsyncListener listener) {
         Long lastUpdated = LeagueTokApplication.context
                 .getSharedPreferences("TAG", Context.MODE_PRIVATE)
@@ -257,5 +257,9 @@ public class Model {
 
     public void getUserById(String uid, NodeService.RequestListener<JSONObject> listener) {
         nodejsService.getUserById(uid, listener);
+    }
+
+    public void sendDeviceToken(String uid, String token, Model.AsyncListener listener) {
+        nodejsService.sendDeviceToken(uid, token, listener);
     }
 }
