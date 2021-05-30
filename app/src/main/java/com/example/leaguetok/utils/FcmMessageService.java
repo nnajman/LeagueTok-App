@@ -43,6 +43,7 @@ public class FcmMessageService extends FirebaseMessagingService {
 
                 // Get new FCM registration token
                 String token = task.getResult();
+                Log.d("TAG", "fcm token: " + token);
 
                 // Send device token to server
                 Model.instance.sendDeviceToken(FirebaseAuth.getInstance().getCurrentUser().getUid(), token, new Model.AsyncListener() {
