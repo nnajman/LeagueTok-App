@@ -115,6 +115,7 @@ public class UploadResultFragment extends Fragment {
                     .streamFor(300, 5000L);
         }
 
+
         leagueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
