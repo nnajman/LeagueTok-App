@@ -36,8 +36,10 @@ public class UploadResultFragment extends Fragment {
     TextView gradeTitle;
     TextView gradeText;
     TextView rankText;
+    TextView lowerScoreText;
     ImageView rankImage;
     Button leagueButton;
+    String imitVideoResult;
 
     public UploadResultFragment() {
         // Required empty public constructor
@@ -50,7 +52,7 @@ public class UploadResultFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_upload_result, container, false);
-        String imitVideoResult = UploadResultFragmentArgs.fromBundle(getArguments()).getImitVideoResult();
+        imitVideoResult = UploadResultFragmentArgs.fromBundle(getArguments()).getImitVideoResult();
         String originalVideoID = UploadResultFragmentArgs.fromBundle(getArguments()).getOriginalVideoID();
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         uploadViewModel = new ViewModelProvider(this).get(UplaodViewModel.class);
@@ -60,7 +62,8 @@ public class UploadResultFragment extends Fragment {
         leagueButton = view.findViewById(R.id.upload_league_button);
         rankText = view.findViewById(R.id.upload_rank_txt);
         rankImage = view.findViewById(R.id.upload_rank_img);
-
+        lowerScoreText = view.findViewById(R.id.upload_lower_score_txt);
+        lowerScoreText.setVisibility(View.INVISIBLE);
         final KonfettiView konfettiView = view.findViewById(R.id.viewKonfetti);
         gradeText.setText(String.valueOf(Math.round(Float.parseFloat(imitVideoResult))));
 
@@ -69,51 +72,62 @@ public class UploadResultFragment extends Fragment {
             @Override
             public void onChanged(List<ImitationVideo> imitationVideos) {
                 Integer rank = 0;
+                Boolean isNewScoreBetter = true;
                 for (ImitationVideo imitVideo : imitationVideos) {
                     rank++;
                     if (imitVideo.getUid().equals(uid)) {
+                        if (Integer.parseInt(imitVideoResult) < imitVideo.getScore()) {
+                            isNewScoreBetter = false;
+                        }
                         break;
                     }
                 }
-//              Set first places drawables
-                switch(rank) {
-                    case 1:
-                        rankImage.setImageResource(R.drawable.ic_outline_looks_one_24);
-                        rankImage.setVisibility(View.VISIBLE);
-                        rankText.setVisibility(View.INVISIBLE);
-                        break;
-                    case 2:
-                        rankImage.setImageResource(R.drawable.ic_outline_looks_two_24);
-                        rankImage.setVisibility(View.VISIBLE);
-                        rankText.setVisibility(View.INVISIBLE);
-                        break;
-                    case 3:
-                        rankImage.setImageResource(R.drawable.ic_outline_looks_3_24);
-                        rankImage.setVisibility(View.VISIBLE);
-                        rankText.setVisibility(View.INVISIBLE);
-                        break;
-                    default:
-                        rankText.setText(String.valueOf(rank));
-                        rankText.setVisibility(View.VISIBLE);
-                        rankImage.setVisibility(View.INVISIBLE);
-                        break;
+                if (isNewScoreBetter) {
+                    //              Set first places drawables
+                    switch(rank) {
+                        case 1:
+                            rankImage.setImageResource(R.drawable.ic_outline_looks_one_24);
+                            rankImage.setVisibility(View.VISIBLE);
+                            rankText.setVisibility(View.INVISIBLE);
+                            break;
+                        case 2:
+                            rankImage.setImageResource(R.drawable.ic_outline_looks_two_24);
+                            rankImage.setVisibility(View.VISIBLE);
+                            rankText.setVisibility(View.INVISIBLE);
+                            break;
+                        case 3:
+                            rankImage.setImageResource(R.drawable.ic_outline_looks_3_24);
+                            rankImage.setVisibility(View.VISIBLE);
+                            rankText.setVisibility(View.INVISIBLE);
+                            break;
+                        default:
+                            rankText.setText(String.valueOf(rank));
+                            rankText.setVisibility(View.VISIBLE);
+                            rankImage.setVisibility(View.INVISIBLE);
+                            break;
+                    }
+
+                    if(Float.parseFloat(imitVideoResult) >= 50) {
+                        konfettiView.build()
+//                  In Int type by this order: Black, Blue, Red
+                                .addColors(65793, 2487534, 16657493)
+                                .setDirection(0.0, 359.0)
+                                .setSpeed(1f, 5f)
+                                .setFadeOutEnabled(true)
+                                .setTimeToLive(500L)
+                                .addShapes(Shape.Square.INSTANCE, Shape.Circle.INSTANCE)
+                                .addSizes(new Size(12, 5f))
+                                .setPosition(-50f, konfettiView.getWidth() + 50f, -50f, -50f)
+                                .streamFor(300, 5000L);
+                    }
+                } else {
+                    rankText.setVisibility(View.INVISIBLE);
+                    lowerScoreText.setVisibility(View.VISIBLE);
                 }
             }
         });
 
-        if(Float.parseFloat(imitVideoResult) >= 50) {
-            konfettiView.build()
-//                  In Int type by this order: Black, Blue, Red
-                    .addColors(65793, 2487534, 16657493)
-                    .setDirection(0.0, 359.0)
-                    .setSpeed(1f, 5f)
-                    .setFadeOutEnabled(true)
-                    .setTimeToLive(500L)
-                    .addShapes(Shape.Square.INSTANCE, Shape.Circle.INSTANCE)
-                    .addSizes(new Size(12, 5f))
-                    .setPosition(-50f, konfettiView.getWidth() + 50f, -50f, -50f)
-                    .streamFor(300, 5000L);
-        }
+
 
 
         leagueButton.setOnClickListener(new View.OnClickListener() {
