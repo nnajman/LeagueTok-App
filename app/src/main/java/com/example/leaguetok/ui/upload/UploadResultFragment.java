@@ -4,15 +4,28 @@ import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.leaguetok.LeagueTokApplication;
 import com.example.leaguetok.R;
+import com.example.leaguetok.model.ImitationVideo;
+import com.example.leaguetok.model.Model;
+import com.example.leaguetok.model.OriginalVideo;
+import com.example.leaguetok.model.User;
+import com.example.leaguetok.ui.league.LeagueViewModel;
+import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.List;
 
 import nl.dionsegijn.konfetti.KonfettiView;
 import nl.dionsegijn.konfetti.models.Shape;
@@ -22,11 +35,15 @@ public class UploadResultFragment extends Fragment {
 
     TextView gradeTitle;
     TextView gradeText;
+    TextView rankText;
+    ImageView rankImage;
     Button leagueButton;
 
     public UploadResultFragment() {
         // Required empty public constructor
     }
+
+    private UplaodViewModel uploadViewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -35,12 +52,55 @@ public class UploadResultFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_upload_result, container, false);
         String imitVideoResult = UploadResultFragmentArgs.fromBundle(getArguments()).getImitVideoResult();
         String originalVideoID = UploadResultFragmentArgs.fromBundle(getArguments()).getOriginalVideoID();
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        uploadViewModel = new ViewModelProvider(this).get(UplaodViewModel.class);
+
         gradeTitle = view.findViewById(R.id.upload_grade_title);
         gradeText = view.findViewById(R.id.upload_grade_txt);
         leagueButton = view.findViewById(R.id.upload_league_button);
-        final KonfettiView konfettiView = view.findViewById(R.id.viewKonfetti);
+        rankText = view.findViewById(R.id.upload_rank_txt);
+        rankImage = view.findViewById(R.id.upload_rank_img);
 
+        final KonfettiView konfettiView = view.findViewById(R.id.viewKonfetti);
         gradeText.setText(String.valueOf(Math.round(Float.parseFloat(imitVideoResult))));
+
+        uploadViewModel.filter(originalVideoID);
+        uploadViewModel.getList().observe(getViewLifecycleOwner(), new Observer<List<ImitationVideo>>() {
+            @Override
+            public void onChanged(List<ImitationVideo> imitationVideos) {
+                Integer rank = 0;
+                for (ImitationVideo imitVideo : imitationVideos) {
+                    rank++;
+                    if (imitVideo.getUid().equals(uid)) {
+                        break;
+                    }
+                }
+//              Set first places drawables
+                switch(rank) {
+                    case 1:
+                        rankImage.setImageResource(R.drawable.ic_outline_looks_one_24);
+                        rankImage.setVisibility(View.VISIBLE);
+                        rankText.setVisibility(View.INVISIBLE);
+                        break;
+                    case 2:
+                        rankImage.setImageResource(R.drawable.ic_outline_looks_two_24);
+                        rankImage.setVisibility(View.VISIBLE);
+                        rankText.setVisibility(View.INVISIBLE);
+                        break;
+                    case 3:
+                        rankImage.setImageResource(R.drawable.ic_outline_looks_3_24);
+                        rankImage.setVisibility(View.VISIBLE);
+                        rankText.setVisibility(View.INVISIBLE);
+                        break;
+                    default:
+                        rankText.setText(String.valueOf(rank));
+                        rankText.setVisibility(View.VISIBLE);
+                        rankImage.setVisibility(View.INVISIBLE);
+                        break;
+                }
+            }
+        });
+
         if(Float.parseFloat(imitVideoResult) >= 50) {
             konfettiView.build()
 //                  In Int type by this order: Black, Blue, Red
@@ -54,6 +114,7 @@ public class UploadResultFragment extends Fragment {
                     .setPosition(-50f, konfettiView.getWidth() + 50f, -50f, -50f)
                     .streamFor(300, 5000L);
         }
+
 
         leagueButton.setOnClickListener(new View.OnClickListener() {
             @Override

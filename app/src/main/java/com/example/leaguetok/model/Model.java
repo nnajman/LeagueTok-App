@@ -39,8 +39,8 @@ public class Model {
         nodejsService.uploadVideo(uri, uid, origVideoId, listener);
     }
 
-    public void addNewUser(String uid, String fullName, AsyncListener listener) {
-        nodejsService.addNewUser(uid, fullName, listener);
+    public void addNewUser(String uid, String fullName, String photoUrl, AsyncListener listener) {
+        nodejsService.addNewUser(uid, fullName, photoUrl, listener);
     }
 
     public LiveData<List<OriginalVideo>> getAllOriginalVideos(AsyncListener listener) {
@@ -253,6 +253,10 @@ public class Model {
                 listener.onError(null);
             }
         });
+    }
+
+    public void getUserById(String uid, NodeService.RequestListener<JSONObject> listener) {
+        nodejsService.getUserById(uid, listener);
     }
 
     public void sendDeviceToken(String uid, String token, Model.AsyncListener listener) {
