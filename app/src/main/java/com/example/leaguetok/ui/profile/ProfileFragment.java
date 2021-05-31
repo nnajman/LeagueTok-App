@@ -63,6 +63,7 @@ public class ProfileFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
 
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.title_profile);
         ((AppCompatActivity) getActivity()).getSupportActionBar().show();
         setHasOptionsMenu(true);
 

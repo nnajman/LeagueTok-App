@@ -5,12 +5,15 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -56,6 +59,11 @@ public class UploadVideoFragment extends Fragment {
         progressBar = view.findViewById(R.id.upload_progress_bar);
         uploadImg = view.findViewById(R.id.upload_video_img);
 
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().show();
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Upload Video");
+        setHasOptionsMenu(true);
+
         Intent pickVideo = new Intent(Intent.ACTION_GET_CONTENT);
         pickVideo.setType("video/*");
 
@@ -84,6 +92,15 @@ public class UploadVideoFragment extends Fragment {
         });
 
         return view;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch(item.getItemId()) {
+            case android.R.id.home:
+                Navigation.findNavController(view).popBackStack();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
