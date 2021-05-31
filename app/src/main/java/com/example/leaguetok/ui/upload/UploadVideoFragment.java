@@ -9,27 +9,21 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.Volley;
-import com.example.leaguetok.LeagueTokApplication;
 import com.example.leaguetok.R;
 import com.example.leaguetok.model.Model;
 import com.example.leaguetok.model.NodeService;
 import com.example.leaguetok.model.OriginalVideo;
-import com.example.leaguetok.ui.home.HomeFragmentDirections;
-import com.example.leaguetok.ui.upload.UploadVideoFragmentDirections;
+import com.eyalbira.loadingdots.LoadingDots;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -41,8 +35,11 @@ public class UploadVideoFragment extends Fragment {
 
     TextView errorText;
     TextView uploadTitle;
+    TextView waitText;
     CircularProgressIndicator progressBar;
     ImageView uploadImg;
+    TextView statusText;
+    LoadingDots dots;
     View view;
 
     public UploadVideoFragment() {
@@ -58,6 +55,9 @@ public class UploadVideoFragment extends Fragment {
         uploadTitle = view.findViewById(R.id.upload_video_title);
         progressBar = view.findViewById(R.id.upload_progress_bar);
         uploadImg = view.findViewById(R.id.upload_video_img);
+        waitText = view.findViewById(R.id.upload_wait_text);
+        statusText = view.findViewById(R.id.upload_status_text);
+        dots = view.findViewById(R.id.upload_loadingDots);
 
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((AppCompatActivity) getActivity()).getSupportActionBar().show();
@@ -114,6 +114,9 @@ public class UploadVideoFragment extends Fragment {
             Model.instance.uploadVideo(selectedVideo, uid, origVideoId, new Model.DataAsyncListener<String>() {
                 @Override
                 public void onComplete(String data) {
+                    waitText.setVisibility(View.VISIBLE);
+                    waitText.setText(R.string.upload_status_wait);
+                    statusText.setText(R.string.upload_status_process);
                     progressBar.setVisibility(View.INVISIBLE);
                     progressBar.setIndeterminate(true);
                     progressBar.setVisibility(View.VISIBLE);
@@ -138,6 +141,9 @@ public class UploadVideoFragment extends Fragment {
                         @Override
                         public void onError(VolleyError error) {
                             if (isResumed()) {
+                                statusText.setVisibility(View.INVISIBLE);
+                                dots.setVisibility(View.INVISIBLE);
+                                waitText.setVisibility(View.INVISIBLE);
                                 progressBar.setVisibility(View.INVISIBLE);
                                 errorText.setVisibility(View.VISIBLE);
                             }
@@ -147,6 +153,10 @@ public class UploadVideoFragment extends Fragment {
 
                 @Override
                 public void onProgress(int progress) {
+                    statusText.setText(R.string.upload_status_video);
+                    statusText.setVisibility(View.VISIBLE);
+                    dots.setVisibility(View.VISIBLE);
+                    waitText.setVisibility(View.INVISIBLE);
                     uploadImg.setVisibility(View.INVISIBLE);
                     progressBar.setVisibility(View.VISIBLE);
                     progressBar.setProgressCompat(progress, true);
