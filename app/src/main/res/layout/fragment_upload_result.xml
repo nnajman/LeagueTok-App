@@ -98,17 +98,17 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginLeft="24dp"
-        android:layout_marginTop="40dp"
         android:layout_marginEnd="24dp"
         android:layout_marginRight="24dp"
         android:gravity="center"
         android:text="@string/lower_score"
         android:textColor="@color/black"
-        android:textSize="20sp"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toTopOf="@+id/upload_league_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/upload_rank_title"
+        app:layout_constraintTop_toBottomOf="@+id/upload_grade_txt"
         tools:visibility="visible" />
 
     <Button
@@ -120,13 +120,14 @@
         android:layout_marginTop="40dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:text="@string/league"
+        android:text="@string/league_table_button"
         android:textSize="20sp"
         android:visibility="visible"
-        app:backgroundTint="@color/pink"
+        app:cornerRadius="50dp"
+        app:icon="@drawable/ic_baseline_emoji_events_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/upload_league_title"
+        app:layout_constraintTop_toBottomOf="@+id/upload_rank_img"
         tools:visibility="visible" />
 
     <TextView
