@@ -43,7 +43,7 @@ public class Listeners {
     private static void validateEditText(TextInputLayout layout, Editable s) {
         if (TextUtils.isEmpty(s)) {
             Log.d("TAG", "field is empty");
-            layout.setError("שדה חובה");
+            layout.setError("Field cannot be empty");
         } else {
             layout.setError(null);
         }

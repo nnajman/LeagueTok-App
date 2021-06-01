@@ -60,9 +60,6 @@ public class SignInFragment extends Fragment {
         Button signInWithGoogleBtn = view.findViewById(R.id.sign_in_with_google_btn);
         progressBar = view.findViewById(R.id.sign_in_progress_bar);
 
-        ImageView logo = view.findViewById(R.id.sign_in_logo);
-        Picasso.get().load("https://firebasestorage.googleapis.com/v0/b/leaguetok.appspot.com/o/logo_pic.jpeg?alt=media&token=6da71041-0ff7-4e1a-83b6-0b83ade8ed57").into(logo);
-
         signInBtn.setOnClickListener(b -> {
             login(emailEt.getText().toString(), passwordEt.getText().toString());
         });
