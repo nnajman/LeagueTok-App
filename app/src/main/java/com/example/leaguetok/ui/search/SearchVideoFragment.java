@@ -21,6 +21,7 @@ import android.widget.VideoView;
 
 import com.example.leaguetok.LeagueTokApplication;
 import com.example.leaguetok.R;
+import com.example.leaguetok.model.Model;
 import com.example.leaguetok.model.OriginalVideo;
 
 public class SearchVideoFragment extends Fragment {
@@ -53,6 +54,16 @@ public class SearchVideoFragment extends Fragment {
         imgPlay = view.findViewById(R.id.listrow_play_btn);
         btnTryIt = view.findViewById(R.id.listrow_try_btn);
         btnLeagueTable = view.findViewById(R.id.listrow_league_table_btn);
+
+        Model.instance.getNumOfImitBySourceId(originalVideo.getId(), new Model.AsyncListener<Integer>() {
+            @Override
+            public void onComplete(Integer data) {
+                ((TextView)view.findViewById(R.id.listrow_count_tries)).setText(LeagueTokApplication.context.getString(R.string.count_tries, data));
+            }
+
+            @Override
+            public void onError(Integer error) {}
+        });
 
         txtVideoTitle.setText(originalVideo.getName());
         setVideoPlayer(originalVideo.getUri());

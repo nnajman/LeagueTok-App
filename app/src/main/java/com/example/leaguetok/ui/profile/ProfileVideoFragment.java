@@ -50,6 +50,7 @@ public class ProfileVideoFragment extends Fragment {
         imgPlay = view.findViewById(R.id.listrow_play_btn);
         view.findViewById(R.id.listrow_try_btn).setVisibility(View.INVISIBLE);
         view.findViewById(R.id.listrow_league_table_btn).setVisibility(View.INVISIBLE);
+        view.findViewById(R.id.listrow_count_tries).setVisibility(View.INVISIBLE);
 
 //        txtVideoTitle.setText(imitationVideo.get());
         setVideoPlayer(imitationVideo.getUrl());
