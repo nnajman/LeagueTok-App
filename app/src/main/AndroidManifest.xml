@@ -16,7 +16,7 @@
         android:theme="@style/Theme.LeagueTok">
         <activity
             android:name=".AuthenticationActivity"
-            android:label="AuthenticationActivity"
+            android:label="LeagueTok"
             android:theme="@style/Theme.LeagueTok.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
