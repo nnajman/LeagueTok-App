@@ -20,7 +20,7 @@ public class ModelFirebase {
     // Need to generalize in order to upload original videos as well. (add type of video as param, check which type, etc.)
     public void uploadVideo(Uri videoUri, String uid, String origVideoId, Model.DataAsyncListener<String> listener) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
-        final StorageReference videosRef = storage.getReference().child(IMIT_VID).child(uid + "_" + origVideoId);
+        final StorageReference videosRef = storage.getReference().child(IMIT_VID).child(uid + "_" + origVideoId + "_new");
 
         // Upload video
         videosRef.putFile(videoUri).addOnFailureListener(new OnFailureListener() {
