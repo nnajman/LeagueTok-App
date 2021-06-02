@@ -75,17 +75,19 @@
 
     <Button
         android:id="@+id/sign_in_with_google_btn"
+        style="?attr/materialButtonOutlinedStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/sign_in_btn"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="15dp"
         android:layout_marginRight="20dp"
-        android:text="Sign In Using Google"
-        android:textColor="@android:color/white"
+        android:text="Sign In With Google"
         app:cornerRadius="50dp"
         app:icon="@drawable/googleg_standard_color_18"
-        app:iconGravity="textStart" />
+        app:iconGravity="textStart"
+        app:strokeColor="@color/pink"
+        app:strokeWidth="1dp" />
 
     <View
         android:id="@+id/sign_in_seperator"
