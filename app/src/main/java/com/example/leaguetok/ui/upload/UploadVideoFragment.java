@@ -84,7 +84,7 @@ public class UploadVideoFragment extends Fragment {
         uploadImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent pickVideo = new Intent(Intent.ACTION_GET_CONTENT);
+                Intent pickVideo = new Intent(Intent.ACTION_PICK);
                 pickVideo.setType("video/*");
                 startActivityForResult(Intent.createChooser(pickVideo,"Select Video"), 1);
                 Intent.createChooser(pickVideo,"Select Video");
