@@ -107,28 +107,24 @@ public class UploadResultFragment extends Fragment {
                             break;
                     }
 
-                    if(Float.parseFloat(imitVideoResult) >= 50) {
-                        konfettiView.build()
+                    konfettiView.build()
 //                  In Int type by this order: Black, Blue, Red
-                                .addColors(65793, 2487534, 16657493)
-                                .setDirection(0.0, 359.0)
-                                .setSpeed(1f, 5f)
-                                .setFadeOutEnabled(true)
-                                .setTimeToLive(500L)
-                                .addShapes(Shape.Square.INSTANCE, Shape.Circle.INSTANCE)
-                                .addSizes(new Size(12, 5f))
-                                .setPosition(-50f, konfettiView.getWidth() + 50f, -50f, -50f)
-                                .streamFor(300, 5000L);
-                    }
+                            .addColors(65793, 2487534, 16657493)
+                            .setDirection(0.0, 359.0)
+                            .setSpeed(1f, 5f)
+                            .setFadeOutEnabled(true)
+                            .setTimeToLive(500L)
+                            .addShapes(Shape.Square.INSTANCE, Shape.Circle.INSTANCE)
+                            .addSizes(new Size(12, 5f))
+                            .setPosition(-50f, konfettiView.getWidth() + 50f, -50f, -50f)
+                            .streamFor(300, 5000L);
+
                 } else {
                     rankText.setVisibility(View.INVISIBLE);
                     lowerScoreText.setVisibility(View.VISIBLE);
                 }
             }
         });
-
-
-
 
         leagueButton.setOnClickListener(new View.OnClickListener() {
             @Override
