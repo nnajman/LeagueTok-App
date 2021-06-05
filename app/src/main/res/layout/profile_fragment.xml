@@ -6,131 +6,14 @@
     android:layout_height="match_parent"
     tools:context=".ui.profile.ProfileFragment">
 
-    <TextView
-        android:id="@+id/textView16"
-        android:layout_width="5dp"
-        android:layout_height="wrap_content"
-        android:text="|"
-        android:textColor="#EAEDED"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="@+id/profile_likes_txt"
-        app:layout_constraintEnd_toStartOf="@+id/profile_likes_txt"
-        app:layout_constraintStart_toEndOf="@+id/profile_followers_txt"
-        app:layout_constraintTop_toTopOf="@+id/profile_likes_num" />
-
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/profile_videos"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="16dp"
+        android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_followers_txt" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/profile_img"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="24dp"
-        android:scaleType="centerCrop"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:src="@tools:sample/avatars"
-        app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView"/>
-
-    <TextView
-        android:id="@+id/profile_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="TextView"
-        android:textColor="@color/black"
-        app:layout_constraintEnd_toEndOf="@+id/profile_img"
-        app:layout_constraintStart_toStartOf="@+id/profile_img"
-        app:layout_constraintTop_toBottomOf="@+id/profile_img" />
-
-    <TextView
-        android:id="@+id/profile_following_num"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="245"
-        android:textColor="@color/black"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/profile_following_txt"
-        app:layout_constraintStart_toStartOf="@+id/profile_following_txt"
-        app:layout_constraintTop_toBottomOf="@+id/profile_name" />
-
-    <TextView
-        android:id="@+id/profile_following_txt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="48dp"
-        android:layout_marginRight="48dp"
-        android:text="Following"
-        app:layout_constraintEnd_toStartOf="@+id/profile_followers_txt"
-        app:layout_constraintTop_toBottomOf="@+id/profile_following_num" />
-
-    <TextView
-        android:id="@+id/profile_followers_num"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="312"
-        android:textColor="@color/black"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/profile_img"
-        app:layout_constraintStart_toStartOf="@+id/profile_img"
-        app:layout_constraintTop_toBottomOf="@+id/profile_name" />
-
-    <TextView
-        android:id="@+id/profile_followers_txt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Followers"
-        app:layout_constraintEnd_toEndOf="@+id/profile_followers_num"
-        app:layout_constraintStart_toStartOf="@+id/profile_followers_num"
-        app:layout_constraintTop_toBottomOf="@+id/profile_followers_num" />
-
-    <TextView
-        android:id="@+id/profile_likes_num"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="257"
-        android:textColor="@color/black"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/profile_likes_txt"
-        app:layout_constraintStart_toStartOf="@+id/profile_likes_txt"
-        app:layout_constraintTop_toTopOf="@+id/profile_followers_num" />
-
-    <TextView
-        android:id="@+id/profile_likes_txt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:layout_marginLeft="48dp"
-        android:layout_marginTop="8dp"
-        android:text="Likes"
-        app:layout_constraintStart_toEndOf="@+id/profile_followers_txt"
-        app:layout_constraintTop_toBottomOf="@+id/profile_likes_num" />
-
-    <TextView
-        android:id="@+id/textView15"
-        android:layout_width="5dp"
-        android:layout_height="wrap_content"
-        android:text="|"
-        android:textColor="#EAEDED"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="@+id/profile_following_txt"
-        app:layout_constraintEnd_toStartOf="@+id/profile_followers_txt"
-        app:layout_constraintStart_toEndOf="@+id/profile_following_txt"
-        app:layout_constraintTop_toTopOf="@+id/profile_following_num" />
 </androidx.constraintlayout.widget.ConstraintLayout>

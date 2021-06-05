@@ -5,7 +5,6 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -22,26 +21,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.android.volley.VolleyError;
-import com.bumptech.glide.Glide;
 import com.example.leaguetok.AuthenticationActivity;
 import com.example.leaguetok.R;
 import com.example.leaguetok.model.ImitationVideo;
-import com.example.leaguetok.model.Model;
-import com.example.leaguetok.model.NodeService;
 import com.example.leaguetok.ui.profile.adapters.ProfileAdapter;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
-import com.squareup.picasso.Picasso;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.List;
 
@@ -53,8 +40,6 @@ public class ProfileFragment extends Fragment {
     private List<ImitationVideo> videos;
     private ProfileViewModel profileViewModel;
     private String uid;
-    private ImageView profileImg;
-    private TextView profileName;
 
     @Nullable
     @Override
@@ -68,8 +53,6 @@ public class ProfileFragment extends Fragment {
         setHasOptionsMenu(true);
 
         recyclerView = view.findViewById(R.id.profile_videos);
-        profileImg = view.findViewById(R.id.profile_img);
-        profileName = view.findViewById(R.id.profile_name);
 
         try {
             uid = ProfileFragmentArgs.fromBundle(getArguments()).getUid();
@@ -78,23 +61,14 @@ public class ProfileFragment extends Fragment {
             uid = mAuth.getCurrentUser().getUid();
         }
 
-        Model.instance.getUserById(uid, new NodeService.RequestListener<JSONObject>() {
-            @Override
-            public void onSuccess(JSONObject response) throws JSONException {
-                profileName.setText(response.get("name").toString());
-                Glide.with(getContext()).load(response.get("photoUrl").toString()).into(profileImg);
-            }
-
-            @Override
-            public void onError(VolleyError error) {
-
-            }
-        });
-
         profileViewModel.getList(uid).observe(getViewLifecycleOwner(), new Observer<List<ImitationVideo>>() {
             @Override
             public void onChanged(List<ImitationVideo> imitationVideos) {
                 videos = imitationVideos;
+
+                // add user at top of the list for profile details
+                videos.add(0, new ImitationVideo());
+
                 buildRecyclerView();
                 adapter.notifyDataSetChanged();
                 adapter.setOnItemClickListener((position) -> {
@@ -141,6 +115,14 @@ public class ProfileFragment extends Fragment {
         // adding layout manager to our recycler view.
         GridLayoutManager manager = new GridLayoutManager(getContext(), 2, GridLayoutManager.VERTICAL, false);
         recyclerView.setHasFixedSize(true);
+
+        // Create a custom SpanSizeLookup where the first item spans both columns
+        manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                return position == 0 ? 2 : 1;
+            }
+        });
 
         // setting layout manager
         // to our recycler view.

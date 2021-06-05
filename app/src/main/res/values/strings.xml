@@ -27,4 +27,5 @@
     <string name="upload_status_video">Uploading video</string>
     <string name="upload_status_process">Processing video</string>
     <string name="upload_status_wait">It might take a while, we\'ll let you know when it\'s ready</string>
+    <string name="profile_tryouts">Your Tryouts:</string>
 </resources>
