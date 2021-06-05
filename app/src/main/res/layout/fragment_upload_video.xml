@@ -87,7 +87,7 @@
             android:layout_gravity="center|center_vertical"
             android:clickable="true"
             android:focusable="true"
-            android:src="@drawable/ic_baseline_video_library_24" />
+            android:src="@drawable/ic_upload_video" />
     </LinearLayout>
 
     <TextView
