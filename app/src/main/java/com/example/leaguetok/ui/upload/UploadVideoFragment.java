@@ -1,12 +1,14 @@
 package com.example.leaguetok.ui.upload;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
@@ -16,16 +18,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
+import com.bumptech.glide.Glide;
 import com.example.leaguetok.R;
 import com.example.leaguetok.model.Model;
 import com.example.leaguetok.model.NodeService;
 import com.example.leaguetok.model.OriginalVideo;
 import com.eyalbira.loadingdots.LoadingDots;
-import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.firebase.auth.FirebaseAuth;
+import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,14 +37,16 @@ import org.json.JSONObject;
 public class UploadVideoFragment extends Fragment {
     OriginalVideo origVideo;
 
-    TextView errorText;
     TextView uploadTitle;
     TextView waitText;
-    CircularProgressIndicator progressBar;
     ImageView uploadImg;
     TextView statusText;
     LoadingDots dots;
     View view;
+    CircularProgressBar progressBar;
+    LinearLayout uploadImgAndText;
+    TextView percentageText;
+    ImageView loading;
 
     public UploadVideoFragment() {
         // Required empty public constructor
@@ -51,13 +57,15 @@ public class UploadVideoFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_upload_video, container, false);
-        errorText = view.findViewById(R.id.upload_error_label);
         uploadTitle = view.findViewById(R.id.upload_video_title);
-        progressBar = view.findViewById(R.id.upload_progress_bar);
+        uploadImgAndText = view.findViewById(R.id.upload_img_and_text);
         uploadImg = view.findViewById(R.id.upload_video_img);
         waitText = view.findViewById(R.id.upload_wait_text);
         statusText = view.findViewById(R.id.upload_status_text);
         dots = view.findViewById(R.id.upload_loadingDots);
+        progressBar = view.findViewById(R.id.upload_progress_bar);
+        percentageText = view.findViewById(R.id.upload_percentage);
+        loading = view.findViewById(R.id.upload_loading);
 
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((AppCompatActivity) getActivity()).getSupportActionBar().show();
@@ -111,15 +119,17 @@ public class UploadVideoFragment extends Fragment {
             String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
             String origVideoId = origVideo.getId();
             Uri selectedVideo = data.getData();
+            progressBar.setVisibility(View.VISIBLE);
             Model.instance.uploadVideo(selectedVideo, uid, origVideoId, new Model.DataAsyncListener<String>() {
                 @Override
                 public void onComplete(String data) {
+                    statusText.setText(R.string.upload_status_process);
                     waitText.setVisibility(View.VISIBLE);
                     waitText.setText(R.string.upload_status_wait);
-                    statusText.setText(R.string.upload_status_process);
                     progressBar.setVisibility(View.INVISIBLE);
-                    progressBar.setIndeterminate(true);
-                    progressBar.setVisibility(View.VISIBLE);
+                    percentageText.setVisibility(View.INVISIBLE);
+                    loading.setVisibility(View.VISIBLE);
+                    Glide.with(view).load(R.drawable.spinner).fitCenter().into(loading);
                     Model.instance.uploadVideoToServer(data, uid, origVideoId, new NodeService.RequestListener<JSONObject>() {
                         @Override
                         public void onSuccess(JSONObject response) {
@@ -144,8 +154,18 @@ public class UploadVideoFragment extends Fragment {
                                 statusText.setVisibility(View.INVISIBLE);
                                 dots.setVisibility(View.INVISIBLE);
                                 waitText.setVisibility(View.INVISIBLE);
-                                progressBar.setVisibility(View.INVISIBLE);
-                                errorText.setVisibility(View.VISIBLE);
+                                loading.setVisibility(View.INVISIBLE);
+                                uploadImgAndText.setVisibility(View.VISIBLE);
+                                new AlertDialog.Builder(view.getContext())
+                                        .setTitle("Oops...")
+                                        .setMessage(getString(R.string.error_message))
+                                        .setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                dialogInterface.dismiss();
+                                            }
+                                        })
+                                        .show();
                             }
                         }
                     });
@@ -156,10 +176,11 @@ public class UploadVideoFragment extends Fragment {
                     statusText.setText(R.string.upload_status_video);
                     statusText.setVisibility(View.VISIBLE);
                     dots.setVisibility(View.VISIBLE);
-                    waitText.setVisibility(View.INVISIBLE);
-                    uploadImg.setVisibility(View.INVISIBLE);
-                    progressBar.setVisibility(View.VISIBLE);
-                    progressBar.setProgressCompat(progress, true);
+                    uploadImgAndText.setVisibility(View.INVISIBLE);
+                    percentageText.setVisibility(View.VISIBLE);
+                    percentageText.setText(getString(R.string.upload_percentage, progress));
+                    progressBar.setProgressWithAnimation((float)progress, 1000l);
+
                 }
             });
         }

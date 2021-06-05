@@ -12,7 +12,7 @@
     <string name="upload_upper_title">Let\'s see you try</string>
     <string name="upload_title">%1$s by %2$s</string>
     <string name="gallery_upload">Upload your TikTok dance from the gallery</string>
-    <string name="error_message">Oops... We are sorry but there was a problem while processing your video :(</string>
+    <string name="error_message">We are sorry but there was a problem while processing your video :(</string>
     <string name="action_try">Try It</string>
     <string name="league_table">League</string>
     <string name="count_tries">- %1$d people tried it -</string>
@@ -28,4 +28,5 @@
     <string name="upload_status_process">Processing video</string>
     <string name="upload_status_wait">It might take a while, we\'ll let you know when it\'s ready</string>
     <string name="profile_tryouts">Your Tryouts:</string>
+    <string name="upload_percentage">%1$d%%</string>
 </resources>
