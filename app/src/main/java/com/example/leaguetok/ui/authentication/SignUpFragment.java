@@ -19,9 +19,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.leaguetok.MainActivity;
 import com.example.leaguetok.R;
 import com.example.leaguetok.model.Model;
@@ -45,7 +47,7 @@ import java.util.List;
 public class SignUpFragment extends Fragment {
     private FirebaseAuth mAuth;
     private View view;
-    private CircularProgressIndicator progressBar;
+    ImageView progressBar;
     private boolean isPhotoUploaded = false;
     public static final int GET_FROM_GALLERY = 3;
     private TextInputEditText fullNameEt;
@@ -56,7 +58,8 @@ public class SignUpFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_sign_up, container, false);
-        progressBar = view.findViewById(R.id.sign_up_progress_bar);
+        progressBar = view.findViewById(R.id.sign_up_loading);
+        Glide.with(view).load(R.drawable.spinner).fitCenter().override(150, 150).into(progressBar);
 
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
@@ -159,8 +162,6 @@ public class SignUpFragment extends Fragment {
             return;
         }
 
-        progressBar.setVisibility(View.INVISIBLE);
-        progressBar.setIndeterminate(true);
         progressBar.setVisibility(View.VISIBLE);
 
         mAuth.fetchSignInMethodsForEmail(email)

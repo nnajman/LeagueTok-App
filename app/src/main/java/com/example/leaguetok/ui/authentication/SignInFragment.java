@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.leaguetok.MainActivity;
 import com.example.leaguetok.R;
 import com.example.leaguetok.model.Model;
@@ -42,7 +43,7 @@ public class SignInFragment extends Fragment {
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 1001;
-    private CircularProgressIndicator progressBar;
+    private ImageView progressBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,7 +59,8 @@ public class SignInFragment extends Fragment {
         TextInputEditText passwordEt = view.findViewById(R.id.sign_in_password_et);
         Button signInBtn = view.findViewById(R.id.sign_in_btn);
         Button signInWithGoogleBtn = view.findViewById(R.id.sign_in_with_google_btn);
-        progressBar = view.findViewById(R.id.sign_in_progress_bar);
+        progressBar = view.findViewById(R.id.sign_in_loading);
+        Glide.with(view).load(R.drawable.spinner).fitCenter().override(150, 150).into(progressBar);
 
         signInBtn.setOnClickListener(b -> {
             login(emailEt.getText().toString(), passwordEt.getText().toString());
@@ -67,6 +69,7 @@ public class SignInFragment extends Fragment {
         signInWithGoogleBtn.setOnClickListener(b -> {
             Intent signInIntent = mGoogleSignInClient.getSignInIntent();
             startActivityForResult(signInIntent, RC_SIGN_IN);
+            progressBar.setVisibility(View.VISIBLE);
         });
 
         TextView navigationText = view.findViewById(R.id.sign_in_navigation_txt);
@@ -83,6 +86,7 @@ public class SignInFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
+            progressBar.setVisibility(View.INVISIBLE);
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             // Google Sign In was successful, authenticate with Firebase
             GoogleSignInAccount account = null;
@@ -98,8 +102,6 @@ public class SignInFragment extends Fragment {
     private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
         Log.d("TAG", "firebaseAuthWithGoogle:" + account.getId());
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
-        progressBar.setVisibility(View.INVISIBLE);
-        progressBar.setIndeterminate(true);
         progressBar.setVisibility(View.VISIBLE);
 
         mAuth.signInWithCredential(credential)
@@ -143,10 +145,7 @@ public class SignInFragment extends Fragment {
             return;
         }
 
-        progressBar.setVisibility(View.INVISIBLE);
-        progressBar.setIndeterminate(true);
         progressBar.setVisibility(View.VISIBLE);
-
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                     @Override

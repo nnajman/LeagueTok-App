@@ -18,13 +18,14 @@
         android:textColor="@color/white"
         android:textSize="50sp" />
 
-    <com.google.android.material.progressindicator.CircularProgressIndicator
-        android:id="@+id/sign_up_progress_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <ImageView
+        android:id="@+id/sign_up_loading"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_gravity="center_horizontal"
+        android:layout_marginTop="15dp"
+        android:src="@drawable/spinner"
         android:visibility="invisible"
-        app:indicatorColor="@color/aqua"
         tools:visibility="invisible" />
 
     <com.google.android.material.textfield.TextInputLayout
