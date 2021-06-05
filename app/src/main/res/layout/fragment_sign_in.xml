@@ -11,11 +11,11 @@
         android:id="@+id/sign_in_logo"
         android:layout_width="100dp"
         android:layout_height="75dp"
-        android:layout_above="@+id/sign_in_email_layout"
-        android:layout_alignStart="@+id/sign_in_email_layout"
-        android:layout_alignLeft="@+id/sign_in_email_layout"
-        android:layout_alignEnd="@+id/sign_in_email_layout"
-        android:layout_alignRight="@+id/sign_in_email_layout"
+        android:layout_above="@+id/upload_original_name_layout"
+        android:layout_alignStart="@+id/upload_original_name_layout"
+        android:layout_alignLeft="@+id/upload_original_name_layout"
+        android:layout_alignEnd="@+id/upload_original_name_layout"
+        android:layout_alignRight="@+id/upload_original_name_layout"
         android:layout_alignParentTop="true"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"/>
@@ -30,7 +30,7 @@
         tools:visibility="invisible" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/sign_in_email_layout"
+        android:id="@+id/upload_original_name_layout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -43,7 +43,7 @@
         app:helperTextEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/sign_in_email_et"
+            android:id="@+id/upload_original_name_et"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:inputType="textEmailAddress"

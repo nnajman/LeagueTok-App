@@ -23,4 +23,5 @@
     <string name="league_score">Score</string>
     <string name="league_table_title">League Table</string>
     <string name="lower_score">New score is lower from previous attempts.. \nBetter luck next time! </string>
+    <string name="upload_original_video_title">Upload a new Challenge</string>
 </resources>

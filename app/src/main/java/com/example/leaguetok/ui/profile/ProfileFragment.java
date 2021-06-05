@@ -11,6 +11,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -55,11 +56,13 @@ public class ProfileFragment extends Fragment {
     private String uid;
     private ImageView profileImg;
     private TextView profileName;
+    private MenuItem uploadVideoBtn;
+    private View view;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.profile_fragment, container, false);
+        view = inflater.inflate(R.layout.profile_fragment, container, false);
         mAuth = FirebaseAuth.getInstance();
         profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
 
@@ -82,6 +85,9 @@ public class ProfileFragment extends Fragment {
             public void onSuccess(JSONObject response) throws JSONException {
                 profileName.setText(response.get("name").toString());
                 Glide.with(getContext()).load(response.get("photoUrl").toString()).into(profileImg);
+                if (response.get("isAdmin").toString() != "true") {
+                    uploadVideoBtn.setVisible(false);
+                }
             }
 
             @Override
@@ -112,6 +118,8 @@ public class ProfileFragment extends Fragment {
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.profile_menu, menu);
+
+        uploadVideoBtn = menu.getItem(0);
     }
 
     @Override
@@ -126,6 +134,10 @@ public class ProfileFragment extends Fragment {
                 Intent i = new Intent(getActivity(), AuthenticationActivity.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(i);
+            case R.id.action_upload_video:
+                NavDirections direction =
+                        ProfileFragmentDirections.actionProfileFragmentToUploadOriginalVideoFragment((String) profileName.getText());
+                Navigation.findNavController(view).navigate(direction);
         }
 
         return super.onOptionsItemSelected(item);

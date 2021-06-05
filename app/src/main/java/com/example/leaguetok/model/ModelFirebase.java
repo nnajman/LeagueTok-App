@@ -47,4 +47,34 @@ public class ModelFirebase {
             }
         });
     }
+
+    public void uploadOriginalVideo(Uri videoUri, String name, String perfomer, Model.DataAsyncListener<String> listener) {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        final StorageReference videosRef = storage.getReference().child(ORIG_VID).child(name + "_" + perfomer);
+
+        // Upload video
+        videosRef.putFile(videoUri).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                listener.onComplete(null);
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                videosRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        // get uri for original video
+                        // add post request to node server with original and imitation videos uri
+                        listener.onComplete(uri.toString());
+                    }
+                });
+            }
+        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                listener.onProgress((int)((100.0 * snapshot.getBytesTransferred()) / snapshot.getTotalByteCount()));
+            }
+        });
+    }
 }

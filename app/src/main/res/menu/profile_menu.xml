@@ -7,6 +7,13 @@
     android:orientation="vertical">
 
     <!--item for our search view with its id-->
+
+    <item
+        android:id="@+id/action_upload_video"
+        android:icon="@drawable/ic_upload_video"
+        android:title="Upload Video"
+        app:showAsAction="always" />
+
     <item
         android:id="@+id/action_logout"
         android:icon="@drawable/ic_logout"

@@ -234,6 +234,41 @@ public class NodeService {
         Volley.newRequestQueue(LeagueTokApplication.context).add(jsObjRequest);
     }
 
+    public void uploadOriginalVideo(String uri, String name, String performer, RequestListener<JSONObject> listener) {
+        final String postVideoURL = getServerUrl() + "/" + ORIG_VIDEOS_API;
+        HashMap<String, String> params = new HashMap<String,String>();
+        params.put("uri", uri);
+        params.put("name", name);
+        params.put("performer", performer);
+
+        JsonObjectRequest jsObjRequest = new
+                JsonObjectRequest(Request.Method.POST,
+                postVideoURL,
+                new JSONObject(params),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            listener.onSuccess(response);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                listener.onError(error);
+            }
+        });
+
+        jsObjRequest.setShouldCache(false);
+        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        Volley.newRequestQueue(LeagueTokApplication.context).add(jsObjRequest);
+    }
+
     public void addNewUser(String uid, String fullName, String photoUrl, Model.AsyncListener listener) {
         final String addNewUserUrl = getServerUrl() + "/" + USERS_API + "/sign-up";
         HashMap<String, String> params = new HashMap<String,String>();
