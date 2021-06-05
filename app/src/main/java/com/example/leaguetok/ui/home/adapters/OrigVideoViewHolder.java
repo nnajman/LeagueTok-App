@@ -16,6 +16,7 @@ import android.widget.VideoView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.leaguetok.LeagueTokApplication;
 import com.example.leaguetok.R;
 import com.google.android.exoplayer2.MediaItem;
@@ -27,7 +28,7 @@ public class OrigVideoViewHolder extends RecyclerView.ViewHolder {
     VideoView videoView;
     TextView txtVideoTitle;
     TextView txtCountTries;
-    ProgressBar loading;
+    ImageView loading;
     ImageView imgPlay;
     LinearLayout btnTryIt;
     LinearLayout btnLeagueTable;
@@ -40,7 +41,8 @@ public class OrigVideoViewHolder extends RecyclerView.ViewHolder {
         videoView = itemView.findViewById(R.id.listrow_video);
         txtVideoTitle = itemView.findViewById(R.id.listrow_video_title);
         txtCountTries = itemView.findViewById(R.id.listrow_count_tries);
-        loading = itemView.findViewById(R.id.listrow_loading);
+        loading = itemView.findViewById(R.id.listrow_loading_spinner);
+        Glide.with(itemView).load(R.drawable.loading_spinner_100).fitCenter().override(100, 100).into(loading);
         imgPlay = itemView.findViewById(R.id.listrow_play_btn);
         btnTryIt = itemView.findViewById(R.id.listrow_try_btn);
         btnLeagueTable = itemView.findViewById(R.id.listrow_league_table_btn);

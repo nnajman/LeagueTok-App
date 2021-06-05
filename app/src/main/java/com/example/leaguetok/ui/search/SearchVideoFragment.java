@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.bumptech.glide.Glide;
 import com.example.leaguetok.LeagueTokApplication;
 import com.example.leaguetok.R;
 import com.example.leaguetok.model.Model;
@@ -29,7 +30,7 @@ public class SearchVideoFragment extends Fragment {
     VideoView videoView;
     TextView txtVideoTitle;
     TextView txtCountTries;
-    ProgressBar loading;
+    ImageView loading;
     ImageView imgPlay;
     LinearLayout btnTryIt;
     LinearLayout btnLeagueTable;
@@ -50,7 +51,8 @@ public class SearchVideoFragment extends Fragment {
         videoView = view.findViewById(R.id.listrow_video);
         txtVideoTitle = view.findViewById(R.id.listrow_video_title);
         txtCountTries = view.findViewById(R.id.listrow_count_tries);
-        loading = view.findViewById(R.id.listrow_loading);
+        loading = view.findViewById(R.id.listrow_loading_spinner);
+        Glide.with(view).load(R.drawable.loading_spinner_100).fitCenter().override(100, 100).into(loading);
         imgPlay = view.findViewById(R.id.listrow_play_btn);
         btnTryIt = view.findViewById(R.id.listrow_try_btn);
         btnLeagueTable = view.findViewById(R.id.listrow_league_table_btn);

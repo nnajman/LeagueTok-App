@@ -87,7 +87,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
         public void bind(OriginalVideo video) {
             searchRowName.setText(video.getName());
-            Glide.with(context).load(video.getUri()).into(searchRowVideo);
+            Glide.with(context).load(video.getUri()).thumbnail(Glide.with(context).load(R.drawable.loading_spinner)).into(searchRowVideo);
         }
     }
 
