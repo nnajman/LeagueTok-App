@@ -74,6 +74,12 @@
         <argument
             android:name="originalVideo"
             app:argType="com.example.leaguetok.model.OriginalVideo" />
+        <action
+            android:id="@+id/action_searchVideoFragment_to_uploadVideoFragment"
+            app:destination="@id/uploadVideoFragment" />
+        <action
+            android:id="@+id/action_searchVideoFragment_to_tableLeagueFragment"
+            app:destination="@id/tableLeagueFragment" />
     </fragment>
     <action android:id="@+id/action_global_profileFragment" app:destination="@id/profileFragment" />
     <fragment
