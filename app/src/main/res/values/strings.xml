@@ -16,7 +16,6 @@
     <string name="action_try">Try It</string>
     <string name="league_table">League</string>
     <string name="count_tries">- %1$d people tried it -</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="league_rank">Rank</string>
     <string name="league_name">Name</string>
@@ -27,6 +26,6 @@
     <string name="upload_status_video">Uploading video</string>
     <string name="upload_status_process">Processing video</string>
     <string name="upload_status_wait">It might take a while, we\'ll let you know when it\'s ready</string>
-    <string name="profile_tryouts">Your Tryouts:</string>
+    <string name="profile_tryouts">My Tryouts:</string>
     <string name="upload_percentage">%1$d%%</string>
 </resources>

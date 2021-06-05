@@ -22,7 +22,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
-import com.bumptech.glide.Glide;
 import com.example.leaguetok.R;
 import com.example.leaguetok.model.Model;
 import com.example.leaguetok.model.NodeService;
@@ -33,6 +32,9 @@ import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
 
 public class UploadVideoFragment extends Fragment {
     OriginalVideo origVideo;
@@ -46,7 +48,6 @@ public class UploadVideoFragment extends Fragment {
     CircularProgressBar progressBar;
     LinearLayout uploadImgAndText;
     TextView percentageText;
-    ImageView loading;
 
     public UploadVideoFragment() {
         // Required empty public constructor
@@ -65,7 +66,14 @@ public class UploadVideoFragment extends Fragment {
         dots = view.findViewById(R.id.upload_loadingDots);
         progressBar = view.findViewById(R.id.upload_progress_bar);
         percentageText = view.findViewById(R.id.upload_percentage);
-        loading = view.findViewById(R.id.upload_loading);
+
+        progressBar.setOnProgressChangeListener(new Function1<Float, Unit>() {
+            @Override
+            public Unit invoke(Float aFloat) {
+                percentageText.setText(getString(R.string.upload_percentage, Math.round(aFloat)));
+                return Unit.INSTANCE;
+            }
+        });
 
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((AppCompatActivity) getActivity()).getSupportActionBar().show();
@@ -119,17 +127,15 @@ public class UploadVideoFragment extends Fragment {
             String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
             String origVideoId = origVideo.getId();
             Uri selectedVideo = data.getData();
+            progressBar.setIndeterminateMode(false);
             progressBar.setVisibility(View.VISIBLE);
             Model.instance.uploadVideo(selectedVideo, uid, origVideoId, new Model.DataAsyncListener<String>() {
                 @Override
                 public void onComplete(String data) {
                     statusText.setText(R.string.upload_status_process);
                     waitText.setVisibility(View.VISIBLE);
-                    waitText.setText(R.string.upload_status_wait);
-                    progressBar.setVisibility(View.INVISIBLE);
+                    progressBar.setIndeterminateMode(true);
                     percentageText.setVisibility(View.INVISIBLE);
-                    loading.setVisibility(View.VISIBLE);
-                    Glide.with(view).load(R.drawable.spinner).fitCenter().into(loading);
                     Model.instance.uploadVideoToServer(data, uid, origVideoId, new NodeService.RequestListener<JSONObject>() {
                         @Override
                         public void onSuccess(JSONObject response) {
@@ -154,7 +160,7 @@ public class UploadVideoFragment extends Fragment {
                                 statusText.setVisibility(View.INVISIBLE);
                                 dots.setVisibility(View.INVISIBLE);
                                 waitText.setVisibility(View.INVISIBLE);
-                                loading.setVisibility(View.INVISIBLE);
+                                progressBar.setVisibility(View.INVISIBLE);
                                 uploadImgAndText.setVisibility(View.VISIBLE);
                                 new AlertDialog.Builder(view.getContext())
                                         .setTitle("Oops...")
@@ -178,9 +184,7 @@ public class UploadVideoFragment extends Fragment {
                     dots.setVisibility(View.VISIBLE);
                     uploadImgAndText.setVisibility(View.INVISIBLE);
                     percentageText.setVisibility(View.VISIBLE);
-                    percentageText.setText(getString(R.string.upload_percentage, progress));
                     progressBar.setProgressWithAnimation((float)progress, 1000l);
-
                 }
             });
         }
