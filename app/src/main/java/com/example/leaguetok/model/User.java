@@ -23,13 +23,15 @@ public class User implements Serializable {
     private String photoUrl;
     private Long lastUpdated;
     private boolean isDeleted;
+    private boolean isAdmin;
 
-    public User(String id, String name, String photoUrl, Long lastUpdated, boolean isDeleted) {
+    public User(String id, String name, String photoUrl, Long lastUpdated, boolean isDeleted, boolean isAdmin) {
         this.id = id;
         this.name = name;
         this.photoUrl = photoUrl;
         this.lastUpdated = lastUpdated;
 		this.isDeleted = isDeleted;
+		this.isAdmin = isAdmin;
 	}
 
     public User(){}
@@ -52,6 +54,8 @@ public class User implements Serializable {
         return isDeleted;
     }
 
+    public boolean isAdmin() { return isAdmin; }
+
     public void setId(@NonNull String id) {
         this.id = id;
     }
@@ -70,12 +74,15 @@ public class User implements Serializable {
         isDeleted = deleted;
     }
 
+    public void setAdmin(boolean admin) { isAdmin = admin; }
+
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
         result.put("id", id);
         result.put("name", name);
         result.put("photoUrl", photoUrl);
         result.put("isDeleted", isDeleted);
+        result.put("isAdmin", isAdmin);
         return result;
     }
 
@@ -85,6 +92,7 @@ public class User implements Serializable {
         photoUrl = json.getString("photoUrl");
         lastUpdated = json.getLong("lastUpdated");
         isDeleted = json.getBoolean("isDeleted");
+        isAdmin = json.getBoolean("isAdmin");
         return this;
     }
 }

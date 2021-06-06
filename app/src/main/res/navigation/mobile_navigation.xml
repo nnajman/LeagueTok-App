@@ -41,6 +41,9 @@
         <action
             android:id="@+id/action_profileFragment_to_profileVideoFragment"
             app:destination="@id/profileVideoFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_uploadOriginalVideoFragment"
+            app:destination="@id/uploadOriginalVideoFragment" />
     </fragment>
     <fragment
         android:id="@+id/uploadVideoFragment"
@@ -104,5 +107,14 @@
         <action
             android:id="@+id/action_uploadResultFragment2_to_tableLeagueFragment"
             app:destination="@id/tableLeagueFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/uploadOriginalVideoFragment"
+        android:name="com.example.leaguetok.ui.profile.UploadOriginalVideoFragment"
+        android:label="fragment_upload_original_video"
+        tools:layout="@layout/fragment_upload_original_video" >
+        <argument
+            android:name="performer"
+            app:argType="string" />
     </fragment>
 </navigation>

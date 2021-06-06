@@ -22,7 +22,6 @@ import com.bumptech.glide.Glide;
 import com.example.leaguetok.MainActivity;
 import com.example.leaguetok.R;
 import com.example.leaguetok.model.Model;
-import com.example.leaguetok.utils.FcmMessageService;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -55,7 +54,7 @@ public class SignInFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         configureGoogleClient();
 
-        TextInputEditText emailEt = view.findViewById(R.id.sign_in_email_et);
+        TextInputEditText emailEt = view.findViewById(R.id.upload_original_name_et);
         TextInputEditText passwordEt = view.findViewById(R.id.sign_in_password_et);
         Button signInBtn = view.findViewById(R.id.sign_in_btn);
         Button signInWithGoogleBtn = view.findViewById(R.id.sign_in_with_google_btn);

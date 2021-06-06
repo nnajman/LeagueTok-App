@@ -39,6 +39,14 @@ public class Model {
         nodejsService.uploadVideo(uri, uid, origVideoId, listener);
     }
 
+    public void uploadOriginalVideo(Uri videoUri, String name, String performer, DataAsyncListener<String> listener) {
+        modelFirebase.uploadOriginalVideo(videoUri, name, performer, listener);
+    }
+
+    public void uploadOriginalVideoToServer(String uri, String name, String performer, NodeService.RequestListener<JSONObject> listener) {
+        nodejsService.uploadOriginalVideo(uri, name, performer, listener);
+    }
+
     public void addNewUser(String uid, String fullName, String photoUrl, AsyncListener listener) {
         nodejsService.addNewUser(uid, fullName, photoUrl, listener);
     }

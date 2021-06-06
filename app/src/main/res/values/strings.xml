@@ -28,4 +28,5 @@
     <string name="upload_status_wait">It might take a while, we\'ll let you know when it\'s ready</string>
     <string name="profile_tryouts">My Tryouts:</string>
     <string name="upload_percentage">%1$d%%</string>
+    <string name="upload_original_video_title">Upload a new Challenge</string>
 </resources>
