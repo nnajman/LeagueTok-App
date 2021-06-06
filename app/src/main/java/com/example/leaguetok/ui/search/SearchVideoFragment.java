@@ -56,7 +56,7 @@ public class SearchVideoFragment extends Fragment {
         txtVideoTitle = root.findViewById(R.id.listrow_video_title);
         txtCountTries = root.findViewById(R.id.listrow_count_tries);
         loading = root.findViewById(R.id.listrow_loading_spinner);
-        Glide.with(root).load(R.drawable.loading_spinner_100).fitCenter().override(100, 100).into(loading);
+        Glide.with(root).load(R.drawable.spinner).fitCenter().override(100, 100).into(loading);
         imgPlay = root.findViewById(R.id.listrow_play_btn);
         btnTryIt = root.findViewById(R.id.listrow_try_btn);
         btnLeagueTable = root.findViewById(R.id.listrow_league_table_btn);

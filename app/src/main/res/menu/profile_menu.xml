@@ -2,6 +2,7 @@
 <menu
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -12,7 +13,9 @@
         android:id="@+id/action_upload_video"
         android:icon="@drawable/ic_upload_video_black"
         android:title="Upload Video"
-        app:showAsAction="always" />
+        android:visibility="invisible"
+        app:showAsAction="always"
+        tools:visibility="invisible" />
 
     <item
         android:id="@+id/action_logout"

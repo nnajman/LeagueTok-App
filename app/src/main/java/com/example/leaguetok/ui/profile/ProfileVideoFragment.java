@@ -48,7 +48,7 @@ public class ProfileVideoFragment extends Fragment {
         txtVideoTitle = view.findViewById(R.id.listrow_video_title);
         txtCountTries = view.findViewById(R.id.listrow_count_tries);
         loading = view.findViewById(R.id.listrow_loading_spinner);
-        Glide.with(view).load(R.drawable.loading_spinner_100).fitCenter().override(100, 100).into(loading);
+        Glide.with(view).load(R.drawable.spinner).fitCenter().override(100, 100).into(loading);
         imgPlay = view.findViewById(R.id.listrow_play_btn);
         view.findViewById(R.id.listrow_try_btn).setVisibility(View.INVISIBLE);
         view.findViewById(R.id.listrow_league_table_btn).setVisibility(View.INVISIBLE);
