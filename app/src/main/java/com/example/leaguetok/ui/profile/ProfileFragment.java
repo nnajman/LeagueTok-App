@@ -47,6 +47,7 @@ public class ProfileFragment extends Fragment {
     private List<ImitationVideo> videos;
     private ProfileViewModel profileViewModel;
     private String uid;
+    private String userName;
     private MenuItem uploadVideoBtn;
     private View view;
 
@@ -74,6 +75,7 @@ public class ProfileFragment extends Fragment {
         Model.instance.getUserById(uid, new NodeService.RequestListener<JSONObject>() {
             @Override
             public void onSuccess(JSONObject response) throws JSONException {
+                userName = response.get("photoUrl").toString();
                 if (response.get("isAdmin").toString() != "true") {
                     uploadVideoBtn.setVisible(false);
                 }
@@ -129,7 +131,7 @@ public class ProfileFragment extends Fragment {
                 startActivity(i);
             case R.id.action_upload_video:
                 NavDirections direction =
-                        ProfileFragmentDirections.actionProfileFragmentToUploadOriginalVideoFragment((String) profileName.getText());
+                        ProfileFragmentDirections.actionProfileFragmentToUploadOriginalVideoFragment(userName);
                 Navigation.findNavController(view).navigate(direction);
         }
 
