@@ -42,7 +42,7 @@ public class OrigVideoViewHolder extends RecyclerView.ViewHolder {
         txtVideoTitle = itemView.findViewById(R.id.listrow_video_title);
         txtCountTries = itemView.findViewById(R.id.listrow_count_tries);
         loading = itemView.findViewById(R.id.listrow_loading_spinner);
-        Glide.with(itemView).load(R.drawable.loading_spinner_100).fitCenter().override(100, 100).into(loading);
+        Glide.with(itemView).load(R.drawable.spinner).fitCenter().override(100, 100).into(loading);
         imgPlay = itemView.findViewById(R.id.listrow_play_btn);
         btnTryIt = itemView.findViewById(R.id.listrow_try_btn);
         btnLeagueTable = itemView.findViewById(R.id.listrow_league_table_btn);

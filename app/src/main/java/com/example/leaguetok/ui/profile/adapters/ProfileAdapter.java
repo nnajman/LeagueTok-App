@@ -134,7 +134,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             Glide
                     .with(context)
                     .load(video.getUrl())
-                    .thumbnail(Glide.with(context).load(R.drawable.loading_spinner))
+                    .thumbnail(Glide.with(context).load(R.drawable.spinner_100))
                     .signature(new ObjectKey(String.valueOf(System.currentTimeMillis())))
                     .fitCenter()
                     .into(rowVideo);
