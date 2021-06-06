@@ -12,6 +12,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -35,6 +37,7 @@ public class UploadResultFragment extends Fragment {
 
     TextView gradeTitle;
     TextView gradeText;
+    TextView rankTitle;
     TextView rankText;
     TextView lowerScoreText;
     ImageView rankImage;
@@ -60,6 +63,7 @@ public class UploadResultFragment extends Fragment {
         gradeTitle = view.findViewById(R.id.upload_grade_title);
         gradeText = view.findViewById(R.id.upload_grade_txt);
         leagueButton = view.findViewById(R.id.upload_league_button);
+        rankTitle = view.findViewById(R.id.upload_rank_title);
         rankText = view.findViewById(R.id.upload_rank_txt);
         rankImage = view.findViewById(R.id.upload_rank_img);
         lowerScoreText = view.findViewById(R.id.upload_lower_score_txt);
@@ -118,14 +122,16 @@ public class UploadResultFragment extends Fragment {
                             .addSizes(new Size(12, 5f))
                             .setPosition(-50f, konfettiView.getWidth() + 50f, -50f, -50f)
                             .streamFor(300, 5000L);
-
                 } else {
+                    rankTitle.setVisibility(View.INVISIBLE);
                     rankText.setVisibility(View.INVISIBLE);
                     lowerScoreText.setVisibility(View.VISIBLE);
                 }
             }
         });
 
+        Animation shake = AnimationUtils.loadAnimation(getContext(), R.anim.shake);
+        leagueButton.startAnimation(shake);
         leagueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
