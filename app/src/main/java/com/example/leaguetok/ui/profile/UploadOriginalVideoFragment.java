@@ -83,7 +83,7 @@ public class UploadOriginalVideoFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (videoNameEt.getText().toString().length() == 0 || performerEt.getText().toString().length() == 0) {
-                    Toast.makeText(getActivity(), "Please fill all the fields", Toast.LENGTH_SHORT);
+                    Toast.makeText(getActivity(), "Please fill all the fields", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
