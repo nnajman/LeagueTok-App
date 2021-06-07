@@ -131,7 +131,7 @@ public class ProfileFragment extends Fragment {
                 startActivity(i);
             case R.id.action_upload_video:
                 NavDirections direction =
-                        ProfileFragmentDirections.actionProfileFragmentToUploadOriginalVideoFragment(userName);
+                        ProfileFragmentDirections.actionProfileFragmentToUploadOriginalVideoFragment();
                 Navigation.findNavController(view).navigate(direction);
         }
 
