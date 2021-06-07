@@ -5,7 +5,6 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -23,11 +22,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.android.volley.VolleyError;
-import com.bumptech.glide.Glide;
 import com.example.leaguetok.AuthenticationActivity;
 import com.example.leaguetok.R;
 import com.example.leaguetok.model.ImitationVideo;
@@ -35,11 +31,8 @@ import com.example.leaguetok.model.Model;
 import com.example.leaguetok.model.NodeService;
 import com.example.leaguetok.ui.profile.adapters.ProfileAdapter;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -54,8 +47,7 @@ public class ProfileFragment extends Fragment {
     private List<ImitationVideo> videos;
     private ProfileViewModel profileViewModel;
     private String uid;
-    private ImageView profileImg;
-    private TextView profileName;
+    private String userName;
     private MenuItem uploadVideoBtn;
     private View view;
 
@@ -66,12 +58,12 @@ public class ProfileFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
 
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.title_profile);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         ((AppCompatActivity) getActivity()).getSupportActionBar().show();
         setHasOptionsMenu(true);
 
         recyclerView = view.findViewById(R.id.profile_videos);
-        profileImg = view.findViewById(R.id.profile_img);
-        profileName = view.findViewById(R.id.profile_name);
 
         try {
             uid = ProfileFragmentArgs.fromBundle(getArguments()).getUid();
@@ -83,8 +75,7 @@ public class ProfileFragment extends Fragment {
         Model.instance.getUserById(uid, new NodeService.RequestListener<JSONObject>() {
             @Override
             public void onSuccess(JSONObject response) throws JSONException {
-                profileName.setText(response.get("name").toString());
-                Glide.with(getContext()).load(response.get("photoUrl").toString()).into(profileImg);
+                userName = response.get("photoUrl").toString();
                 if (response.get("isAdmin").toString() != "true") {
                     uploadVideoBtn.setVisible(false);
                 }
@@ -100,6 +91,10 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onChanged(List<ImitationVideo> imitationVideos) {
                 videos = imitationVideos;
+
+                // add user at top of the list for profile details
+                videos.add(0, new ImitationVideo());
+
                 buildRecyclerView();
                 adapter.notifyDataSetChanged();
                 adapter.setOnItemClickListener((position) -> {
@@ -136,7 +131,7 @@ public class ProfileFragment extends Fragment {
                 startActivity(i);
             case R.id.action_upload_video:
                 NavDirections direction =
-                        ProfileFragmentDirections.actionProfileFragmentToUploadOriginalVideoFragment((String) profileName.getText());
+                        ProfileFragmentDirections.actionProfileFragmentToUploadOriginalVideoFragment(userName);
                 Navigation.findNavController(view).navigate(direction);
         }
 
@@ -152,6 +147,14 @@ public class ProfileFragment extends Fragment {
         // adding layout manager to our recycler view.
         GridLayoutManager manager = new GridLayoutManager(getContext(), 2, GridLayoutManager.VERTICAL, false);
         recyclerView.setHasFixedSize(true);
+
+        // Create a custom SpanSizeLookup where the first item spans both columns
+        manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                return position == 0 ? 2 : 1;
+            }
+        });
 
         // setting layout manager
         // to our recycler view.

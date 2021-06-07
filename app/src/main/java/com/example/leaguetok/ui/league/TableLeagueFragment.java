@@ -15,6 +15,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -33,6 +34,7 @@ import com.example.leaguetok.ui.league.adapters.ImitVideoAdapter;
 import java.util.List;
 
 public class TableLeagueFragment extends Fragment {
+    View root;
 
     public TableLeagueFragment() {
         // Required empty public constructor
@@ -43,10 +45,12 @@ public class TableLeagueFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         leagueViewModel = new ViewModelProvider(this).get(LeagueViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_table_league, container, false);
+        root = inflater.inflate(R.layout.fragment_table_league, container, false);
         String origVideoId = TableLeagueFragmentArgs.fromBundle(getArguments()).getOriginalVideoID();
         RecyclerView list = root.findViewById(R.id.imitVideosList);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((AppCompatActivity) getActivity()).getSupportActionBar().show();
+        setHasOptionsMenu(true);
         Model.instance.getOrigVideoById(origVideoId, new Model.AsyncListener<OriginalVideo>() {
             @Override
             public void onComplete(OriginalVideo data) {
@@ -112,5 +116,14 @@ public class TableLeagueFragment extends Fragment {
         });
 
         return root;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch(item.getItemId()) {
+            case android.R.id.home:
+                Navigation.findNavController(root).popBackStack();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

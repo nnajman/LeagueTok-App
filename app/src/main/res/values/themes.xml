@@ -11,6 +11,8 @@
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">@color/black</item>
+        <item name="actionBarTheme">@style/ActionBarStyle</item>
+
         <!-- Customize your theme here. -->
         <!--item name="colorAccent">@color/black</item-->
     </style>
@@ -23,4 +25,9 @@
     <style name="Theme.LeagueTok.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.LeagueTok.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="ActionBarStyle" parent="@style/Widget.AppCompat.ActionBar">
+        <item name="android:background">@color/white</item>
+    </style>
+
 </resources>

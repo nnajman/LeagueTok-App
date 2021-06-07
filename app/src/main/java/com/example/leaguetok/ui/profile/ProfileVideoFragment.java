@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.bumptech.glide.Glide;
 import com.example.leaguetok.LeagueTokApplication;
 import com.example.leaguetok.R;
 import com.example.leaguetok.model.ImitationVideo;
@@ -27,7 +28,7 @@ public class ProfileVideoFragment extends Fragment {
     VideoView videoView;
     TextView txtVideoTitle;
     TextView txtCountTries;
-    ProgressBar loading;
+    ImageView loading;
     ImageView imgPlay;
 
     public ProfileVideoFragment() {
@@ -46,10 +47,12 @@ public class ProfileVideoFragment extends Fragment {
         videoView = view.findViewById(R.id.listrow_video);
         txtVideoTitle = view.findViewById(R.id.listrow_video_title);
         txtCountTries = view.findViewById(R.id.listrow_count_tries);
-        loading = view.findViewById(R.id.listrow_loading);
+        loading = view.findViewById(R.id.listrow_loading_spinner);
+        Glide.with(view).load(R.drawable.spinner).fitCenter().override(100, 100).into(loading);
         imgPlay = view.findViewById(R.id.listrow_play_btn);
         view.findViewById(R.id.listrow_try_btn).setVisibility(View.INVISIBLE);
         view.findViewById(R.id.listrow_league_table_btn).setVisibility(View.INVISIBLE);
+        view.findViewById(R.id.listrow_count_tries).setVisibility(View.INVISIBLE);
 
 //        txtVideoTitle.setText(imitationVideo.get());
         setVideoPlayer(imitationVideo.getUrl());
