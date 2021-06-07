@@ -270,4 +270,8 @@ public class Model {
     public void sendDeviceToken(String uid, String token, Model.AsyncListener listener) {
         nodejsService.sendDeviceToken(uid, token, listener);
     }
+
+    public void setIsAdmin(String uid, boolean isAdmin, Model.AsyncListener listener) {
+        nodejsService.setIsAdmin(uid, isAdmin, listener);
+    }
 }

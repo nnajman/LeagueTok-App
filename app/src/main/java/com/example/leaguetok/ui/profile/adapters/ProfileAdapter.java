@@ -100,7 +100,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
 
         public void bind(String userName, String photoUrl) {
-            Glide.with(context).load(photoUrl).into(profileImage);
+            Glide.with(context).load(photoUrl).placeholder(R.drawable.profile_placeholder).into(profileImage);
             txtName.setText(userName);
         }
     }
