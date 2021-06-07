@@ -8,23 +8,16 @@
     tools:context=".ui.profile.UploadOriginalVideoFragment">
 
     <TextView
-        android:id="@+id/upload_original_error_label"
-        android:layout_width="0dp"
+        android:id="@+id/upload_original_video_title"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginRight="24dp"
-        android:layout_marginBottom="16dp"
-        android:gravity="center"
-        android:text="@string/error_message"
+        android:layout_marginTop="40dp"
+        android:text="@string/upload_original_video_title"
         android:textColor="@color/black"
-        android:textSize="18sp"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textSize="34sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/upload_original_name_layout"
@@ -34,7 +27,7 @@
         android:layout_centerInParent="true"
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
         android:hint="Challenge Name"
@@ -80,70 +73,102 @@
             android:textSize="15sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.progressindicator.CircularProgressIndicator
-        android:id="@+id/upload_original_progress_bar"
-        android:layout_width="136dp"
+    <LinearLayout
+        android:id="@+id/upload_original_video_img_and_text"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/upload_original_performer_layout">
+
+        <TextView
+            android:id="@+id/upload_original_video_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/gallery_upload_original_video"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+        <ImageView
+            android:id="@+id/upload_original_video_img"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_gravity="center|center_vertical"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/ic_upload_video" />
+    </LinearLayout>
+
+    <com.mikhaellopez.circularprogressbar.CircularProgressBar
+        android:id="@+id/upload_original_video_progress_bar"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
         android:visibility="invisible"
-        app:indicatorColor="@color/aqua"
-        app:indicatorSize="80dp"
-        app:layout_constraintBottom_toTopOf="@+id/upload_original_error_label"
+        app:cpb_background_progressbar_color="@color/pink"
+        app:cpb_background_progressbar_width="12dp"
+        app:cpb_progress_direction="to_right"
+        app:cpb_progressbar_color="@color/aqua"
+        app:cpb_progressbar_width="8dp"
+        app:cpb_round_border="false"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:visibility="invisible" />
-
-    <ImageView
-        android:id="@+id/upload_original_video_img"
-        android:layout_width="200dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="64dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:src="@drawable/ic_baseline_video_library_24"
-        android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/upload_original_error_label"
-        app:layout_constraintDimensionRatio="h,1:1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/upload_original_performer_layout"
-        tools:visibility="visible" />
+        app:layout_constraintTop_toBottomOf="@+id/upload_original_video_status_text" />
 
     <TextView
-        android:id="@+id/textView6"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:gravity="center"
-        android:text="@string/gallery_upload"
-        android:textColor="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/upload_original_video_img" />
-
-    <TextView
-        android:id="@+id/upload_original_video_title"
+        android:id="@+id/upload_original_video_percentage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:text="@string/upload_original_video_title"
-        android:textColor="@color/black"
-        android:textSize="34sp"
+        android:text="@string/upload_percentage"
+        android:textSize="36sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/upload_original_video_progress_bar"
+        app:layout_constraintEnd_toEndOf="@+id/upload_original_video_progress_bar"
+        app:layout_constraintStart_toStartOf="@+id/upload_original_video_progress_bar"
+        app:layout_constraintTop_toTopOf="@+id/upload_original_video_progress_bar" />
+
+    <TextView
+        android:id="@+id/upload_original_video_status_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginRight="24dp"
+        android:gravity="right"
+        android:text="@string/upload_status_process"
+        android:textColor="@color/pink"
+        android:textSize="24sp"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.563"
+        app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/upload_original_performer_layout" />
+
+    <com.eyalbira.loadingdots.LoadingDots
+        android:id="@+id/upload_original_video_loadingDots"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:LoadingDots_dots_color="@color/pink"
+        app:LoadingDots_dots_count="3"
+        app:LoadingDots_dots_size="5dp"
+        app:LoadingDots_jump_height="12dp"
+        app:LoadingDots_loop_start_delay="20"
+        app:layout_constraintBottom_toBottomOf="@+id/upload_original_video_status_text"
+        app:layout_constraintStart_toEndOf="@+id/upload_original_video_status_text"
+        app:layout_constraintTop_toTopOf="@+id/upload_original_video_status_text">
+    </com.eyalbira.loadingdots.LoadingDots>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
