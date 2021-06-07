@@ -106,9 +106,5 @@
         android:id="@+id/uploadOriginalVideoFragment"
         android:name="com.example.leaguetok.ui.profile.UploadOriginalVideoFragment"
         android:label="fragment_upload_original_video"
-        tools:layout="@layout/fragment_upload_original_video" >
-        <argument
-            android:name="performer"
-            app:argType="string" />
-    </fragment>
+        tools:layout="@layout/fragment_upload_original_video" />
 </navigation>

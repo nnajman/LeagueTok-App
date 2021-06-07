@@ -36,7 +36,7 @@ public class UploadOriginalVideoFragment extends Fragment {
     ImageView uploadImg;
     View view;
     TextInputEditText videoNameEt;
-    String performer;
+    TextInputEditText performerEt;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,7 +47,7 @@ public class UploadOriginalVideoFragment extends Fragment {
         progressBar = view.findViewById(R.id.upload_original_progress_bar);
         uploadImg = view.findViewById(R.id.upload_original_video_img);
         videoNameEt = view.findViewById(R.id.upload_original_name_et);
-        performer = UploadOriginalVideoFragmentArgs.fromBundle(getArguments()).getPerformer();
+        performerEt = view.findViewById(R.id.upload_original_performer_et);
 
         Intent pickVideo = new Intent(Intent.ACTION_GET_CONTENT);
         pickVideo.setType("video/*");
@@ -55,6 +55,11 @@ public class UploadOriginalVideoFragment extends Fragment {
         uploadImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (videoNameEt.getText().toString().length() == 0 || performerEt.getText().toString().length() == 0) {
+                    Toast.makeText(getActivity(), "Please fill all the fields", Toast.LENGTH_SHORT);
+                    return;
+                }
+
                 Intent pickVideo = new Intent(Intent.ACTION_GET_CONTENT);
                 pickVideo.setType("video/*");
                 startActivityForResult(Intent.createChooser(pickVideo,"Select Video"), 1);
@@ -72,6 +77,7 @@ public class UploadOriginalVideoFragment extends Fragment {
         if (resultCode == Activity.RESULT_OK && requestCode == 1 && data != null) {
             Uri selectedVideo = data.getData();
             String name = videoNameEt.getText().toString();
+            String performer = performerEt.getText().toString();
 
             Model.instance.uploadOriginalVideo(selectedVideo, name, performer, new Model.DataAsyncListener<String>() {
                 @Override
