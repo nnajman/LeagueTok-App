@@ -27,7 +27,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView"
-        tools:src="@tools:sample/avatars" />
+        app:srcCompat="@drawable/profile_placeholder"
+        tools:src="@drawable/profile_placeholder" />
 
     <TextView
         android:id="@+id/profile_listrow_name"

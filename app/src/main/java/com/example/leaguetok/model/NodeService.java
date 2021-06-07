@@ -360,4 +360,34 @@ public class NodeService {
 
         Volley.newRequestQueue(LeagueTokApplication.context).add(jsObjRequest);
     }
+
+    public void setIsAdmin(String uid, boolean isAdmin, Model.AsyncListener listener) {
+        final String setIsAdminUrl = getServerUrl() + "/" + USERS_API + "/admin";
+        HashMap<String, Object> params = new HashMap<String,Object>();
+        params.put("uid", uid);
+        params.put("isAdmin", isAdmin);
+
+        JsonObjectRequest jsObjRequest = new
+                JsonObjectRequest(Request.Method.PUT,
+                setIsAdminUrl,
+                new JSONObject(params),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        listener.onComplete(null);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                listener.onError(error);
+            }
+        });
+
+        jsObjRequest.setShouldCache(false);
+        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(10000,
+                0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        Volley.newRequestQueue(LeagueTokApplication.context).add(jsObjRequest);
+    }
 }

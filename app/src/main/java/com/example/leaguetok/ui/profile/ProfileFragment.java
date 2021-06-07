@@ -49,6 +49,7 @@ public class ProfileFragment extends Fragment {
     private String uid;
     private String userName;
     private MenuItem uploadVideoBtn;
+    private MenuItem manageUsersBtn;
     private View view;
 
     @Nullable
@@ -78,6 +79,7 @@ public class ProfileFragment extends Fragment {
                 userName = response.get("photoUrl").toString();
                 if (response.get("isAdmin").toString() != "true") {
                     uploadVideoBtn.setVisible(false);
+                    manageUsersBtn.setVisible(false);
                 }
             }
 
@@ -114,7 +116,8 @@ public class ProfileFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.profile_menu, menu);
 
-        uploadVideoBtn = menu.getItem(0);
+        uploadVideoBtn = menu.getItem(1);
+        manageUsersBtn = menu.getItem(0);
     }
 
     @Override
@@ -129,10 +132,16 @@ public class ProfileFragment extends Fragment {
                 Intent i = new Intent(getActivity(), AuthenticationActivity.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(i);
+                break;
             case R.id.action_upload_video:
                 NavDirections direction =
                         ProfileFragmentDirections.actionProfileFragmentToUploadOriginalVideoFragment();
                 Navigation.findNavController(view).navigate(direction);
+                break;
+            case R.id.action_manage_users:
+                Navigation.findNavController(view)
+                        .navigate(ProfileFragmentDirections.actionProfileFragmentToManageUsersFragment());
+                break;
         }
 
         return super.onOptionsItemSelected(item);

@@ -43,7 +43,12 @@
             app:destination="@id/profileVideoFragment" />
         <action
             android:id="@+id/action_profileFragment_to_uploadOriginalVideoFragment"
-            app:destination="@id/uploadOriginalVideoFragment" />
+            app:destination="@id/uploadOriginalVideoFragment"
+            app:enterAnim="@android:anim/slide_in_left" />
+        <action
+            android:id="@+id/action_profileFragment_to_manageUsersFragment"
+            app:destination="@id/manageUsersFragment"
+            app:enterAnim="@android:anim/slide_in_left" />
     </fragment>
     <fragment
         android:id="@+id/uploadVideoFragment"
@@ -113,4 +118,9 @@
         android:name="com.example.leaguetok.ui.profile.UploadOriginalVideoFragment"
         android:label="fragment_upload_original_video"
         tools:layout="@layout/fragment_upload_original_video" />
+    <fragment
+        android:id="@+id/manageUsersFragment"
+        android:name="com.example.leaguetok.ui.manageUsers.ManageUsersFragment"
+        android:label="manage_users_fragment"
+        tools:layout="@layout/manage_users_fragment" />
 </navigation>
