@@ -12,6 +12,7 @@
     <string name="upload_upper_title">Let\'s see you try</string>
     <string name="upload_title">%1$s by %2$s</string>
     <string name="gallery_upload">Upload your TikTok dance from the gallery</string>
+    <string name="gallery_upload_original_video">Upload a TikTok dance from the gallery</string>
     <string name="error_message">We are sorry but there was a problem while processing your video :(</string>
     <string name="action_try">Try It</string>
     <string name="league_table">League</string>
