@@ -140,8 +140,6 @@ public class UploadVideoFragment extends Fragment {
                         @Override
                         public void onSuccess(JSONObject response) {
                             if (isResumed()) {
-                                Model.instance.refreshAllImitVideos(null);
-                                Model.instance.refreshAllUsers(null);
                                 progressBar.setVisibility(View.INVISIBLE);
                                 uploadImg.setVisibility(View.VISIBLE);
                                 try {
