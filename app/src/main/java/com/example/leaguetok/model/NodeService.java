@@ -78,8 +78,8 @@ public class NodeService {
         });
 
         jsArrRequest.setShouldCache(false);
-        jsArrRequest.setRetryPolicy(new DefaultRetryPolicy(3000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+        jsArrRequest.setRetryPolicy(new DefaultRetryPolicy(15000,
+                0,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         Volley.newRequestQueue(LeagueTokApplication.context).add(jsArrRequest);
@@ -116,8 +116,8 @@ public class NodeService {
         });
 
         jsArrRequest.setShouldCache(false);
-        jsArrRequest.setRetryPolicy(new DefaultRetryPolicy(10000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+        jsArrRequest.setRetryPolicy(new DefaultRetryPolicy(15000,
+                0,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         Volley.newRequestQueue(LeagueTokApplication.context).add(jsArrRequest);
@@ -154,8 +154,8 @@ public class NodeService {
         });
 
         jsArrRequest.setShouldCache(false);
-        jsArrRequest.setRetryPolicy(new DefaultRetryPolicy(10000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+        jsArrRequest.setRetryPolicy(new DefaultRetryPolicy(15000,
+                0,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         Volley.newRequestQueue(LeagueTokApplication.context).add(jsArrRequest);
@@ -192,8 +192,8 @@ public class NodeService {
         });
 
         jsArrRequest.setShouldCache(false);
-        jsArrRequest.setRetryPolicy(new DefaultRetryPolicy(10000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+        jsArrRequest.setRetryPolicy(new DefaultRetryPolicy(15000,
+                0,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         Volley.newRequestQueue(LeagueTokApplication.context).add(jsArrRequest);
@@ -227,7 +227,7 @@ public class NodeService {
         });
 
         jsObjRequest.setShouldCache(false);
-        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(600000,
+        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(1200000,
                 0,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
@@ -262,7 +262,7 @@ public class NodeService {
         });
 
         jsObjRequest.setShouldCache(false);
-        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(600000,
+        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(1200000,
                 0,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
@@ -293,7 +293,7 @@ public class NodeService {
         });
 
         jsObjRequest.setShouldCache(false);
-        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(10000,
+        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(150000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
@@ -324,7 +324,7 @@ public class NodeService {
         });
 
         jsObjRequest.setShouldCache(false);
-        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(10000,
+        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(150000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
@@ -354,7 +354,7 @@ public class NodeService {
         });
 
         jsObjRequest.setShouldCache(false);
-        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(10000,
+        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(150000,
                 0,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
