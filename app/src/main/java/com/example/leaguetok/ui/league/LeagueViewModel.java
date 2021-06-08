@@ -25,7 +25,9 @@ public class LeagueViewModel extends ViewModel {
     public LeagueViewModel() {
         imitList = Model.instance.getAllImitationVideos(new Model.AsyncListener() {
             @Override
-            public void onComplete(Object data) {}
+            public void onComplete(Object data) {
+                Model.instance.refreshAllImitVideos(null);
+            }
 
             @Override
             public void onError(Object error) {
@@ -34,7 +36,9 @@ public class LeagueViewModel extends ViewModel {
         });
         usersList = Model.instance.getAllUsers(new Model.AsyncListener() {
             @Override
-            public void onComplete(Object data) {}
+            public void onComplete(Object data) {
+                Model.instance.refreshAllUsers(null);
+            }
 
             @Override
             public void onError(Object error) {}

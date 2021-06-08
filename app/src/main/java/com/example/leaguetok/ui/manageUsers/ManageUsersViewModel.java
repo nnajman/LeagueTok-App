@@ -18,7 +18,7 @@ public class ManageUsersViewModel extends ViewModel {
         this.usersList = Model.instance.getAllUsers(new Model.AsyncListener() {
             @Override
             public void onComplete(Object data) {
-
+                Model.instance.refreshAllUsers(null);
             }
 
             @Override

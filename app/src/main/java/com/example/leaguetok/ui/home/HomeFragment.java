@@ -44,7 +44,18 @@ public class HomeFragment extends Fragment {
                 Model.instance.refreshAllOrigVideos(new Model.AsyncListener() {
                     @Override
                     public void onComplete(Object data) {
-                        swiper.setRefreshing(false);
+                        Model.instance.refreshAllUsers(null);
+                        Model.instance.refreshAllImitVideos(new Model.AsyncListener() {
+                            @Override
+                            public void onComplete(Object data) {
+                                swiper.setRefreshing(false);
+                            }
+
+                            @Override
+                            public void onError(Object error) {
+
+                            }
+                        });
                     }
 
                     @Override
