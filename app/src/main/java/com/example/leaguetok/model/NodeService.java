@@ -227,8 +227,8 @@ public class NodeService {
         });
 
         jsObjRequest.setShouldCache(false);
-        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(10000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(600000,
+                0,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         Volley.newRequestQueue(LeagueTokApplication.context).add(jsObjRequest);
@@ -262,8 +262,8 @@ public class NodeService {
         });
 
         jsObjRequest.setShouldCache(false);
-        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(10000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(600000,
+                0,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         Volley.newRequestQueue(LeagueTokApplication.context).add(jsObjRequest);
