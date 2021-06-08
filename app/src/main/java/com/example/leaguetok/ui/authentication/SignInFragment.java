@@ -54,7 +54,7 @@ public class SignInFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         configureGoogleClient();
 
-        TextInputEditText emailEt = view.findViewById(R.id.upload_original_name_et);
+        TextInputEditText emailEt = view.findViewById(R.id.sign_in_email_et);
         TextInputEditText passwordEt = view.findViewById(R.id.sign_in_password_et);
         Button signInBtn = view.findViewById(R.id.sign_in_btn);
         Button signInWithGoogleBtn = view.findViewById(R.id.sign_in_with_google_btn);
